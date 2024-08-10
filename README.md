@@ -23,3 +23,13 @@ A Node.js API for managing points in a loyalty and rewards system.
    ```bash
    npm run dev
    ```
+
+## Development
+
+Commits must follow the format of:
+
+```
+feat|fix|chore|docs|test|style|refactor|perf|build|ci|revert:(<scope>): "YOUR COMMIT MESSAGE"
+
+e.g. feat(app): initial commit
+```
