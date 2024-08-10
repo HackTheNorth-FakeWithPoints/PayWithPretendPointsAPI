@@ -26,10 +26,16 @@ A Node.js API for managing points in a loyalty and rewards system.
 
 ## Development
 
-Commits must follow the format of:
+**Commits must follow the format of:**
 
-```
+```bash
 feat|fix|chore|docs|test|style|refactor|perf|build|ci|revert:(<scope>): "YOUR COMMIT MESSAGE"
 
 e.g. feat(app): initial commit
+```
+
+**Run the format command to lint code:**
+
+```bash
+npm run format
 ```

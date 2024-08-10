@@ -9,8 +9,9 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --minify",
     "start": "tsup src/index.ts --minify && node ./dist/index.cjs",
-    "build": "tsup src/index.ts --minify"
+    "format": "npx prettier --write . && npx eslint --fix ."
   },
   "keywords": [
     "Hack The North",
