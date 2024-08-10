@@ -1,26 +1,63 @@
 {
-  "name": "paywithpretendpointsapi",
+  "type": "module",
+  "private": true,
   "version": "1.0.0",
-  "description": "Node version of Points API",
-  "main": "index.js",
+  "name": "paywithpretendpointsapi",
+  "author": "HackTheNorth-FakeWithPoints",
+  "license": "AGPL-3.0-only",
+  "description": "Node Version of Points API",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/index.ts",
+    "start": "tsup src/index.ts --minify && node ./dist/index.cjs",
+    "build": "tsup src/index.ts --minify"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Hack The North",
+    "Points API",
+    "Hackathon"
+  ],
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "http-status-codes": "^2.3.0",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
-    "eslint": "^9.8.0",
-    "nodemon": "^3.1.4",
-    "prettier": "^3.3.3"
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.1.0",
+    "@types/sequelize": "^4.28.20",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.3.3",
+    "tsup": "^8.2.4",
+    "tsx": "^4.16.5",
+    "typescript": "^5.5.4"
+  },
+  "overrides": {
+    "eslint": "^9.9.0",
+    "glob": "11.0.0",
+    "rimraf": "^6.0.1"
+  },
+  "tsup": {
+    "entry": [
+      "src",
+      "!src/**/__tests__/**",
+      "!src/**/*.test.*"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
   }
 }
