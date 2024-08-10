@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
 
+import { logger } from '@/logger/index.ts'
 import { app } from '@/server/index.ts'
 
 config()
@@ -7,7 +8,7 @@ config()
 const port = process.env.PORT ?? 3000
 
 const server = app.listen(port, () => {
-  console.info(`Server running on port ${port}`)
+  logger.info(`Server running on port ${port}`)
 })
 
 const handleServerTermination = () => {
