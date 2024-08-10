@@ -10,8 +10,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsup src/index.ts --minify && node ./dist/index.cjs",
-    "build": "tsup src/index.ts --minify",
-    "prepare": "husky"
+    "build": "tsup src/index.ts --minify"
   },
   "keywords": [
     "Hack The North",
