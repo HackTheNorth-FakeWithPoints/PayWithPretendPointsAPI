@@ -7,6 +7,10 @@
   "description": "Node Version of Points API",
   "license": "AGPL-3.0-only",
   "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI.git"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsup src/index.ts --minify",
@@ -15,9 +19,11 @@
     "swagger": "npx tsx src/swagger/swagger.ts"
   },
   "keywords": [
+    "Loyalty and Rewards API",
     "Hack The North",
     "Points API",
-    "Hackathon"
+    "Hackathon",
+    "Points"
   ],
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",

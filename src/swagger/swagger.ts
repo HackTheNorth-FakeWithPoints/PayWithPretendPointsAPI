@@ -1,4 +1,4 @@
-import { OpenAPIRegistry, OpenApiGeneratorV3, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+import { OpenAPIRegistry, OpenApiGeneratorV3, RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import * as fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -6,11 +6,37 @@ import * as yaml from 'yaml'
 import { z } from 'zod'
 
 import { routePrefix } from '@/constants/route-prefix.ts'
+import {
+  healthPathOpenApiConfig,
+  homePathOpenApiConfig,
+  loyaltyConvertPointsCalculatePointsPathOpenApiConfig,
+  loyaltyConvertPointsPathOpenApiConfig,
+  loyaltyPayWithPointsPathOpenApiConfig,
+  loyaltyPointsTransferPathOpenApiConfig,
+  rewardsClientsAccountsTransactionDetailPathOpenApiConfig,
+  rewardsClientsAccountsTransactionHistoryPathOpenApiConfig
+} from '@/routes/index.ts'
 
 const generateSwaggerDocument = () => {
   extendZodWithOpenApi(z)
 
+  const registryPaths: RouteConfig[] = [
+    homePathOpenApiConfig,
+    healthPathOpenApiConfig,
+    loyaltyConvertPointsCalculatePointsPathOpenApiConfig,
+    loyaltyConvertPointsPathOpenApiConfig,
+    loyaltyPayWithPointsPathOpenApiConfig,
+    loyaltyPointsTransferPathOpenApiConfig,
+    rewardsClientsAccountsTransactionDetailPathOpenApiConfig,
+    rewardsClientsAccountsTransactionHistoryPathOpenApiConfig
+  ]
+
   const registry = new OpenAPIRegistry()
+
+  registryPaths.forEach((registryPath) => {
+    registry.registerPath(registryPath)
+  })
+
   const generator = new OpenApiGeneratorV3(registry.definitions)
 
   const swaggerDocument = generator.generateDocument({
