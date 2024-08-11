@@ -2,7 +2,6 @@ import { OpenAPIRegistry, OpenApiGeneratorV3, RouteConfig, extendZodWithOpenApi 
 import * as fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import * as yaml from 'yaml'
 import { z } from 'zod'
 
 import { routePrefix } from '@/constants/route-prefix.ts'
@@ -49,11 +48,11 @@ const generateSwaggerDocument = () => {
     servers: [{ url: routePrefix }]
   })
 
-  const fileContent = yaml.stringify(swaggerDocument)
+  const fileContent = JSON.stringify(swaggerDocument)
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
 
-  fs.writeFileSync(`${__dirname}/oas.yml`, fileContent, {
+  fs.writeFileSync(`${__dirname}/oas.json`, fileContent, {
     encoding: 'utf-8'
   })
 }

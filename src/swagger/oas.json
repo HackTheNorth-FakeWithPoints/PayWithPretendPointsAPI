@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.0",
+  "info": { "version": "1.0.0", "title": "paywithpretendpointsapi" },
+  "servers": [{ "url": "/api/v1" }],
+  "components": { "schemas": {}, "parameters": {} },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Returns a welcome message for the app.",
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Welcome to the Loyalty and Rewards API" }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Returns the status of the database connection.",
+        "responses": {
+          "200": {
+            "description": "Object with database success status information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "SUCCESS" },
+                    "message": { "type": "string", "example": "Database Connection Healthy" },
+                    "error": {
+                      "anyOf": [
+                        { "nullable": true },
+                        { "type": "object", "properties": {} },
+                        { "nullable": true },
+                        { "nullable": true }
+                      ]
+                    }
+                  },
+                  "required": ["status", "message"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Object with database error status information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "SUCCESS" },
+                    "message": { "type": "string", "example": "Database Connection Healthy" },
+                    "error": {
+                      "anyOf": [
+                        { "nullable": true },
+                        { "type": "object", "properties": {} },
+                        { "nullable": true },
+                        { "nullable": true }
+                      ]
+                    }
+                  },
+                  "required": ["status", "message"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loyalty/points/convert/calculatePoints": {
+      "post": {
+        "description": "Calculate the points you have.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "points": { "type": "integer", "example": 100 } },
+                "required": ["points"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/loyalty/points/convert": {
+      "post": {
+        "description": "Convert points to something else.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "points": { "type": "integer", "example": 100 } },
+                "required": ["points"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/loyalty/points/payWithPoints": {
+      "post": {
+        "description": "Pay for something with points.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "points": { "type": "integer", "example": 100 } },
+                "required": ["points"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/loyalty/points/transfer": {
+      "post": {
+        "description": "Transfers points to another place.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "points": { "type": "integer", "example": 100 } },
+                "required": ["points"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/rewards/client/accounts/{accountId}/transactionDetail/{referenceId}": {
+      "get": {
+        "description": "Get the transaction details for a given account id and reference id.",
+        "parameters": [
+          { "schema": { "type": "string" }, "required": true, "name": "accountId", "in": "path" },
+          { "schema": { "type": "string" }, "required": true, "name": "referenceId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/rewards/client/accounts/{accountId}/transactionHistory": {
+      "get": {
+        "description": "Get the transaction history for an account.",
+        "parameters": [{ "schema": { "type": "string" }, "required": true, "name": "accountId", "in": "path" }],
+        "responses": {
+          "200": {
+            "description": "Object with message data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "message": { "type": "string", "example": "100 points transferred!" } },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  }
+}
