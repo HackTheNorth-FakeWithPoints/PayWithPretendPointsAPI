@@ -18,6 +18,6 @@ app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 
 app.use(`${routePrefix}`, healthRouter)
 app.use(`${routePrefix}`, loyaltyRouter)
-app.use(`${routePrefix}/`, serve, setup(swaggerJSON));
+app.use(`/`, serve, setup(swaggerJSON));
 
 export { app }
