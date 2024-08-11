@@ -1,29 +1,32 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
+import { routePrefix } from '@/constants/index.ts'
+
 extendZodWithOpenApi(z)
 
 /*****************************************************************
  * /loyalty/points/transfer
  */
-const loyaltyPointsTransferRequestSchema = z.object({
+const pointsTransfer = z.object({
   points: z.number().int().openapi({ example: 100 })
 })
 
-const loyaltyPointsTransferResponseSchema = z.object({
+const pointsTransferResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const loyaltyPointsTransferPathOpenApiConfig: RouteConfig = {
+const pointsTransferSwagger: RouteConfig = {
   method: 'post',
-  path: '/loyalty/points/transfer',
+  path: `${routePrefix}/loyalty/points/transfer`,
+  tags: ['Points'],
   description: 'Transfers points to another place.',
   request: {
     body: {
       required: true,
       content: {
         'application/json': {
-          schema: loyaltyPointsTransferRequestSchema
+          schema: pointsTransfer
         }
       }
     }
@@ -33,7 +36,7 @@ const loyaltyPointsTransferPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: loyaltyPointsTransferResponseSchema
+          schema: pointsTransferResponse
         }
       }
     },
@@ -49,24 +52,25 @@ const loyaltyPointsTransferPathOpenApiConfig: RouteConfig = {
 /*******************************************************************
  * /loyalty/points/payWithPoints
  */
-const loyaltyPayWithPointsRequestSchema = z.object({
+const payWithPoints = z.object({
   points: z.number().int().openapi({ example: 100 })
 })
 
-const loyaltyPayWithPointsResponseSchema = z.object({
+const payWithPointsResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const loyaltyPayWithPointsPathOpenApiConfig: RouteConfig = {
+const payWithPointsSwagger: RouteConfig = {
   method: 'post',
-  path: '/loyalty/points/payWithPoints',
+  path: `${routePrefix}/loyalty/points/payWithPoints`,
   description: 'Pay for something with points.',
+  tags: ['Points'],
   request: {
     body: {
       required: true,
       content: {
         'application/json': {
-          schema: loyaltyPayWithPointsRequestSchema
+          schema: payWithPoints
         }
       }
     }
@@ -76,7 +80,7 @@ const loyaltyPayWithPointsPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: loyaltyPayWithPointsResponseSchema
+          schema: payWithPointsResponse
         }
       }
     },
@@ -92,24 +96,25 @@ const loyaltyPayWithPointsPathOpenApiConfig: RouteConfig = {
 /*******************************************************************
  * /loyalty/points/convert
  */
-const loyaltyConvertPointsRequestSchema = z.object({
+const convertPoints = z.object({
   points: z.number().int().openapi({ example: 100 })
 })
 
-const loyaltyConvertPointsResponseSchema = z.object({
+const convertPointsResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const loyaltyConvertPointsPathOpenApiConfig: RouteConfig = {
+const convertPointsSwagger: RouteConfig = {
   method: 'post',
-  path: '/loyalty/points/convert',
+  path: `${routePrefix}/loyalty/points/convert`,
   description: 'Convert points to something else.',
+  tags: ['Points'],
   request: {
     body: {
       required: true,
       content: {
         'application/json': {
-          schema: loyaltyConvertPointsRequestSchema
+          schema: convertPoints
         }
       }
     }
@@ -119,7 +124,7 @@ const loyaltyConvertPointsPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: loyaltyConvertPointsResponseSchema
+          schema: convertPointsResponse
         }
       }
     },
@@ -135,24 +140,25 @@ const loyaltyConvertPointsPathOpenApiConfig: RouteConfig = {
 /*******************************************************************
  * /loyalty/points/convert/calculatePoints
  */
-const loyaltyConvertPointsCalculatePointsRequestSchema = z.object({
+const calculatePoints = z.object({
   points: z.number().int().openapi({ example: 100 })
 })
 
-const loyaltyConvertPointsCalculatePointsResponseSchema = z.object({
+const calculatePointsResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const loyaltyConvertPointsCalculatePointsPathOpenApiConfig: RouteConfig = {
+const calculatePointsSwagger: RouteConfig = {
   method: 'post',
-  path: '/loyalty/points/convert/calculatePoints',
+  path: `${routePrefix}/loyalty/points/convert/calculatePoints`,
   description: 'Calculate the points you have.',
+  tags: ['Points'],
   request: {
     body: {
       required: true,
       content: {
         'application/json': {
-          schema: loyaltyConvertPointsCalculatePointsRequestSchema
+          schema: calculatePoints
         }
       }
     }
@@ -162,7 +168,7 @@ const loyaltyConvertPointsCalculatePointsPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: loyaltyConvertPointsCalculatePointsResponseSchema
+          schema: calculatePointsResponse
         }
       }
     },
@@ -178,18 +184,19 @@ const loyaltyConvertPointsCalculatePointsPathOpenApiConfig: RouteConfig = {
 /*******************************************************************
  * /rewards/client/accounts/:accountId/transactionHistory
  */
-const rewardsClientsAccountsTransactionHistoryRequestSchema = z.object({
+const transactionHistory = z.object({
   accountId: z.string().openapi({ example: '1' })
 })
 
-const rewardsClientsAccountsTransactionHistoryResponseSchema = z.object({
+const transactionHistoryResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const rewardsClientsAccountsTransactionHistoryPathOpenApiConfig: RouteConfig = {
+const transactionHistorySwagger: RouteConfig = {
   method: 'get',
-  path: '/rewards/client/accounts/{accountId}/transactionHistory',
+  path: `${routePrefix}/rewards/client/accounts/{accountId}/transactionHistory`,
   description: 'Get the transaction history for an account.',
+  tags: ['Transactions'],
   request: {
     params: z.object({ accountId: z.string() })
   },
@@ -198,7 +205,7 @@ const rewardsClientsAccountsTransactionHistoryPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: rewardsClientsAccountsTransactionHistoryResponseSchema
+          schema: transactionHistoryResponse
         }
       }
     },
@@ -214,19 +221,20 @@ const rewardsClientsAccountsTransactionHistoryPathOpenApiConfig: RouteConfig = {
 /*******************************************************************
  * /rewards/client/accounts/:accountId/transactionDetail/:referenceId
  */
-const rewardsClientsAccountsTransactionDetailRequestSchema = z.object({
+const transactionDetail = z.object({
   accountId: z.string().openapi({ example: '1' }),
   referenceId: z.string().openapi({ example: '1' })
 })
 
-const rewardsClientsAccountsTransactionDetailResponseSchema = z.object({
+const transactionDetailResponse = z.object({
   message: z.string().openapi({ example: '100 points transferred!' })
 })
 
-const rewardsClientsAccountsTransactionDetailPathOpenApiConfig: RouteConfig = {
+const transactionDetailSwagger: RouteConfig = {
   method: 'get',
-  path: '/rewards/client/accounts/{accountId}/transactionDetail/{referenceId}',
+  path: `${routePrefix}/rewards/client/accounts/{accountId}/transactionDetail/{referenceId}`,
   description: 'Get the transaction details for a given account id and reference id.',
+  tags: ['Transactions'],
   request: {
     params: z.object({ accountId: z.string(), referenceId: z.string() })
   },
@@ -235,7 +243,7 @@ const rewardsClientsAccountsTransactionDetailPathOpenApiConfig: RouteConfig = {
       description: 'Object with message data.',
       content: {
         'application/json': {
-          schema: rewardsClientsAccountsTransactionHistoryResponseSchema
+          schema: transactionDetailResponse
         }
       }
     },
@@ -249,33 +257,16 @@ const rewardsClientsAccountsTransactionDetailPathOpenApiConfig: RouteConfig = {
 }
 
 export {
-  // /loyalty/points/transfer
-  loyaltyPointsTransferRequestSchema,
-  loyaltyPointsTransferResponseSchema,
-  loyaltyPointsTransferPathOpenApiConfig,
-
-  // /loyalty/points/payWithPoints
-  loyaltyPayWithPointsRequestSchema,
-  loyaltyPayWithPointsResponseSchema,
-  loyaltyPayWithPointsPathOpenApiConfig,
-
-  // /loyalty/points/convert
-  loyaltyConvertPointsRequestSchema,
-  loyaltyConvertPointsResponseSchema,
-  loyaltyConvertPointsPathOpenApiConfig,
-
-  // /loyalty/points/convert/calculatePoints
-  loyaltyConvertPointsCalculatePointsRequestSchema,
-  loyaltyConvertPointsCalculatePointsResponseSchema,
-  loyaltyConvertPointsCalculatePointsPathOpenApiConfig,
-
-  // /rewards/client/accounts/:accountId/transactionHistory
-  rewardsClientsAccountsTransactionHistoryRequestSchema,
-  rewardsClientsAccountsTransactionHistoryResponseSchema,
-  rewardsClientsAccountsTransactionHistoryPathOpenApiConfig,
-
-  // /rewards/client/accounts/:accountId/transactionDetail/:referenceId
-  rewardsClientsAccountsTransactionDetailRequestSchema,
-  rewardsClientsAccountsTransactionDetailResponseSchema,
-  rewardsClientsAccountsTransactionDetailPathOpenApiConfig
+  pointsTransfer,
+  pointsTransferSwagger,
+  payWithPoints,
+  payWithPointsSwagger,
+  convertPoints,
+  convertPointsSwagger,
+  calculatePoints,
+  calculatePointsSwagger,
+  transactionHistory,
+  transactionHistorySwagger,
+  transactionDetail,
+  transactionDetailSwagger
 }

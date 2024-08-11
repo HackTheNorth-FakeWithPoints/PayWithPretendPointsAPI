@@ -4,30 +4,28 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { z } from 'zod'
 
-import { routePrefix } from '@/constants/route-prefix.ts'
+import { logger } from '@/logger/logger.ts'
 import {
-  healthPathOpenApiConfig,
-  homePathOpenApiConfig,
-  loyaltyConvertPointsCalculatePointsPathOpenApiConfig,
-  loyaltyConvertPointsPathOpenApiConfig,
-  loyaltyPayWithPointsPathOpenApiConfig,
-  loyaltyPointsTransferPathOpenApiConfig,
-  rewardsClientsAccountsTransactionDetailPathOpenApiConfig,
-  rewardsClientsAccountsTransactionHistoryPathOpenApiConfig
+  calculatePointsSwagger,
+  convertPointsSwagger,
+  healthSwagger,
+  payWithPointsSwagger,
+  pointsTransferSwagger,
+  transactionDetailSwagger,
+  transactionHistorySwagger
 } from '@/routes/index.ts'
 
 const generateSwaggerDocument = () => {
   extendZodWithOpenApi(z)
 
   const registryPaths: RouteConfig[] = [
-    homePathOpenApiConfig,
-    healthPathOpenApiConfig,
-    loyaltyConvertPointsCalculatePointsPathOpenApiConfig,
-    loyaltyConvertPointsPathOpenApiConfig,
-    loyaltyPayWithPointsPathOpenApiConfig,
-    loyaltyPointsTransferPathOpenApiConfig,
-    rewardsClientsAccountsTransactionDetailPathOpenApiConfig,
-    rewardsClientsAccountsTransactionHistoryPathOpenApiConfig
+    healthSwagger,
+    calculatePointsSwagger,
+    convertPointsSwagger,
+    payWithPointsSwagger,
+    pointsTransferSwagger,
+    transactionDetailSwagger,
+    transactionHistorySwagger
   ]
 
   const registry = new OpenAPIRegistry()
@@ -42,19 +40,23 @@ const generateSwaggerDocument = () => {
     openapi: '3.0.0',
     info: {
       version: process.env.npm_package_version as string,
-      title: process.env.npm_package_name as string,
+      title: 'Pay With Pretend Points API',
       description: process.env.npm_package_description as string
-    },
-    servers: [{ url: routePrefix }]
+    }
   })
 
   const fileContent = JSON.stringify(swaggerDocument)
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
+  const swaggerFileName = `${__dirname}/oas.json`
 
-  fs.writeFileSync(`${__dirname}/oas.json`, fileContent, {
-    encoding: 'utf-8'
-  })
+  try {
+    fs.writeFileSync(swaggerFileName, fileContent, {
+      encoding: 'utf-8'
+    })
+  } catch {
+    logger.error(`Failed to write to the file: ${swaggerFileName}!`)
+  }
 }
 
 generateSwaggerDocument()

@@ -1,27 +1,34 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
+import { routePrefix } from '@/constants/route-prefix.ts'
+
 extendZodWithOpenApi(z)
 
 /*****************************************************************
  * /health
  */
-const healthResponseSchema = z.object({
-  status: z.string().openapi({ example: 'SUCCESS' }),
-  message: z.string().openapi({ example: 'Database Connection Healthy' }),
-  error: z.null().or(z.object({})).or(z.any()).openapi({ example: null })
+const healthSchema = z.object({
+  status: z.string().openapi({ examples: ['SUCCESS', 'ERROR'] }),
+  message: z.string().openapi({ examples: ['Database Connection Healthy', 'Database Connection Failed'] }),
+  error: z
+    .null()
+    .or(z.object({}))
+    .or(z.any())
+    .openapi({ examples: [null, {}] })
 })
 
-const healthPathOpenApiConfig: RouteConfig = {
+const healthSwagger: RouteConfig = {
   method: 'get',
-  path: '/health',
+  path: `${routePrefix}/health`,
+  tags: ['Status'],
   description: 'Returns the status of the database connection.',
   responses: {
     200: {
       description: 'Object with database success status information.',
       content: {
         'application/json': {
-          schema: healthResponseSchema
+          schema: healthSchema
         }
       }
     },
@@ -29,11 +36,11 @@ const healthPathOpenApiConfig: RouteConfig = {
       description: 'Object with database error status information.',
       content: {
         'application/json': {
-          schema: healthResponseSchema
+          schema: healthSchema
         }
       }
     }
   }
 }
 
-export { healthResponseSchema, healthPathOpenApiConfig }
+export { healthSwagger }
