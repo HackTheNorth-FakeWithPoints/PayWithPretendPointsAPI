@@ -34,8 +34,14 @@ feat|fix|chore|docs|test|style|refactor|perf|build|ci|revert:(<scope>): "YOUR CO
 e.g. feat(app): initial commit
 ```
 
-**Run the format command to lint code:**
+**Run the `format` command to lint code:**
 
 ```bash
 npm run format
+```
+
+**Run the `swagger` command to generate oas.yml**:
+
+```bash
+npm run swagger
 ```

@@ -1,0 +1,10 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: paywithpretendpointsapi
+servers:
+  - url: /api/v1
+components:
+  schemas: {}
+  parameters: {}
+paths: {}

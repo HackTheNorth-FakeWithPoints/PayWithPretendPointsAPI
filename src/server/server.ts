@@ -2,10 +2,10 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 
+import { routePrefix } from '@/constants/route-prefix.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
 import { healthRouter, homeRouter, loyaltyRouter } from '@/routes/index.ts'
 
-const routePrefix = '/api/v1'
 const app = express()
 
 app.use(helmet())
