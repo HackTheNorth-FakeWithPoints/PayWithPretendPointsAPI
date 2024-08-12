@@ -3,6 +3,7 @@ import { fixupConfigRules } from '@eslint/compat'
 import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
 import tsParser from '@typescript-eslint/parser'
+import globals from 'globals'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -23,34 +24,29 @@ export default [
   ),
   {
     languageOptions: {
-      parser: tsParser
+      parser: tsParser,
+      globals: {
+        ...globals.node
+      }
     },
-
     settings: {
       'import/resolver': {
         typescript: {},
-
         node: {
           extensions: ['.js', '.ts'],
           moduleDirectory: ['node_modules']
         }
       }
     },
-
     rules: {
       eqeqeq: 'error',
       'no-console': 'error',
-
       'no-restricted-imports': [
         'error',
         {
           patterns: ['.*']
         }
       ]
-    },
-    env: {
-      node: true,
-      es2021: true
     }
   }
 ]

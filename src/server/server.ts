@@ -6,7 +6,7 @@ import { serve, setup } from 'swagger-ui-express'
 import { routePrefix } from '@/constants/route-prefix.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
 import { healthRouter, loyaltyRouter } from '@/routes/index.ts'
-import swaggerJSON from '@/swagger/oas.json' with { type: "json" };
+import swaggerJSON from '@/swagger/oas.json'
 
 const app = express()
 
@@ -18,6 +18,12 @@ app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 
 app.use(`${routePrefix}`, healthRouter)
 app.use(`${routePrefix}`, loyaltyRouter)
-app.use(`/`, serve, setup(swaggerJSON));
+app.use(
+  `/`,
+  serve,
+  setup(swaggerJSON, {
+    customSiteTitle: 'Pay With Pretend Points API'
+  })
+)
 
 export { app }
