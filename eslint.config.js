@@ -47,6 +47,10 @@ export default [
           patterns: ['.*']
         }
       ]
+    },
+    env: {
+      node: true,
+      es2021: true
     }
   }
 ]
