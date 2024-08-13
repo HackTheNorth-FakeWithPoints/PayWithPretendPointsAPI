@@ -1,0 +1,845 @@
+openapi: 3.0.3
+info:
+  title: Fake with Points
+  description: Loyalty Point API
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: guy@example.com
+  license:
+    name: None
+  version: 0.0.1
+externalDocs:
+  description: Developer Portal
+  url: tbd.com
+servers:
+  - url: https://paywithpretendpointsapi.onrender.com
+    description: Hack the North Integration Server
+tags:
+  - name: Points Operations
+    description: Things pertaining to points
+  - name: Txn History
+    description: Things pertaining to point transactions
+  - name: Partner Operations
+    description: admin functions for partner.
+    
+paths:
+    /v1/loyalty/{memberId}/points/:
+      get:
+        tags: 
+          - Points Operations
+        operationId: getPointsBalance
+        description: gets total points across all accounts of a member
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: merchant/loyalty point partner id
+            required: true
+            schema:
+              type: string
+       
+        responses:
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PointsBalanceResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+          
+    /v1/loyalty/{memberId}/points/account/{accountId}/:
+      get:
+        tags: 
+          - Points Operations
+        operationId: getPointsBalanceForAccount
+        description: gets total points from a single accounts of a member
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: accountId
+            in: path
+            description: unique account identifier
+            required: true
+            schema:
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PointsBalanceResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+    
+    /v1/loyalty/{memberId}/transactions/:
+      get:
+        tags: 
+          - Txn History
+        operationId: getTransactionHistoryByClient
+        description: gets total points from a single accounts of a member
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TxnHistoryResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+       
+      post: 
+        tags: 
+          - Txn History
+        operationId: createTxnForMember
+        description: earn or burn points for a member for a partner
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string
+        requestBody:
+          description: Description of the points earn transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTxnRequest'
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CreateTxnResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+      
+    /v1/loyalty/{memberId}/transactions/{txnId}/:
+      get:
+        tags:
+          - Txn History
+        operationId: getTxnDetailsForMember
+        description: get the details of a single txn
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: txnId
+            in: path
+            description: unique txn identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string  
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TxnResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+
+      delete:
+        operationId: reverseTxn
+        description: Reverses txn
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: txnId
+            in: path
+            description: unique txn identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string  
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TxnResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+      put:
+        operationId: getTxnDetailsForMember
+        description: get the details of a single txn
+        parameters:
+          - name: memberId
+            in: path
+            description: unique member identifier
+            required: true
+            schema: 
+              type: string
+          - name: txnId
+            in: path
+            description: unique txn identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: header
+            description: unique account identifier
+            required: true
+            schema:
+              type: string  
+        requestBody:
+          description: Description of the transaction to modify
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyTxnRequest'
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TxnResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+
+    /v1/loyalty/partners/:
+      post:
+        tags:
+          - Partner Operatons
+        operationId: createPartner
+        description: create partner record
+    
+        requestBody:
+          description: Description of the partner to create
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePartnerRequest'
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CreatePartnerResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+      
+
+    /v1/loyalty/partners/{partnerId}/:
+      get:
+        tags: 
+          - Partner Operations
+        operationId: getPartnerDetails
+        description: gets details of a particular partner
+        parameters:
+          - name: partnerId
+            in: path
+            description: merchant/loyalty point partner id
+            required: true
+            schema:
+              type: string
+       
+        responses:
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PartnerDetailsResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+      put:
+        tags: 
+          - Partner Operations
+        operationId: updatePartnerDetails
+        description: updates details of a particular partner
+        parameters:
+          - name: partnerId
+            in: path
+            description: merchant/loyalty point partner id
+            required: true
+            schema:
+              type: string
+        requestBody:
+          description: Description of the partner to create
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePartnerRequest'   
+        responses:
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PartnerDetailsResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+      
+      delete:
+        tags: 
+          - Partner Operations
+        operationId: deletePartnerDetails
+        description: deleats details of a particular partner
+        parameters:
+          - name: partnerId
+            in: path
+            description: merchant/loyalty point partner id
+            required: true
+            schema:
+              type: string
+       
+        responses:
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DeletePartnerResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+    /v1/loyalty/partners/{partnerId}/transactions/:
+      get:
+        tags: 
+          - Txn History By Partner
+        operationId: getTransactionHistoryByPartner
+        description: gets txn history for a single partner
+        parameters:
+          - name: partnerId
+            in: path
+            description: unique account identifier
+            required: true
+            schema:
+              type: string
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PartnerTxnHistoryResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+       
+
+    /v1/loyalty/partners/{partnerId}/transactions/{txnId}:
+      get:
+        tags:
+          - Txn History
+        operationId: getTxnDetailForPartner
+        description: get the details of a single txn
+        parameters: 
+          - name: txnId
+            in: path
+            description: unique txn identifier
+            required: true
+            schema: 
+              type: string
+          - name: partnerId
+            in: path
+            description: unique account identifier
+            required: true
+            schema:
+              type: string  
+              
+        responses:      
+          '200':
+            description: successful response, may include additional see statusCode in response.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TxnResponse'
+            
+          '204': 
+            description: No Content
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+           
+          '400':
+            description: Bad request / validation error in given data
+          '401':
+            description: Not authenticated 
+          '403':
+            description: Not authorized to view this resource
+          '404':
+            description: resource not found
+          '500':
+            description: Internal Server Error
+          '503':
+            description: Service Unavailable
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+
+  
+            
+components:
+  schemas:
+    PointsBalanceResponse:
+      required:
+        - memberId
+        - pointBalance
+        - responseCode
+        - message
+      type: object
+      properties:
+        memberId:
+          type: string
+        accountId:
+          type: string
+        responseCode:
+          type: integer
+          format: int64
+        message:
+          type: string
+        pointBalance:
+          type: integer
+          format: int64
+          
+    PartnerDetailsResponse:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+        PartnerDescription: 
+          $ref: '#/components/schemas/PartnerDescription'
+
+    CreatePartnerRequest:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+
+    CreatePartnerResponse:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+        PartnerDescription: 
+          $ref: '#/components/schemas/PartnerDescription'
+    
+    UpdatePartnerRequest:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+        PartnerDescription: 
+          $ref: '#/components/schemas/PartnerDescription'
+    
+    UpdatePartnerResponse:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+        PartnerDescription: 
+          $ref: '#/components/schemas/PartnerDescription'
+    
+    DeletePartnerResponse:
+      type: object
+      properties:
+        placeHolder:
+          type: string
+        PartnerDescription: 
+          $ref: '#/components/schemas/PartnerDescription'
+
+    CreateTxnRequest:
+      required:
+        - txnDescription
+      type: object
+      properties:
+        txnDescription:
+          $ref: '#/components/schemas/TxnDescription'
+    
+    ModifyTxnRequest:
+      required:
+        - txnDescription
+      type: object
+      properties:
+        txnDescription:
+          $ref: '#/components/schemas/TxnDescription'
+
+    CreateTxnResponse:
+      required:
+        - txnDescription
+      type: object
+      properties:
+        txnDescription:
+          $ref: '#/components/schemas/TxnDescription'
+          
+    TxnHistoryResponse:
+      properties:
+        transactions:
+          type: array
+          description: list of txns
+          items:
+            $ref: '#/components/schemas/TxnDescription'
+    
+    TxnResponse:
+      properties:
+        transactions:
+          type: object
+          description: requested txn
+          items:
+            $ref: '#/components/schemas/TxnDescription'
+
+    PartnerTxnHistoryResponse:
+      properties:
+        transactions:
+          type: array
+          description: list of txns
+          items:
+            $ref: '#/components/schemas/TxnDescription'
+
+
+    PartnerDescription:
+      properties: 
+        partnerId:
+          type: string
+
+
+    TxnDescription:
+      required:
+        - refId
+      properties:
+        refId:
+          description: Unqiue (for your partnerId) alphanumeric transaction identifier.
+          type: string
+        ammount: 
+          description: Number of points earned
+          type: integer
+          format: int64
+        
+          
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+              
+      
