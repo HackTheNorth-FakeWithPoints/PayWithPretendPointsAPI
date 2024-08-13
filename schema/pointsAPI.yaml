@@ -75,62 +75,7 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ErrorResponse'
           
-    /v1/loyalty/{memberId}/points/account/{accountId}/:
-      get:
-        tags: 
-          - Points Operations
-        operationId: getPointsBalanceForAccount
-        description: gets total points from a single accounts of a member
-        parameters:
-          - name: memberId
-            in: path
-            description: unique member identifier
-            required: true
-            schema: 
-              type: string
-          - name: accountId
-            in: path
-            description: unique account identifier
-            required: true
-            schema:
-              type: string
-          - name: partnerId
-            in: header
-            description: unique account identifier
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: successful response, may include additional see statusCode in response.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/PointsBalanceResponse'
-            
-          '204': 
-            description: No Content
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
-           
-          '400':
-            description: Bad request / validation error in given data
-          '401':
-            description: Not authenticated 
-          '403':
-            description: Not authorized to view this resource
-          '404':
-            description: resource not found
-          '500':
-            description: Internal Server Error
-          '503':
-            description: Service Unavailable
-            content:
-              '*/*':
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+    
     
     /v1/loyalty/{memberId}/transactions/:
       get:
