@@ -647,28 +647,35 @@ components:
   schemas:
     PointsBalanceResponse:
       required:
+        - status
         - memberId
         - pointBalance
         - responseCode
         - message
       type: object
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         memberId:
           type: string
         accountId:
           type: string
-        responseCode:
-          type: integer
-          format: int64
-        message:
-          type: string
+        accountStatus:
+          enum:
+            - active
+            - inactive
+            - locked
         pointBalance:
           type: integer
           format: int64
           
     PartnerDetailsResponse:
       type: object
+      required:
+        - status
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         placeHolder:
           type: string
         PartnerDescription: 
@@ -676,13 +683,24 @@ components:
 
     CreatePartnerRequest:
       type: object
+      required:
+        - status
       properties:
-        placeHolder:
+        status:
+          $ref: '#/components/schemas/Status'
+        parnerId: 
+          description: newly created partner id
           type: string
+        partnerDescription:
+          $ref: '#/components/schemas/PartnerDescription'
 
     CreatePartnerResponse:
       type: object
+      required:
+        - status
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         placeHolder:
           type: string
         PartnerDescription: 
@@ -713,9 +731,9 @@ components:
           $ref: '#/components/schemas/PartnerDescription'
 
     CreateTxnRequest:
+      type: object
       required:
         - txnDescription
-      type: object
       properties:
         txnDescription:
           $ref: '#/components/schemas/TxnDescription'
@@ -730,14 +748,21 @@ components:
 
     CreateTxnResponse:
       required:
+        - status
         - txnDescription
       type: object
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         txnDescription:
           $ref: '#/components/schemas/TxnDescription'
           
     TxnHistoryResponse:
+      required:
+        - status
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         transactions:
           type: array
           description: list of txns
@@ -745,26 +770,108 @@ components:
             $ref: '#/components/schemas/TxnDescription'
     
     TxnResponse:
+      required:
+        - status
       properties:
-        transactions:
+        status:
+          $ref: '#/components/schemas/Status'
+        transaction:
           type: object
           description: requested txn
           items:
             $ref: '#/components/schemas/TxnDescription'
 
     PartnerTxnHistoryResponse:
+      required:
+        - status
       properties:
+        status:
+          $ref: '#/components/schemas/Status'
         transactions:
           type: array
           description: list of txns
           items:
             $ref: '#/components/schemas/TxnDescription'
 
+    Status:
+      description: API Response Status for business errors (non-technical errors)
+      properties:   
+        code:
+          type: string
+        message:
+          type: string
+        nestedStatus:
+          $ref: '#/components/schemas/Status'
 
     PartnerDescription:
+      description: a description of the partner
       properties: 
         partnerId:
           type: string
+        name: 
+          type: string
+        description:  
+          type: string
+        contacts: 
+          items:
+            $ref: '#/components/schemas/ContactType'
+
+
+
+    ContactType:
+      description: contact information for a member or partner.
+      properties:
+        name:
+          type: string
+        type:
+          enum:
+            - partner
+            - member
+        primaryAddress: 
+          $ref: '#/components/schemas/AddressType'
+
+        secondardyAddress:
+          $ref: '#/components/schemas/AddressType'
+
+        phone:
+          type: array
+          items: 
+            $ref: '#/components/schemas/PhoneType'
+
+        email:  
+          type: array
+          items:
+            $ref: '#components/schemas/EmailType'
+
+    AddressType:
+      description: Postal Address
+      properties:
+        street:
+          type: array
+          items: 
+            type: string
+        
+    PhoneType:
+      description: telephone number
+      properties:
+        number: 
+          type: string
+        type: 
+          enum:
+            - home
+            - work
+            - cell
+            - other
+
+    EmailType:
+      description: email Address
+      properties:
+        email:  
+          type: string 
+          enum:
+            - home
+            - work
+            - other
 
 
     TxnDescription:
@@ -779,7 +886,6 @@ components:
         refId:
           description: Unqiue (for your partnerId) alphanumeric transaction identifier.
           type: string
-       
         timestamp:
           description: time and date of transaction.
           type: string
@@ -787,11 +893,13 @@ components:
         partnerRefId:
           description: an optional field to map this txn to a id within your own system.  API does not check uniqueness or validity.
           type: string
+        partnerId: 
+          description: partner txn occured with
+          type: string
         amount: 
           description: Number of points earned
           type: integer
-          format: int64 
-        
+          format: int64  
         txnType:
           description: Point earn or spend type
           enum:
