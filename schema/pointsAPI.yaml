@@ -770,21 +770,54 @@ components:
     TxnDescription:
       required:
         - refId
+        - amount
+        - txnType
+        - timestamp
+        - txnDescription
+
       properties:
         refId:
           description: Unqiue (for your partnerId) alphanumeric transaction identifier.
           type: string
-        ammount: 
+       
+        timestamp:
+          description: time and date of transaction.
+          type: string
+          format: date-time
+        partnerRefId:
+          description: an optional field to map this txn to a id within your own system.  API does not check uniqueness or validity.
+          type: string
+        amount: 
           description: Number of points earned
           type: integer
-          format: int64
+          format: int64 
+        
+        txnType:
+          description: Point earn or spend type
+          enum:
+            - earn
+            - spend
+        txnDescription:
+          description: individual lines of description, will not have more than 3.
+          type: array
+          items:
+              type: string
+          
         
           
     ErrorResponse:
       type: object
+      required:
+        - statusCode
+        - timeStamp
       properties:
+        statusCode:
+          type: integer
+          format: int64
         timestamp:
           type: integer
           format: int64
+        message:  
+          type: string
               
       
