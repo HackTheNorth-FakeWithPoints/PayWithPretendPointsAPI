@@ -297,8 +297,8 @@ paths:
                   $ref: '#/components/schemas/ErrorResponse'
 
       put:
-        operationId: getTxnDetailsForMember
-        description: get the details of a single txn
+        operationId: putTxnDetailsForMember
+        description: update the details of a single txn
         parameters:
           - name: memberId
             in: path
@@ -841,7 +841,7 @@ components:
         email:  
           type: array
           items:
-            $ref: '#components/schemas/EmailType'
+            $ref: '#/components/schemas/EmailType'
 
     AddressType:
       description: Postal Address
