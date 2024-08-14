@@ -21,6 +21,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "migrations/20240814061206-user.js"],
   "exclude": ["node_modules"]
 }
