@@ -6,13 +6,19 @@ import { z } from 'zod'
 
 import { logger } from '@/logger/logger.ts'
 import {
-  calculatePointsSwagger,
-  convertPointsSwagger,
+  createPartnerSwagger,
+  createTxnForMemberSwagger,
+  deletePartnerDetailsSwagger,
+  getPartnerDetailsSwagger,
+  getPointsSwagger,
+  getTransactionHistoryByClientSwagger,
+  getTransactionHistoryByPartnerSwagger,
+  getTxnDetailForPartnerSwagger,
+  getTxnDetailsForMemberSwagger,
   healthSwagger,
-  payWithPointsSwagger,
-  pointsTransferSwagger,
-  transactionDetailSwagger,
-  transactionHistorySwagger
+  putTxnDetailsForMemberSwagger,
+  reverseTxnSwagger,
+  updatePartnerDetailsSwagger
 } from '@/routes/index.ts'
 
 const generateSwaggerDocument = () => {
@@ -20,12 +26,18 @@ const generateSwaggerDocument = () => {
 
   const registryPaths: RouteConfig[] = [
     healthSwagger,
-    calculatePointsSwagger,
-    convertPointsSwagger,
-    payWithPointsSwagger,
-    pointsTransferSwagger,
-    transactionDetailSwagger,
-    transactionHistorySwagger
+    getPointsSwagger,
+    getTransactionHistoryByClientSwagger,
+    createTxnForMemberSwagger,
+    getTxnDetailsForMemberSwagger,
+    reverseTxnSwagger,
+    putTxnDetailsForMemberSwagger,
+    createPartnerSwagger,
+    getPartnerDetailsSwagger,
+    updatePartnerDetailsSwagger,
+    deletePartnerDetailsSwagger,
+    getTransactionHistoryByPartnerSwagger,
+    getTxnDetailForPartnerSwagger
   ]
 
   const registry = new OpenAPIRegistry()
