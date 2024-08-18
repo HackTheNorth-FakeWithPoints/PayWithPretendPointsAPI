@@ -40,8 +40,18 @@ e.g. feat(app): initial commit
 npm run format
 ```
 
-**Run the `swagger` command to generate oas.yml**:
+**Run the `swagger` command to generate oas.yml:**:
 
 ```bash
 npm run swagger
+```
+
+**Spin up a local database instance:**:
+
+```bash
+# on first run or changes made
+docker compose -f docker-compose.local.yml up --build
+
+# if not changes made, this is faster
+docker compose up
 ```

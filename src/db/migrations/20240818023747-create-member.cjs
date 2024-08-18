@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Members', {
+    await queryInterface.createTable('members', {
       memberId: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -12,7 +12,7 @@ module.exports = {
       partnerId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Partners',
+          model: 'partners',
           key: 'partnerId'
         },
         onDelete: 'CASCADE'
@@ -24,7 +24,7 @@ module.exports = {
       contactId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Contacts',
+          model: 'contacts',
           key: 'id'
         },
         onDelete: 'CASCADE'
@@ -49,8 +49,7 @@ module.exports = {
       }
     })
   },
-
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Members')
+    await queryInterface.dropTable('members')
   }
 }
