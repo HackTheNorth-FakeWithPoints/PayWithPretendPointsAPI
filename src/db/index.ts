@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
 
-import { SEQUELIZE_CONFIG } from '@/db/config/index.ts'
+// eslint-disable-next-line no-restricted-imports
+import { SEQUELIZE_CONFIG } from './config/config.ts'
 
 const sequelize = new Sequelize({
   ...SEQUELIZE_CONFIG,
