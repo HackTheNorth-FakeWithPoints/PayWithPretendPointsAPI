@@ -1,5 +1,6 @@
-/** @type {import('@jest/types').Config} */
-const config = {
+import type { Config } from 'jest'
+
+const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: {
@@ -12,4 +13,4 @@ const config = {
   transformIgnorePatterns: ['/node_modules/']
 }
 
-module.exports = config
+export default config
