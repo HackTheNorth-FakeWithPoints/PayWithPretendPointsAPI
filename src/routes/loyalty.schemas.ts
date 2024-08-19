@@ -3,22 +3,27 @@ import { z } from 'zod'
 
 extendZodWithOpenApi(z)
 
-const routePrefix = '/v1'
+const routePrefix = '/api/v1'
 
 // Schemas
 const createStatusSchema = (): z.ZodSchema =>
-  z.object({
-    code: z.string(),
-    message: z.string(),
-    nestedStatus: z.lazy(() => createStatusSchema().openapi({ type: 'object', properties: { code: { type: 'string' }, message: { type: 'string' }, nestedStatus: { type: 'object' } } })).optional()
-  }).openapi({ type: 'object', properties: { code: { type: 'string' }, message: { type: 'string' }, nestedStatus: { type: 'object' } } })
+  z
+    .object({
+      code: z.string(),
+      message: z.string(),
+      nestedStatus: z.lazy(() => createStatusSchema()).optional()
+    })
+    .openapi({
+      type: 'object',
+      properties: { code: { type: 'string' }, message: { type: 'string' }, nestedStatus: { type: 'object' } }
+    })
 
 const Status = createStatusSchema()
 
 const PointsBalanceResponse = z.object({
   status: Status,
   memberId: z.string(),
-  accountId: z.string().optional(),
+  partnerId: z.string().optional(),
   accountStatus: z.enum(['active', 'inactive', 'locked']).optional(),
   pointBalance: z.number().int()
 })
@@ -61,18 +66,7 @@ const PartnerDetailsResponse = z.object({
   PartnerDescription: PartnerDescription
 })
 
-const CreatePartnerRequest = z.object({
-  status: Status,
-  partnerId: z.string(),
-  partnerDescription: PartnerDescription
-})
-
 const CreatePartnerResponse = PartnerDetailsResponse
-
-const UpdatePartnerRequest = z.object({
-  placeHolder: z.string().optional(),
-  PartnerDescription: PartnerDescription
-})
 
 const UpdatePartnerResponse = PartnerDetailsResponse
 
@@ -170,11 +164,11 @@ const getTransactionHistoryByClientSwagger: RouteConfig = {
   }
 }
 
-const createTxnForMember = {
-  params: z.object({ memberId: z.string() }),
-  headers: z.object({ partnerId: z.string() }),
+const createTxnForMember = z.object({
+  memberId: z.string(),
+  partnerId: z.string(),
   body: CreateTxnRequest
-}
+})
 
 const createTxnForMemberSwagger: RouteConfig = {
   method: 'post',
@@ -198,10 +192,11 @@ const createTxnForMemberSwagger: RouteConfig = {
   }
 }
 
-const getTxnDetailsForMember = {
-  params: z.object({ memberId: z.string(), txnId: z.string() }),
-  headers: z.object({ partnerId: z.string() })
-}
+const getTxnDetailsForMember = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string()
+})
 
 const getTxnDetailsForMemberSwagger: RouteConfig = {
   method: 'get',
@@ -224,10 +219,11 @@ const getTxnDetailsForMemberSwagger: RouteConfig = {
   }
 }
 
-const reverseTxn = {
-  params: z.object({ memberId: z.string(), txnId: z.string() }),
-  headers: z.object({ partnerId: z.string() })
-}
+const reverseTxn = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string()
+})
 
 const reverseTxnSwagger: RouteConfig = {
   method: 'delete',
@@ -250,11 +246,12 @@ const reverseTxnSwagger: RouteConfig = {
   }
 }
 
-const putTxnDetailsForMember = {
-  params: z.object({ memberId: z.string(), txnId: z.string() }),
-  headers: z.object({ partnerId: z.string() }),
+const putTxnDetailsForMember = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string(),
   body: ModifyTxnRequest
-}
+})
 
 const putTxnDetailsForMemberSwagger: RouteConfig = {
   method: 'put',
@@ -278,9 +275,11 @@ const putTxnDetailsForMemberSwagger: RouteConfig = {
   }
 }
 
-const createPartner = {
-  body: CreatePartnerRequest
-}
+const createPartner = z.object({
+  status: Status,
+  partnerId: z.string(),
+  partnerDescription: PartnerDescription
+})
 
 const createPartnerSwagger: RouteConfig = {
   method: 'post',
@@ -288,7 +287,7 @@ const createPartnerSwagger: RouteConfig = {
   tags: ['Partner Operations'],
   description: 'create partner record',
   request: {
-    body: { content: { 'application/json': { schema: CreatePartnerRequest } } }
+    body: { content: { 'application/json': { schema: createPartner } } }
   },
   responses: {
     200: { description: 'successful response', content: { 'application/json': { schema: CreatePartnerResponse } } },
@@ -302,9 +301,9 @@ const createPartnerSwagger: RouteConfig = {
   }
 }
 
-const getPartnerDetails = {
-  params: z.object({ partnerId: z.string() })
-}
+const getPartnerDetails = z.object({
+  partnerId: z.string()
+})
 
 const getPartnerDetailsSwagger: RouteConfig = {
   method: 'get',
@@ -326,10 +325,16 @@ const getPartnerDetailsSwagger: RouteConfig = {
   }
 }
 
-const updatePartnerDetails = {
-  params: z.object({ partnerId: z.string() }),
-  body: UpdatePartnerRequest
-}
+const updatePartnerDetails = z.object({
+  status: Status,
+  partnerId: z.string(),
+  partnerDescription: PartnerDescription
+})
+
+const UpdatePartnerRequest = z.object({
+  status: Status,
+  partnerDescription: PartnerDescription
+})
 
 const updatePartnerDetailsSwagger: RouteConfig = {
   method: 'put',
@@ -352,9 +357,9 @@ const updatePartnerDetailsSwagger: RouteConfig = {
   }
 }
 
-const deletePartnerDetails = {
-  params: z.object({ partnerId: z.string() })
-}
+const deletePartnerDetails = z.object({
+  partnerId: z.string()
+})
 
 const deletePartnerDetailsSwagger: RouteConfig = {
   method: 'delete',
@@ -376,9 +381,9 @@ const deletePartnerDetailsSwagger: RouteConfig = {
   }
 }
 
-const getTransactionHistoryByPartner = {
-  params: z.object({ partnerId: z.string() })
-}
+const getTransactionHistoryByPartner = z.object({
+  partnerId: z.string()
+})
 
 const getTransactionHistoryByPartnerSwagger: RouteConfig = {
   method: 'get',
@@ -400,9 +405,10 @@ const getTransactionHistoryByPartnerSwagger: RouteConfig = {
   }
 }
 
-const getTxnDetailForPartner = {
-  params: z.object({ partnerId: z.string(), txnId: z.string() })
-}
+const getTxnDetailForPartner = z.object({
+  partnerId: z.string(),
+  txnId: z.string()
+})
 
 const getTxnDetailForPartnerSwagger: RouteConfig = {
   method: 'get',
