@@ -1,0 +1,59 @@
+meta {
+  name: createPartner
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:3000/api/v1/loyalty/partners
+  body: json
+  auth: none
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": {
+      "code": "string",
+      "message": "string"
+    },
+    "partnerId": "string",
+    "partnerDescription": {
+      "partnerId": "string",
+      "name": "string",
+      "description": "string",
+      "contacts": [
+        {
+          "name": "string",
+          "type": "partner",
+          "primaryAddress": {
+            "street": [
+              "string"
+            ]
+          },
+          "secondardyAddress": {
+            "street": [
+              "string"
+            ]
+          },
+          "phone": [
+            {
+              "number": "string",
+              "type": "home"
+            }
+          ],
+          "email": [
+            {
+              "email": "string",
+              "type": "home"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

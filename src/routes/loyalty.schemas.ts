@@ -1,272 +1,488 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { routePrefix } from '@/constants/index.ts'
-
 extendZodWithOpenApi(z)
 
+const routePrefix = '/api/v1'
+
+// Schemas
+const createStatusSchema = (): z.ZodSchema =>
+  z
+    .object({
+      code: z.string(),
+      message: z.string(),
+      nestedStatus: z.lazy(() => createStatusSchema()).optional()
+    })
+    .openapi({
+      type: 'object',
+      properties: { code: { type: 'string' }, message: { type: 'string' }, nestedStatus: { type: 'object' } }
+    })
+
+const Status = createStatusSchema()
+
+const PartnerDescription = z.object({
+  partnerId: z.string(),
+  name: z.string(),
+  description: z.string(),
+  contacts: z.array(
+    z.object({
+      name: z.string(),
+      type: z.enum(['partner', 'member']),
+      primaryAddress: z.object({
+        street: z.array(z.string())
+      }),
+      secondardyAddress: z
+        .object({
+          street: z.array(z.string())
+        })
+        .optional(),
+      phone: z.array(
+        z.object({
+          number: z.string(),
+          type: z.enum(['home', 'work', 'cell', 'other'])
+        })
+      ),
+      email: z.array(
+        z.object({
+          email: z.string(),
+          type: z.enum(['home', 'work', 'other'])
+        })
+      )
+    })
+  )
+})
+
+const PartnerDetailsResponse = z.object({
+  status: Status,
+  placeHolder: z.string().optional(),
+  PartnerDescription: PartnerDescription
+})
+
+
+const TxnDescription = z.object({
+  refId: z.string(),
+  timestamp: z.string().datetime(),
+  partnerRefId: z.string().optional(),
+  partnerId: z.string(),
+  amount: z.number().int(),
+  txnType: z.enum(['earn', 'burn']),
+  txnDescription: z.array(z.string())
+})
+
+const TxnHistoryResponse = z.object({
+  status: Status,
+  transactions: z.array(TxnDescription)
+})
+
+const TxnResponse = z.object({
+  status: Status,
+  transaction: TxnDescription
+})
+
+const ErrorResponse = z.object({
+  statusCode: z.number().int(),
+  timestamp: z.number().int(),
+  message: z.string()
+})
 /*****************************************************************
- * /loyalty/points/transfer
+ * /loyalty/{memberId}/points
  */
-const pointsTransfer = z.object({
-  points: z.number().int().openapi({ example: 100 })
+const getPointsBalance = z.object({
+  memberId: z.string(),
+  partnerId: z.string()
 })
 
-const pointsTransferResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
+const PointsBalanceResponse = z.object({
+  status: Status,
+  memberId: z.string(),
+  partnerId: z.string().optional(),
+  accountStatus: z.enum(['active', 'inactive', 'locked']).optional(),
+  pointBalance: z.number().int()
 })
 
-const pointsTransferSwagger: RouteConfig = {
-  method: 'post',
-  path: `${routePrefix}/loyalty/points/transfer`,
-  tags: ['Points'],
-  description: 'Transfers points to another place.',
-  request: {
-    body: {
-      required: true,
-      content: {
-        'application/json': {
-          schema: pointsTransfer
-        }
-      }
-    }
-  },
-  responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: pointsTransferResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
-  }
-}
-
-/*******************************************************************
- * /loyalty/points/payWithPoints
- */
-const payWithPoints = z.object({
-  points: z.number().int().openapi({ example: 100 })
-})
-
-const payWithPointsResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
-})
-
-const payWithPointsSwagger: RouteConfig = {
-  method: 'post',
-  path: `${routePrefix}/loyalty/points/payWithPoints`,
-  description: 'Pay for something with points.',
-  tags: ['Points'],
-  request: {
-    body: {
-      required: true,
-      content: {
-        'application/json': {
-          schema: payWithPoints
-        }
-      }
-    }
-  },
-  responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: payWithPointsResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
-  }
-}
-
-/*******************************************************************
- * /loyalty/points/convert
- */
-const convertPoints = z.object({
-  points: z.number().int().openapi({ example: 100 })
-})
-
-const convertPointsResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
-})
-
-const convertPointsSwagger: RouteConfig = {
-  method: 'post',
-  path: `${routePrefix}/loyalty/points/convert`,
-  description: 'Convert points to something else.',
-  tags: ['Points'],
-  request: {
-    body: {
-      required: true,
-      content: {
-        'application/json': {
-          schema: convertPoints
-        }
-      }
-    }
-  },
-  responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: convertPointsResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
-  }
-}
-
-/*******************************************************************
- * /loyalty/points/convert/calculatePoints
- */
-const calculatePoints = z.object({
-  points: z.number().int().openapi({ example: 100 })
-})
-
-const calculatePointsResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
-})
-
-const calculatePointsSwagger: RouteConfig = {
-  method: 'post',
-  path: `${routePrefix}/loyalty/points/convert/calculatePoints`,
-  description: 'Calculate the points you have.',
-  tags: ['Points'],
-  request: {
-    body: {
-      required: true,
-      content: {
-        'application/json': {
-          schema: calculatePoints
-        }
-      }
-    }
-  },
-  responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: calculatePointsResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
-  }
-}
-
-/*******************************************************************
- * /rewards/client/accounts/:accountId/transactionHistory
- */
-const transactionHistory = z.object({
-  accountId: z.string().openapi({ example: '1' })
-})
-
-const transactionHistoryResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
-})
-
-const transactionHistorySwagger: RouteConfig = {
+// Route Configs
+const getPointsSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/rewards/client/accounts/{accountId}/transactionHistory`,
-  description: 'Get the transaction history for an account.',
-  tags: ['Transactions'],
+  path: `${routePrefix}/loyalty/{memberId}/points`,
+  tags: ['Points Operations'],
+  description: 'Gets total points from a single accounts of a member',
   request: {
-    params: z.object({ accountId: z.string() })
+    params: z.object({ memberId: z.string() }),
+    headers: z.object({ partnerId: z.string() })
   },
   responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: transactionHistoryResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
+    200: { description: 'successful response', content: { 'application/json': { schema: PointsBalanceResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
 
-/*******************************************************************
- * /rewards/client/accounts/:accountId/transactionDetail/:referenceId
+/*****************************************************************
+ * /loyalty/{memberId}/transactions
  */
-const transactionDetail = z.object({
-  accountId: z.string().openapi({ example: '1' }),
-  referenceId: z.string().openapi({ example: '1' })
+
+const getTransactionHistoryByClient = z.object({
+  memberId: z.string(),
+  partnerId: z.string()
 })
 
-const transactionDetailResponse = z.object({
-  message: z.string().openapi({ example: '100 points transferred!' })
-})
-
-const transactionDetailSwagger: RouteConfig = {
+const getTransactionHistoryByClientSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/rewards/client/accounts/{accountId}/transactionDetail/{referenceId}`,
-  description: 'Get the transaction details for a given account id and reference id.',
-  tags: ['Transactions'],
+  path: `${routePrefix}/loyalty/{memberId}/transactions`,
+  tags: ['Txn History'],
+  description: 'gets transaction history from an account of a member',
   request: {
-    params: z.object({ accountId: z.string(), referenceId: z.string() })
+    params: z.object({ memberId: z.string() }),
+    headers: z.object({ partnerId: z.string() })
   },
   responses: {
-    200: {
-      description: 'Object with message data.',
-      content: {
-        'application/json': {
-          schema: transactionDetailResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
+    200: { description: 'successful response', content: { 'application/json': { schema: TxnHistoryResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+const CreateTxnRequest = z.object({
+  txnDescription: TxnDescription
+})
+
+const createTxnForMember = z.object({
+  memberId: z.string(),
+  partnerId: z.string(),
+  body: CreateTxnRequest
+})
+
+const CreateTxnResponse = z.object({
+  status: Status,
+  txnDescription: TxnDescription
+})
+
+const createTxnForMemberSwagger: RouteConfig = {
+  method: 'post',
+  path: `${routePrefix}/loyalty/{memberId}/transactions`,
+  tags: ['Txn History'],
+  description: 'earn or burn points for a member for a partner',
+  request: {
+    params: z.object({ memberId: z.string() }),
+    headers: z.object({ partnerId: z.string() }),
+    body: { content: { 'application/json': { schema: CreateTxnRequest } } }
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: CreateTxnResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+
+
+/*****************************************************************
+ * /loyalty/{memberId}/transactions/loyalty/{memberId}/transactions/{txnId}
+ */
+
+
+const getTxnDetailsForMember = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string()
+})
+
+const getTxnDetailsForMemberSwagger: RouteConfig = {
+  method: 'get',
+  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  tags: ['Txn History'],
+  description: 'get the details of a single txn',
+  request: {
+    params: z.object({ memberId: z.string(), txnId: z.string() }),
+    headers: z.object({ partnerId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: TxnResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+const reverseTxn = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string()
+})
+
+const reverseTxnSwagger: RouteConfig = {
+  method: 'delete',
+  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  tags: ['Txn History'],
+  description: 'Reverses txn',
+  request: {
+    params: z.object({ memberId: z.string(), txnId: z.string() }),
+    headers: z.object({ partnerId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: TxnResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+const ModifyTxnRequest = CreateTxnRequest
+
+const putTxnDetailsForMember = z.object({
+  memberId: z.string(),
+  txnId: z.string(),
+  partnerId: z.string(),
+  body: ModifyTxnRequest
+})
+
+const putTxnDetailsForMemberSwagger: RouteConfig = {
+  method: 'put',
+  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  tags: ['Txn History'],
+  description: 'update the details of a single txn',
+  request: {
+    params: z.object({ memberId: z.string(), txnId: z.string() }),
+    headers: z.object({ partnerId: z.string() }),
+    body: { content: { 'application/json': { schema: ModifyTxnRequest } } }
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: TxnResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+/*****************************************************************
+ * /loyalty/partners
+ */
+
+const createPartner = z.object({
+  status: Status,
+  partnerId: z.string(),
+  partnerDescription: PartnerDescription
+})
+
+const CreatePartnerResponse = PartnerDetailsResponse
+
+const createPartnerSwagger: RouteConfig = {
+  method: 'post',
+  path: `${routePrefix}/loyalty/partners`,
+  tags: ['Partner Operations'],
+  description: 'create partner record',
+  request: {
+    body: { content: { 'application/json': { schema: createPartner } } }
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: CreatePartnerResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+/*****************************************************************
+ * /loyalty/partners/{partnerId}
+ */
+
+const getPartnerDetails = z.object({
+  partnerId: z.string()
+})
+
+const GetPartnerDetailsResponse = PartnerDetailsResponse
+
+const getPartnerDetailsSwagger: RouteConfig = {
+  method: 'get',
+  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  tags: ['Partner Operations'],
+  description: 'gets details of a particular partner',
+  request: {
+    params: z.object({ partnerId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: GetPartnerDetailsResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+const UpdatePartnerResponse = PartnerDetailsResponse
+
+const updatePartnerDetails = z.object({
+  status: Status,
+  partnerId: z.string(),
+  partnerDescription: PartnerDescription
+})
+
+const UpdatePartnerRequestBody = z.object({
+  status: Status,
+  partnerDescription: PartnerDescription
+})
+
+const updatePartnerDetailsSwagger: RouteConfig = {
+  method: 'put',
+  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  tags: ['Partner Operations'],
+  description: 'updates details of a particular partner',
+  request: {
+    params: z.object({ partnerId: z.string() }),
+    body: { content: { 'application/json': { schema: UpdatePartnerRequestBody } } }
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: UpdatePartnerResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+const deletePartnerDetails = z.object({
+  partnerId: z.string()
+})
+
+const DeletePartnerResponse = PartnerDetailsResponse
+
+const deletePartnerDetailsSwagger: RouteConfig = {
+  method: 'delete',
+  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  tags: ['Partner Operations'],
+  description: 'deletes details of a particular partner',
+  request: {
+    params: z.object({ partnerId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: DeletePartnerResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+/*****************************************************************
+ * /loyalty/partners/{partnerId}/transactions
+ */
+
+const getTransactionHistoryByPartner = z.object({
+  partnerId: z.string()
+})
+
+const PartnerTxnHistoryResponse = TxnHistoryResponse
+
+const getTransactionHistoryByPartnerSwagger: RouteConfig = {
+  method: 'get',
+  path: `${routePrefix}/loyalty/partners/{partnerId}/transactions`,
+  tags: ['Txn History By Partner'],
+  description: 'gets txn history for a single partner',
+  request: {
+    params: z.object({ partnerId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: PartnerTxnHistoryResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
+  }
+}
+
+/*****************************************************************
+ * /loyalty/partners/{partnerId}/{txnId}
+ */
+
+const getTxnDetailForPartner = z.object({
+  partnerId: z.string(),
+  txnId: z.string()
+})
+
+const getTxnDetailForPartnerSwagger: RouteConfig = {
+  method: 'get',
+  path: `${routePrefix}/loyalty/partners/{partnerId}/transactions/{txnId}`,
+  tags: ['Txn History'],
+  description: 'get the details of a single txn',
+  request: {
+    params: z.object({ partnerId: z.string(), txnId: z.string() })
+  },
+  responses: {
+    200: { description: 'successful response', content: { 'application/json': { schema: TxnResponse } } },
+    204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
+    400: { description: 'Bad Request / validation error in given data' },
+    401: { description: 'Not authenticated' },
+    403: { description: 'Not authorized to view this resource' },
+    404: { description: 'resource not found' },
+    500: { description: 'Internal Server Error' },
+    503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
 
 export {
-  pointsTransfer,
-  pointsTransferSwagger,
-  payWithPoints,
-  payWithPointsSwagger,
-  convertPoints,
-  convertPointsSwagger,
-  calculatePoints,
-  calculatePointsSwagger,
-  transactionHistory,
-  transactionHistorySwagger,
-  transactionDetail,
-  transactionDetailSwagger
+  getPointsBalance,
+  getPointsSwagger,
+  getTransactionHistoryByClient,
+  getTransactionHistoryByClientSwagger,
+  createTxnForMember,
+  createTxnForMemberSwagger,
+  getTxnDetailsForMember,
+  getTxnDetailsForMemberSwagger,
+  reverseTxn,
+  reverseTxnSwagger,
+  putTxnDetailsForMember,
+  putTxnDetailsForMemberSwagger,
+  createPartner,
+  createPartnerSwagger,
+  getPartnerDetails,
+  getPartnerDetailsSwagger,
+  updatePartnerDetails,
+  updatePartnerDetailsSwagger,
+  deletePartnerDetails,
+  deletePartnerDetailsSwagger,
+  getTransactionHistoryByPartner,
+  getTransactionHistoryByPartnerSwagger,
+  getTxnDetailForPartner,
+  getTxnDetailForPartnerSwagger
 }
