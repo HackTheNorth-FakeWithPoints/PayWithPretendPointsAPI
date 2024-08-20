@@ -20,14 +20,6 @@ const createStatusSchema = (): z.ZodSchema =>
 
 const Status = createStatusSchema()
 
-const PointsBalanceResponse = z.object({
-  status: Status,
-  memberId: z.string(),
-  partnerId: z.string().optional(),
-  accountStatus: z.enum(['active', 'inactive', 'locked']).optional(),
-  pointBalance: z.number().int()
-})
-
 const PartnerDescription = z.object({
   partnerId: z.string(),
   name: z.string(),
@@ -66,11 +58,6 @@ const PartnerDetailsResponse = z.object({
   PartnerDescription: PartnerDescription
 })
 
-const CreatePartnerResponse = PartnerDetailsResponse
-
-const UpdatePartnerResponse = PartnerDetailsResponse
-
-const DeletePartnerResponse = PartnerDetailsResponse
 
 const TxnDescription = z.object({
   refId: z.string(),
@@ -80,17 +67,6 @@ const TxnDescription = z.object({
   amount: z.number().int(),
   txnType: z.enum(['earn', 'burn']),
   txnDescription: z.array(z.string())
-})
-
-const CreateTxnRequest = z.object({
-  txnDescription: TxnDescription
-})
-
-const ModifyTxnRequest = CreateTxnRequest
-
-const CreateTxnResponse = z.object({
-  status: Status,
-  txnDescription: TxnDescription
 })
 
 const TxnHistoryResponse = z.object({
@@ -103,17 +79,25 @@ const TxnResponse = z.object({
   transaction: TxnDescription
 })
 
-const PartnerTxnHistoryResponse = TxnHistoryResponse
-
 const ErrorResponse = z.object({
   statusCode: z.number().int(),
   timestamp: z.number().int(),
   message: z.string()
 })
-
+/*****************************************************************
+ * /loyalty/{memberId}/points
+ */
 const getPointsBalance = z.object({
   memberId: z.string(),
   partnerId: z.string()
+})
+
+const PointsBalanceResponse = z.object({
+  status: Status,
+  memberId: z.string(),
+  partnerId: z.string().optional(),
+  accountStatus: z.enum(['active', 'inactive', 'locked']).optional(),
+  pointBalance: z.number().int()
 })
 
 // Route Configs
@@ -137,6 +121,10 @@ const getPointsSwagger: RouteConfig = {
     503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
+
+/*****************************************************************
+ * /loyalty/{memberId}/transactions
+ */
 
 const getTransactionHistoryByClient = z.object({
   memberId: z.string(),
@@ -163,11 +151,19 @@ const getTransactionHistoryByClientSwagger: RouteConfig = {
     503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
+const CreateTxnRequest = z.object({
+  txnDescription: TxnDescription
+})
 
 const createTxnForMember = z.object({
   memberId: z.string(),
   partnerId: z.string(),
   body: CreateTxnRequest
+})
+
+const CreateTxnResponse = z.object({
+  status: Status,
+  txnDescription: TxnDescription
 })
 
 const createTxnForMemberSwagger: RouteConfig = {
@@ -191,6 +187,13 @@ const createTxnForMemberSwagger: RouteConfig = {
     503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
+
+
+
+/*****************************************************************
+ * /loyalty/{memberId}/transactions/loyalty/{memberId}/transactions/{txnId}
+ */
+
 
 const getTxnDetailsForMember = z.object({
   memberId: z.string(),
@@ -245,6 +248,7 @@ const reverseTxnSwagger: RouteConfig = {
     503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
+const ModifyTxnRequest = CreateTxnRequest
 
 const putTxnDetailsForMember = z.object({
   memberId: z.string(),
@@ -275,11 +279,17 @@ const putTxnDetailsForMemberSwagger: RouteConfig = {
   }
 }
 
+/*****************************************************************
+ * /loyalty/partners
+ */
+
 const createPartner = z.object({
   status: Status,
   partnerId: z.string(),
   partnerDescription: PartnerDescription
 })
+
+const CreatePartnerResponse = PartnerDetailsResponse
 
 const createPartnerSwagger: RouteConfig = {
   method: 'post',
@@ -301,9 +311,15 @@ const createPartnerSwagger: RouteConfig = {
   }
 }
 
+/*****************************************************************
+ * /loyalty/partners/{partnerId}
+ */
+
 const getPartnerDetails = z.object({
   partnerId: z.string()
 })
+
+const GetPartnerDetailsResponse = PartnerDetailsResponse
 
 const getPartnerDetailsSwagger: RouteConfig = {
   method: 'get',
@@ -314,7 +330,7 @@ const getPartnerDetailsSwagger: RouteConfig = {
     params: z.object({ partnerId: z.string() })
   },
   responses: {
-    200: { description: 'successful response', content: { 'application/json': { schema: PartnerDetailsResponse } } },
+    200: { description: 'successful response', content: { 'application/json': { schema: GetPartnerDetailsResponse } } },
     204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
     400: { description: 'Bad Request / validation error in given data' },
     401: { description: 'Not authenticated' },
@@ -325,13 +341,15 @@ const getPartnerDetailsSwagger: RouteConfig = {
   }
 }
 
+const UpdatePartnerResponse = PartnerDetailsResponse
+
 const updatePartnerDetails = z.object({
   status: Status,
   partnerId: z.string(),
   partnerDescription: PartnerDescription
 })
 
-const UpdatePartnerRequest = z.object({
+const UpdatePartnerRequestBody = z.object({
   status: Status,
   partnerDescription: PartnerDescription
 })
@@ -343,7 +361,7 @@ const updatePartnerDetailsSwagger: RouteConfig = {
   description: 'updates details of a particular partner',
   request: {
     params: z.object({ partnerId: z.string() }),
-    body: { content: { 'application/json': { schema: UpdatePartnerRequest } } }
+    body: { content: { 'application/json': { schema: UpdatePartnerRequestBody } } }
   },
   responses: {
     200: { description: 'successful response', content: { 'application/json': { schema: UpdatePartnerResponse } } },
@@ -360,6 +378,8 @@ const updatePartnerDetailsSwagger: RouteConfig = {
 const deletePartnerDetails = z.object({
   partnerId: z.string()
 })
+
+const DeletePartnerResponse = PartnerDetailsResponse
 
 const deletePartnerDetailsSwagger: RouteConfig = {
   method: 'delete',
@@ -381,9 +401,15 @@ const deletePartnerDetailsSwagger: RouteConfig = {
   }
 }
 
+/*****************************************************************
+ * /loyalty/partners/{partnerId}/transactions
+ */
+
 const getTransactionHistoryByPartner = z.object({
   partnerId: z.string()
 })
+
+const PartnerTxnHistoryResponse = TxnHistoryResponse
 
 const getTransactionHistoryByPartnerSwagger: RouteConfig = {
   method: 'get',
@@ -404,6 +430,10 @@ const getTransactionHistoryByPartnerSwagger: RouteConfig = {
     503: { description: 'Service Unavailable', content: { '*/*': { schema: ErrorResponse } } }
   }
 }
+
+/*****************************************************************
+ * /loyalty/partners/{partnerId}/{txnId}
+ */
 
 const getTxnDetailForPartner = z.object({
   partnerId: z.string(),
