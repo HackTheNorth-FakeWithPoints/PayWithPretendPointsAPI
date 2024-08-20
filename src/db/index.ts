@@ -5,7 +5,7 @@ import { SEQUELIZE_CONFIG } from './config/config.ts'
 
 const sequelize = new Sequelize({
   ...SEQUELIZE_CONFIG,
-  models: [__dirname + '/models/**/*.ts']
+  models: ['/models/**/*.ts']
 })
 
 export { sequelize }
