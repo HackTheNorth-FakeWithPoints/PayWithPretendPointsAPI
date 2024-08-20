@@ -165,8 +165,10 @@ router.get('/loyalty/partners/:partnerId/transactions', (req: Request, res: Resp
 
 router.get('/loyalty/partners/:partnerId/transactions/:txnId', (req: Request, res: Response) => {
   try {
-
-    const { partnerId,txnId  } = getTxnDetailForPartner.parse({ partnerId: req.params.partnerId, txnId: req.params.txnId })
+    const { partnerId, txnId } = getTxnDetailForPartner.parse({
+      partnerId: req.params.partnerId,
+      txnId: req.params.txnId
+    })
     res.json({ message: `Successfully got transaction details for txnId: ${txnId} on partnerId: ${partnerId}` })
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
