@@ -1,10 +1,9 @@
-import { config } from 'dotenv'
-import { SequelizeOptions } from 'sequelize-typescript'
+/* eslint-disable @typescript-eslint/no-require-imports */
+require('ts-node/register')
+require('dotenv').config()
 
-config()
-
-const SEQUELIZE_CONFIG: SequelizeOptions = {
-  port: process.env.DB_PORT as unknown as number,
+module.exports = {
+  port: process.env.DB_PORT,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -19,5 +18,3 @@ const SEQUELIZE_CONFIG: SequelizeOptions = {
     }
   }
 }
-
-export { SEQUELIZE_CONFIG }
