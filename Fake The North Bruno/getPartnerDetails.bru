@@ -1,0 +1,19 @@
+meta {
+  name: getPartnerDetails
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://localhost:3000/api/v1/loyalty/partners/:partnerId
+  body: none
+  auth: none
+}
+
+params:path {
+  partnerId: 1
+}
+
+headers {
+  accept: application/json
+}

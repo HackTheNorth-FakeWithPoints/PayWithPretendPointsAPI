@@ -1,0 +1,20 @@
+meta {
+  name: getTxnDetailForPartner
+  type: http
+  seq: 8
+}
+
+get {
+  url: http://localhost:3000/api/v1/loyalty/partners/:partnerId/transactions/:txnId
+  body: none
+  auth: none
+}
+
+params:path {
+  partnerId: 1
+  txnId: 1
+}
+
+headers {
+  accept: application/json
+}

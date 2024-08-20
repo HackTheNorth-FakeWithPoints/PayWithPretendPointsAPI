@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Fake The North Bruno",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
