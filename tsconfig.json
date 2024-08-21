@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES5",
+    "target": "ESNext",
     "strict": true,
     "sourceMap": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "module": "CommonJS",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -22,5 +22,5 @@
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/db/config", "src/db/migrations"]
 }

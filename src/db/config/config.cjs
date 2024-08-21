@@ -9,12 +9,12 @@ module.exports = {
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   dialect: 'postgres',
-  ...(process.env.NODE_ENV === 'production' && {
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: true
-      }
+
+  // comment out "dialectOptions" if running locally
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: true
     }
-  })
+  }
 }

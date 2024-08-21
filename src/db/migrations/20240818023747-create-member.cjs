@@ -1,17 +1,16 @@
-import { DataTypes, QueryInterface, Sequelize } from 'sequelize'
+'use strict'
 
-/** @type {import("sequelize-cli").Migration} */
 module.exports = {
-  up: async (queryInterface: QueryInterface) => {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('members', {
       memberId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
       },
       partnerId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'partners',
           key: 'partnerId'
@@ -19,11 +18,11 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       name: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       contactId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'contacts',
           key: 'id'
@@ -31,26 +30,26 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       balance: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(10, 2),
         defaultValue: 0.0
       },
       status: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     })
   },
-  down: async (queryInterface: QueryInterface) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('members')
   }
 }

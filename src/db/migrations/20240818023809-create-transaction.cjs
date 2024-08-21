@@ -1,29 +1,28 @@
-import { DataTypes, QueryInterface, Sequelize } from 'sequelize'
+'use strict'
 
-/** @type {import("sequelize-cli").Migration} */
 module.exports = {
-  up: async (queryInterface: QueryInterface) => {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('transactions', {
       txnId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
       },
       refId: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       partnerRefId: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       timestamp: {
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       partnerId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'partners',
           key: 'partnerId'
@@ -31,7 +30,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       memberId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'members',
           key: 'memberId'
@@ -39,39 +38,39 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       status: {
-        type: DataTypes.ENUM('delete', 'reverse'),
+        type: Sequelize.ENUM('delete', 'reverse'),
         allowNull: false
       },
       txnType: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false
       },
       amount: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
       description1: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       description2: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       description3: {
-        type: DataTypes.STRING
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     })
   },
-  down: async (queryInterface: QueryInterface) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('transactions')
   }
 }
