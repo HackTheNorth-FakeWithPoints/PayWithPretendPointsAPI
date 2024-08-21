@@ -55,3 +55,27 @@ docker compose -f docker-compose.local.yml up --build
 # if not changes made, this is faster
 docker compose up
 ```
+
+**Sequelize migration template:**
+
+```js
+'use strict'
+
+module.exports = {
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @param {import('sequelize').Sequelize & import('sequelize').DataTypes} Sequelize
+   * @returns {Promise<void>}
+   */
+  up: async (queryInterface, Sequelize) => {
+    // your up migration here...
+  },
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @returns {Promise<void>}
+   */
+  down: async (queryInterface) => {
+    // your down migration here...
+  }
+}
+```
