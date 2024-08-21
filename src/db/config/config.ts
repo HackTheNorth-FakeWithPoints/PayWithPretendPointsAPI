@@ -10,14 +10,14 @@ const SEQUELIZE_CONFIG: SequelizeOptions = {
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   dialect: 'postgres',
-
-  // comment out "dialectOptions" if running locally
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: true
+  ...(process.env.NODE_ENV === 'production' && {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: true
+      }
     }
-  }
+  })
 }
 
 export { SEQUELIZE_CONFIG }

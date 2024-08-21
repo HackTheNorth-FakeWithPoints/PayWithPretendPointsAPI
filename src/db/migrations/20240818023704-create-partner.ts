@@ -1,27 +1,28 @@
-'use strict'
+import { DataTypes, QueryInterface, Sequelize } from 'sequelize'
 
+/** @type {import("sequelize-cli").Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface: QueryInterface) => {
     await queryInterface.createTable('partners', {
       partnerId: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
       },
       status: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
       },
       name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
       },
       description: {
-        type: Sequelize.TEXT
+        type: DataTypes.TEXT
       },
       contactId: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'contacts',
           key: 'id'
@@ -29,31 +30,31 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       permission: {
-        type: Sequelize.ENUM('Read', 'Write', 'Balance Inquiry'),
+        type: DataTypes.ENUM('Read', 'Write', 'Balance Inquiry'),
         allowNull: false
       },
       emailId: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
       },
       password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     })
   },
-  down: async (queryInterface) => {
+  down: async (queryInterface: QueryInterface) => {
     await queryInterface.dropTable('partners')
   }
 }
