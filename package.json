@@ -30,6 +30,7 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
     "@sequelize/core": "^7.0.0-alpha.37",
+    "@swc/core": "^1.7.14",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -53,7 +54,6 @@
     "@eslint/compat": "^1.1.1",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.0",
-    "@swc/core": "^1.7.14",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
