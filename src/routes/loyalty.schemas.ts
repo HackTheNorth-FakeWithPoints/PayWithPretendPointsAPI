@@ -58,7 +58,6 @@ const PartnerDetailsResponse = z.object({
   PartnerDescription: PartnerDescription
 })
 
-
 const TxnDescription = z.object({
   refId: z.string(),
   timestamp: z.string().datetime(),
@@ -188,12 +187,9 @@ const createTxnForMemberSwagger: RouteConfig = {
   }
 }
 
-
-
 /*****************************************************************
  * /loyalty/{memberId}/transactions/loyalty/{memberId}/transactions/{txnId}
  */
-
 
 const getTxnDetailsForMember = z.object({
   memberId: z.string(),

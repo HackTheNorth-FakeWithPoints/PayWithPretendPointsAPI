@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from 'express'
 
+import { findPartnerById } from '@/dataProviders/partners.ts'
 import {
   createPartner,
   createTxnForMember,
@@ -119,11 +120,17 @@ router.post('/loyalty/partners/', (req: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
   try {
     const { partnerId } = getPartnerDetails.parse({ partnerId: req.params.partnerId })
 
-    res.json({ message: `Successfully got details for partnerId: ${partnerId}` })
+    const partner = await findPartnerById(partnerId)
+
+    if (!partner) {
+      return res.status(404).json({ message: `Partner with id ${partnerId} not found!` })
+    }
+
+    res.json(partner)
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
   }
