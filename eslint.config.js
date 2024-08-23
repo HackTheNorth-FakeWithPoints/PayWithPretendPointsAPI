@@ -1,5 +1,4 @@
 import { fixupConfigRules } from '@eslint/compat'
-// eslint-disable-next-line import/namespace
 import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
 import tsParser from '@typescript-eslint/parser'
