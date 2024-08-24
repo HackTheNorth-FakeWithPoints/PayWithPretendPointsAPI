@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from 'express'
 
+import { adminAuthMiddleware, authMiddleware } from '@/middleware/index.ts'
 import {
   createPartner,
   createTxnForMember,
@@ -17,7 +18,7 @@ import {
 
 const router = express.Router()
 
-router.get('/loyalty/:memberId/points/', (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/points/', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId } = getPointsBalance.parse({
       partnerId: req.get('partnerId'),
@@ -32,7 +33,7 @@ router.get('/loyalty/:memberId/points/', (req: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/:memberId/transactions/', (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/transactions/', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId } = getTransactionHistoryByClient.parse({
       partnerId: req.get('partnerId'),
@@ -44,7 +45,7 @@ router.get('/loyalty/:memberId/transactions/', (req: Request, res: Response) => 
   }
 })
 
-router.post('/loyalty/:memberId/transactions/', (req: Request, res: Response) => {
+router.post('/loyalty/:memberId/transactions/', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, body } = createTxnForMember.parse({
       partnerId: req.get('partnerId'),
@@ -60,7 +61,7 @@ router.post('/loyalty/:memberId/transactions/', (req: Request, res: Response) =>
   }
 })
 
-router.get('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId } = getTxnDetailsForMember.parse({
       partnerId: req.get('partnerId'),
@@ -76,7 +77,7 @@ router.get('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Respons
   }
 })
 
-router.delete('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Response) => {
+router.delete('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId } = reverseTxn.parse({
       partnerId: req.get('partnerId'),
@@ -90,7 +91,7 @@ router.delete('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Resp
   }
 })
 
-router.put('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Response) => {
+router.put('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId, body } = putTxnDetailsForMember.parse({
       partnerId: req.get('partnerId'),
@@ -107,7 +108,7 @@ router.put('/loyalty/:memberId/transactions/:txnId', (req: Request, res: Respons
   }
 })
 
-router.post('/loyalty/partners/', (req: Request, res: Response) => {
+router.post('/loyalty/partners/', adminAuthMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, status, partnerDescription } = createPartner.parse(req.body)
 
@@ -119,7 +120,7 @@ router.post('/loyalty/partners/', (req: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId } = getPartnerDetails.parse({ partnerId: req.params.partnerId })
 
@@ -129,7 +130,7 @@ router.get('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
   }
 })
 
-router.put('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
+router.put('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, status, partnerDescription } = updatePartnerDetails.parse({
       partnerId: req.params.partnerId,
@@ -145,7 +146,7 @@ router.put('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
   }
 })
 
-router.delete('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
+router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId } = deletePartnerDetails.parse({ partnerId: req.params.partnerId })
     res.json({ message: `Successfully deleted partner with id: ${partnerId}` })
@@ -154,7 +155,7 @@ router.delete('/loyalty/partners/:partnerId', (req: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/partners/:partnerId/transactions', (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId/transactions', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId } = getTransactionHistoryByPartner.parse({ partnerId: req.params.partnerId })
     res.json({ message: `Successfully got transaction history for partnerId: ${partnerId}` })
@@ -163,7 +164,7 @@ router.get('/loyalty/partners/:partnerId/transactions', (req: Request, res: Resp
   }
 })
 
-router.get('/loyalty/partners/:partnerId/transactions/:txnId', (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, txnId } = getTxnDetailForPartner.parse({
       partnerId: req.params.partnerId,
