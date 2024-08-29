@@ -3,7 +3,7 @@ import express from 'express'
 import helmet from 'helmet'
 import { serve, setup } from 'swagger-ui-express'
 
-import { routePrefix } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
 import { adminAuthRouter, authRouter, healthRouter, loyaltyRouter } from '@/routes/index.ts'
 import swaggerJSON from '@/swagger/oas.json'
@@ -16,10 +16,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 
-app.use(`${routePrefix}`, healthRouter)
-app.use(`${routePrefix}`, authRouter)
-app.use(`${routePrefix}`, adminAuthRouter)
-app.use(`${routePrefix}`, loyaltyRouter)
+app.use(`${ROUTE_PREFIX}`, healthRouter)
+app.use(`${ROUTE_PREFIX}`, authRouter)
+app.use(`${ROUTE_PREFIX}`, adminAuthRouter)
+app.use(`${ROUTE_PREFIX}`, loyaltyRouter)
 app.use(
   `/`,
   serve,

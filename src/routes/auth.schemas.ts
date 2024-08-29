@@ -1,7 +1,7 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { routePrefix } from '@/constants/index.ts'
+import { ROUTE_PREFIX } from '@/constants/index.ts'
 
 extendZodWithOpenApi(z)
 
@@ -19,7 +19,7 @@ const authResponse = z.object({
 
 const authSwagger: RouteConfig = {
   method: 'post',
-  path: `${routePrefix}/auth`,
+  path: `${ROUTE_PREFIX}/auth`,
   tags: ['Authentication'],
   description: 'auth into partner account',
   request: {

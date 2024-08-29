@@ -1,1 +1,1 @@
-export const routePrefix = '/api/v1'
+export const ROUTE_PREFIX = '/api/v1'

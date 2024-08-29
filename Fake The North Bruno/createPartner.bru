@@ -7,53 +7,23 @@ meta {
 post {
   url: http://localhost:3000/api/v1/loyalty/partners
   body: json
-  auth: none
+  auth: Bearer
 }
 
 headers {
   accept: application/json
   Content-Type: application/json
+  Authorization: Bearer jwt-token
 }
 
 body:json {
   {
-    "status": {
-      "code": "string",
-      "message": "string"
-    },
-    "partnerId": "string",
-    "partnerDescription": {
-      "partnerId": "string",
-      "name": "string",
-      "description": "string",
-      "contacts": [
-        {
-          "name": "string",
-          "type": "partner",
-          "primaryAddress": {
-            "street": [
-              "string"
-            ]
-          },
-          "secondardyAddress": {
-            "street": [
-              "string"
-            ]
-          },
-          "phone": [
-            {
-              "number": "string",
-              "type": "home"
-            }
-          ],
-          "email": [
-            {
-              "email": "string",
-              "type": "home"
-            }
-          ]
-        }
-      ]
-    }
+    "status": "ACTIVE",
+    "name": "Partner Name",
+    "description": "Partner Description",
+    "contactId": 1,
+    "permission": "Read",
+    "emailId": "partner3@example.com",
+    "password": "hashed-password"
   }
 }

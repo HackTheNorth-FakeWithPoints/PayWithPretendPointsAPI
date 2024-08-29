@@ -1,7 +1,7 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { routePrefix } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 
 extendZodWithOpenApi(z)
 
@@ -20,7 +20,7 @@ const healthSchema = z.object({
 
 const healthSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/health`,
+  path: `${ROUTE_PREFIX}/health`,
   tags: ['Status'],
   description: 'Returns the status of the database connection.',
   responses: {

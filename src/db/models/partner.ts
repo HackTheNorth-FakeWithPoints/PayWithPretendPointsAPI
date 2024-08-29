@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 
+import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
 import { Contact } from '@/db/models/index.ts'
 
@@ -42,7 +43,7 @@ Partner.init(
       onDelete: 'CASCADE'
     },
     permission: {
-      type: DataTypes.ENUM('Read', 'Write', 'Balance Inquiry'),
+      type: DataTypes.ENUM(...Object.values(PARTNER_PERMISSIONS)),
       allowNull: false
     },
     emailId: {
