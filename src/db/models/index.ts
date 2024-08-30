@@ -1,8 +1,8 @@
 import { readdirSync } from 'fs'
 import { basename, dirname, join } from 'path'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
+const __filename = 'src/db/models/index.ts'
+
 const __dirname = dirname(__filename)
 
 const models: { [key: string]: any } = {}
