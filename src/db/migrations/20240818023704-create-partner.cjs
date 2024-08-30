@@ -1,14 +1,9 @@
 'use strict'
 
 module.exports = {
-  /**
-   * @param {import('sequelize').QueryInterface} queryInterface
-   * @param {import('sequelize').Sequelize & import('sequelize').DataTypes} Sequelize
-   * @returns {Promise<void>}
-   */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('partners', {
-      partnerId: {
+      id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
@@ -32,16 +27,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       permission: {
         type: Sequelize.ENUM('Read', 'Write', 'Balance Inquiry'),
         allowNull: false
-      },
-      emailId: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
       },
       password: {
         type: Sequelize.STRING,
@@ -59,10 +51,6 @@ module.exports = {
       }
     })
   },
-  /**
-   * @param {import('sequelize').QueryInterface} queryInterface
-   * @returns {Promise<void>}
-   */
   down: async (queryInterface) => {
     await queryInterface.dropTable('partners')
   }
