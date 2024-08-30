@@ -83,7 +83,7 @@ Partner.init(
     }
   },
   {
-    modelName: 'Partner',
+    modelName: 'partner',
     tableName: 'partners',
     timestamps: true,
     sequelize

@@ -47,12 +47,7 @@ Member.init(
       primaryKey: true
     },
     partnerId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Partner,
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     name: {
       type: DataTypes.STRING,
@@ -87,7 +82,7 @@ Member.init(
     }
   },
   {
-    modelName: 'Member',
+    modelName: 'member',
     tableName: 'members',
     timestamps: true,
     sequelize

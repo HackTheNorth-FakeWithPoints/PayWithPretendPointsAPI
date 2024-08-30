@@ -120,7 +120,7 @@ Transaction.init(
     }
   },
   {
-    modelName: 'Transaction',
+    modelName: 'transaction',
     tableName: 'transactions',
     timestamps: true,
     sequelize
