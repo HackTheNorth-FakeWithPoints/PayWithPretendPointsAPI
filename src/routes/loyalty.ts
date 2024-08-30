@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from 'express'
 
 import { addPartner, findPartnerById, modifyPartner, removePartner } from '@/data-providers/index.ts'
+import { findTransactions } from '@/data-providers/transaction.ts'
 import { adminAuthMiddleware, authMiddleware } from '@/middleware/index.ts'
 import {
   createTxnForMember,
@@ -33,13 +34,19 @@ router.get('/loyalty/:memberId/points/', authMiddleware, (req: Request, res: Res
   }
 })
 
-router.get('/loyalty/:memberId/transactions/', authMiddleware, (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/transactions/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const { partnerId, memberId } = getTransactionHistoryByClient.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId
     })
-    res.json({ message: `Successfully got transaction history for clientId: ${memberId} by ${partnerId}` })
+
+    const transactions = await findTransactions({ memberId: parseInt(memberId), partnerId: parseInt(partnerId) })
+
+    res.json({
+      message: `Successfully got transaction history for clientId: ${memberId} by ${partnerId}`,
+      transactions
+    })
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
   }

@@ -2,7 +2,6 @@ import { DataTypes, Model } from 'sequelize'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
-import { Contact } from '@/db/models/index.ts'
 
 class Partner extends Model {
   declare partnerId: number
@@ -13,6 +12,14 @@ class Partner extends Model {
   declare permission: string
   declare emailId: string
   declare password: string
+
+  static associate(models: any) {
+    Partner.belongsTo(models.Contact, {
+      onDelete: 'CASCADE',
+      foreignKey: 'contactId',
+      targetKey: 'id'
+    })
+  }
 }
 
 Partner.init(
@@ -35,12 +42,7 @@ Partner.init(
       type: DataTypes.TEXT
     },
     contactId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Contact,
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     permission: {
       type: DataTypes.ENUM(...Object.values(PARTNER_PERMISSIONS)),

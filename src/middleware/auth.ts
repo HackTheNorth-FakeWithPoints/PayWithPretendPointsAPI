@@ -9,7 +9,13 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
       return res.status(403).json({ message: 'Authorization header not found!' })
     }
 
-    jwt.verify(token, process.env.JWT_SECRET as string)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload
+
+    if (!decoded || !decoded.partnerId) {
+      return res.status(403).json({ message: 'Invalid token!' })
+    }
+
+    req.partnerId = decoded.partnerId.toString()
 
     next()
   } catch {

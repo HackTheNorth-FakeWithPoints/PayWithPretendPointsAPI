@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import morgan from 'morgan'
 import { serve, setup } from 'swagger-ui-express'
 
 import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
@@ -12,6 +13,7 @@ const app = express()
 
 app.use(helmet())
 app.use(rateLimiter)
+app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
