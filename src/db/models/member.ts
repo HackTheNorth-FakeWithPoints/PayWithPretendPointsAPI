@@ -1,7 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
-import { Contact, Partner } from '@/db/models/index.ts'
 
 class Member extends Model {
   declare memberId: number
@@ -12,6 +11,16 @@ class Member extends Model {
   declare status: string
   declare createdAt: Date
   declare updatedAt: Date
+
+  static associate = (models: any) => {
+    Member.belongsTo(models.Partner, {
+      onDelete: 'CASCADE'
+    })
+
+    Member.belongsTo(models.Contact, {
+      onDelete: 'CASCADE'
+    })
+  }
 }
 
 Member.init(
@@ -23,24 +32,14 @@ Member.init(
       primaryKey: true
     },
     partnerId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Partner,
-        key: 'partnerId'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
     contactId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Contact,
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     balance: {
       type: DataTypes.DECIMAL(10, 2),

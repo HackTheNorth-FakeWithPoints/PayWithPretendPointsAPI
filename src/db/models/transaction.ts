@@ -18,6 +18,18 @@ class Transaction extends Model {
   declare description3?: string
   declare createdAt: Date
   declare updatedAt: Date
+
+  static associate(models: any) {
+    Transaction.belongsTo(models.Partner, {
+      foreignKey: 'partnerId',
+      onDelete: 'CASCADE'
+    })
+
+    Transaction.belongsTo(models.Member, {
+      foreignKey: 'memberId',
+      onDelete: 'CASCADE'
+    })
+  }
 }
 
 Transaction.init(
