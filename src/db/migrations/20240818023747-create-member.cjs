@@ -26,13 +26,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      contactId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'contacts',
-          key: 'id'
-        },
-        onDelete: 'CASCADE'
+      address: {
+        type: Sequelize.STRING
+      },
+      phone: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
       },
       balance: {
         type: Sequelize.DECIMAL(10, 2),

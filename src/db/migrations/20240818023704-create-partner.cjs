@@ -25,13 +25,14 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      contactId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'contacts',
-          key: 'id'
-        },
-        onDelete: 'CASCADE'
+      address: {
+        type: Sequelize.STRING
+      },
+      phone: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
       },
       permission: {
         type: Sequelize.ENUM('Read', 'Write', 'Balance Inquiry'),
