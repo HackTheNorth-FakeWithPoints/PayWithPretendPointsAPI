@@ -37,9 +37,10 @@ router.get('/loyalty/:memberId/points/', authMiddleware, (req: Request, res: Res
 router.get('/loyalty/:memberId/transactions/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const { partnerId, memberId } = getTransactionHistoryByClient.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId
     })
+
     const transactions = await findTransactions({ memberId: parseInt(memberId), partnerId: parseInt(partnerId) })
 
     res.json({
