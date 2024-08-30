@@ -1,9 +1,10 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-extendZodWithOpenApi(z)
+import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
+import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 
-const routePrefix = '/api/v1'
+extendZodWithOpenApi(z)
 
 // Schemas
 const createStatusSchema = (): z.ZodSchema =>
@@ -20,44 +21,39 @@ const createStatusSchema = (): z.ZodSchema =>
 
 const Status = createStatusSchema()
 
-const PartnerDescription = z.object({
-  partnerId: z.string(),
-  name: z.string(),
-  description: z.string(),
-  contacts: z.array(
-    z.object({
-      name: z.string(),
-      type: z.enum(['partner', 'member']),
-      primaryAddress: z.object({
-        street: z.array(z.string())
-      }),
-      secondardyAddress: z
-        .object({
-          street: z.array(z.string())
-        })
-        .optional(),
-      phone: z.array(
-        z.object({
-          number: z.string(),
-          type: z.enum(['home', 'work', 'cell', 'other'])
-        })
-      ),
-      email: z.array(
-        z.object({
-          email: z.string(),
-          type: z.enum(['home', 'work', 'other'])
-        })
-      )
-    })
-  )
+const partnerId = z.object({
+  partnerId: z.string().openapi({ example: '1' })
+})
+
+const partnerData = z.object({
+  status: z.string().openapi({ example: 'ACTIVE' }),
+  name: z.string().openapi({ example: 'Partner Name' }),
+  description: z.string().openapi({ example: 'Partner Description' }),
+  contactId: z.number().int().openapi({ example: 1 }),
+  permission: z
+    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS)])
+    .openapi({ example: PARTNER_PERMISSIONS.READ }),
+  emailId: z.string().openapi({ example: 'partner@example.com' }),
+  password: z.string().openapi({ example: '******************' })
+})
+
+const optionalPartnerData = z.object({
+  status: z.string().optional().openapi({ example: 'ACTIVE' }),
+  name: z.string().optional().openapi({ example: 'Partner Name' }),
+  description: z.string().optional().openapi({ example: 'Partner Description' }),
+  contactId: z.number().int().optional().openapi({ example: 1 }),
+  permission: z
+    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS)])
+    .optional()
+    .openapi({ example: PARTNER_PERMISSIONS.READ }),
+  emailId: z.string().optional().openapi({ example: 'partner@example.com' }),
+  password: z.string().optional().openapi({ example: '******************' })
 })
 
 const PartnerDetailsResponse = z.object({
-  status: Status,
-  placeHolder: z.string().optional(),
-  PartnerDescription: PartnerDescription
+  message: z.string().openapi({ type: 'string' }),
+  partner: partnerData
 })
-
 
 const TxnDescription = z.object({
   refId: z.string(),
@@ -103,7 +99,7 @@ const PointsBalanceResponse = z.object({
 // Route Configs
 const getPointsSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/{memberId}/points`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/points`,
   tags: ['Points Operations'],
   description: 'Gets total points from a single accounts of a member',
   request: {
@@ -133,7 +129,7 @@ const getTransactionHistoryByClient = z.object({
 
 const getTransactionHistoryByClientSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/{memberId}/transactions`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions`,
   tags: ['Txn History'],
   description: 'gets transaction history from an account of a member',
   request: {
@@ -168,7 +164,7 @@ const CreateTxnResponse = z.object({
 
 const createTxnForMemberSwagger: RouteConfig = {
   method: 'post',
-  path: `${routePrefix}/loyalty/{memberId}/transactions`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions`,
   tags: ['Txn History'],
   description: 'earn or burn points for a member for a partner',
   request: {
@@ -188,12 +184,9 @@ const createTxnForMemberSwagger: RouteConfig = {
   }
 }
 
-
-
 /*****************************************************************
  * /loyalty/{memberId}/transactions/loyalty/{memberId}/transactions/{txnId}
  */
-
 
 const getTxnDetailsForMember = z.object({
   memberId: z.string(),
@@ -203,7 +196,7 @@ const getTxnDetailsForMember = z.object({
 
 const getTxnDetailsForMemberSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{txnId}`,
   tags: ['Txn History'],
   description: 'get the details of a single txn',
   request: {
@@ -230,7 +223,7 @@ const reverseTxn = z.object({
 
 const reverseTxnSwagger: RouteConfig = {
   method: 'delete',
-  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{txnId}`,
   tags: ['Txn History'],
   description: 'Reverses txn',
   request: {
@@ -259,7 +252,7 @@ const putTxnDetailsForMember = z.object({
 
 const putTxnDetailsForMemberSwagger: RouteConfig = {
   method: 'put',
-  path: `${routePrefix}/loyalty/{memberId}/transactions/{txnId}`,
+  path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{txnId}`,
   tags: ['Txn History'],
   description: 'update the details of a single txn',
   request: {
@@ -283,24 +276,16 @@ const putTxnDetailsForMemberSwagger: RouteConfig = {
  * /loyalty/partners
  */
 
-const createPartner = z.object({
-  status: Status,
-  partnerId: z.string(),
-  partnerDescription: PartnerDescription
-})
-
-const CreatePartnerResponse = PartnerDetailsResponse
-
 const createPartnerSwagger: RouteConfig = {
   method: 'post',
-  path: `${routePrefix}/loyalty/partners`,
+  path: `${ROUTE_PREFIX}/loyalty/partners`,
   tags: ['Partner Operations'],
   description: 'create partner record',
   request: {
-    body: { content: { 'application/json': { schema: createPartner } } }
+    body: { content: { 'application/json': { schema: partnerData } } }
   },
   responses: {
-    200: { description: 'successful response', content: { 'application/json': { schema: CreatePartnerResponse } } },
+    200: { description: 'successful response', content: { 'application/json': { schema: PartnerDetailsResponse } } },
     204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
     400: { description: 'Bad Request / validation error in given data' },
     401: { description: 'Not authenticated' },
@@ -315,22 +300,16 @@ const createPartnerSwagger: RouteConfig = {
  * /loyalty/partners/{partnerId}
  */
 
-const getPartnerDetails = z.object({
-  partnerId: z.string()
-})
-
-const GetPartnerDetailsResponse = PartnerDetailsResponse
-
 const getPartnerDetailsSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
   tags: ['Partner Operations'],
   description: 'gets details of a particular partner',
   request: {
-    params: z.object({ partnerId: z.string() })
+    params: partnerId
   },
   responses: {
-    200: { description: 'successful response', content: { 'application/json': { schema: GetPartnerDetailsResponse } } },
+    200: { description: 'successful response', content: { 'application/json': { schema: PartnerDetailsResponse } } },
     204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
     400: { description: 'Bad Request / validation error in given data' },
     401: { description: 'Not authenticated' },
@@ -341,30 +320,17 @@ const getPartnerDetailsSwagger: RouteConfig = {
   }
 }
 
-const UpdatePartnerResponse = PartnerDetailsResponse
-
-const updatePartnerDetails = z.object({
-  status: Status,
-  partnerId: z.string(),
-  partnerDescription: PartnerDescription
-})
-
-const UpdatePartnerRequestBody = z.object({
-  status: Status,
-  partnerDescription: PartnerDescription
-})
-
 const updatePartnerDetailsSwagger: RouteConfig = {
-  method: 'put',
-  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  method: 'patch',
+  path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
   tags: ['Partner Operations'],
   description: 'updates details of a particular partner',
   request: {
-    params: z.object({ partnerId: z.string() }),
-    body: { content: { 'application/json': { schema: UpdatePartnerRequestBody } } }
+    params: partnerId,
+    body: { content: { 'application/json': { schema: optionalPartnerData } } }
   },
   responses: {
-    200: { description: 'successful response', content: { 'application/json': { schema: UpdatePartnerResponse } } },
+    200: { description: 'successful response', content: { 'application/json': { schema: PartnerDetailsResponse } } },
     204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
     400: { description: 'Bad Request / validation error in given data' },
     401: { description: 'Not authenticated' },
@@ -375,22 +341,26 @@ const updatePartnerDetailsSwagger: RouteConfig = {
   }
 }
 
-const deletePartnerDetails = z.object({
-  partnerId: z.string()
-})
-
-const DeletePartnerResponse = PartnerDetailsResponse
-
 const deletePartnerDetailsSwagger: RouteConfig = {
   method: 'delete',
-  path: `${routePrefix}/loyalty/partners/{partnerId}`,
+  path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
   tags: ['Partner Operations'],
   description: 'deletes details of a particular partner',
   request: {
-    params: z.object({ partnerId: z.string() })
+    params: partnerId
   },
   responses: {
-    200: { description: 'successful response', content: { 'application/json': { schema: DeletePartnerResponse } } },
+    200: {
+      description: 'successful response',
+      content: {
+        'application/json': {
+          schema: z.object({
+            message: z.string().openapi({ type: 'string' }),
+            count: z.number().int().openapi({ example: 1 })
+          })
+        }
+      }
+    },
     204: { description: 'No Content', content: { 'application/json': { schema: ErrorResponse } } },
     400: { description: 'Bad Request / validation error in given data' },
     401: { description: 'Not authenticated' },
@@ -413,7 +383,7 @@ const PartnerTxnHistoryResponse = TxnHistoryResponse
 
 const getTransactionHistoryByPartnerSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/partners/{partnerId}/transactions`,
+  path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}/transactions`,
   tags: ['Txn History By Partner'],
   description: 'gets txn history for a single partner',
   request: {
@@ -442,7 +412,7 @@ const getTxnDetailForPartner = z.object({
 
 const getTxnDetailForPartnerSwagger: RouteConfig = {
   method: 'get',
-  path: `${routePrefix}/loyalty/partners/{partnerId}/transactions/{txnId}`,
+  path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}/transactions/{txnId}`,
   tags: ['Txn History'],
   description: 'get the details of a single txn',
   request: {
@@ -473,13 +443,12 @@ export {
   reverseTxnSwagger,
   putTxnDetailsForMember,
   putTxnDetailsForMemberSwagger,
-  createPartner,
+  partnerId,
+  partnerData,
+  optionalPartnerData,
   createPartnerSwagger,
-  getPartnerDetails,
   getPartnerDetailsSwagger,
-  updatePartnerDetails,
   updatePartnerDetailsSwagger,
-  deletePartnerDetails,
   deletePartnerDetailsSwagger,
   getTransactionHistoryByPartner,
   getTransactionHistoryByPartnerSwagger,

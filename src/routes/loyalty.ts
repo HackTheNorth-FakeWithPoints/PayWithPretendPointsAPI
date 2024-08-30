@@ -1,19 +1,19 @@
 import express, { type Request, type Response } from 'express'
 
+import { addPartner, findPartnerById, modifyPartner, removePartner } from '@/data-providers/index.ts'
 import { adminAuthMiddleware, authMiddleware } from '@/middleware/index.ts'
 import {
-  createPartner,
   createTxnForMember,
-  deletePartnerDetails,
-  getPartnerDetails,
   getPointsBalance,
   getTransactionHistoryByClient,
   getTransactionHistoryByPartner,
   getTxnDetailForPartner,
   getTxnDetailsForMember,
+  optionalPartnerData,
+  partnerData,
+  partnerId,
   putTxnDetailsForMember,
-  reverseTxn,
-  updatePartnerDetails
+  reverseTxn
 } from '@/routes/index.ts'
 
 const router = express.Router()
@@ -108,48 +108,53 @@ router.put('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Reque
   }
 })
 
-router.post('/loyalty/partners/', adminAuthMiddleware, (req: Request, res: Response) => {
+router.post('/loyalty/partners/', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const { partnerId, status, partnerDescription } = createPartner.parse(req.body)
+    const partnerPayload = partnerData.parse(req.body)
+
+    const partner = await addPartner(partnerPayload)
+
+    res.json({ message: `Successfully created partner with partnerId: ${partner.partnerId}`, partner })
+  } catch (error) {
+    res.json({ message: 'An error occurred!', error })
+  }
+})
+
+router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { partnerId: parsedPartnerId } = partnerId.parse({ partnerId: req.params.partnerId })
+
+    const partner = await findPartnerById(parseInt(parsedPartnerId))
+
+    res.json({ message: `Successfully fetched partner with partnerId: ${parsedPartnerId}`, partner })
+  } catch (error) {
+    res.json({ message: 'An error occurred!', error })
+  }
+})
+
+router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { partnerId: parsedPartnerId } = partnerId.parse({ partnerId: req.params.partnerId })
+    const partnerPayload = optionalPartnerData.parse(req.body)
+
+    const [, partner] = await modifyPartner(parseInt(parsedPartnerId), partnerPayload)
 
     res.json({
-      message: `Successfully created partner with id: ${partnerId} with status: ${status} with content: ${partnerDescription} `
+      message: `Successfully updated details for partnerId: ${parsedPartnerId}`,
+      partner: partner[0]
     })
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
   }
 })
 
-router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
+router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const { partnerId } = getPartnerDetails.parse({ partnerId: req.params.partnerId })
+    const { partnerId: parsedPartnerId } = partnerId.parse({ partnerId: req.params.partnerId })
 
-    res.json({ message: `Successfully got details for partnerId: ${partnerId}` })
-  } catch (error) {
-    res.json({ message: 'An error occurred!', error })
-  }
-})
+    const count = await removePartner(parseInt(parsedPartnerId))
 
-router.put('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
-  try {
-    const { partnerId, status, partnerDescription } = updatePartnerDetails.parse({
-      partnerId: req.params.partnerId,
-      status: req.body.status,
-      partnerDescription: req.body.partnerDescription
-    })
-
-    res.json({
-      message: `Successfully updated details for partnerId: ${partnerId} with status ${status} with description ${partnerDescription}`
-    })
-  } catch (error) {
-    res.json({ message: 'An error occurred!', error })
-  }
-})
-
-router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, (req: Request, res: Response) => {
-  try {
-    const { partnerId } = deletePartnerDetails.parse({ partnerId: req.params.partnerId })
-    res.json({ message: `Successfully deleted partner with id: ${partnerId}` })
+    res.json({ message: `Successfully deleted partner with id: ${parsedPartnerId}`, count })
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
   }
