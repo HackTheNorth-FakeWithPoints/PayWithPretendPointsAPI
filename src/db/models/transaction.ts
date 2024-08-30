@@ -1,9 +1,28 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
 
-class Transaction extends Model {
+interface TransactionAttributes {
+  txnId: number
+  refId: string
+  partnerRefId?: string
+  timestamp: Date
+  partnerId: number
+  memberId: number
+  status: 'delete' | 'reverse'
+  txnType: string
+  amount: number
+  description1?: string
+  description2?: string
+  description3?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+type TransactionCreationAttributes = Optional<TransactionAttributes, 'txnId'>
+
+class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
   declare txnId: number
   declare refId: string
   declare partnerRefId?: string
@@ -19,7 +38,7 @@ class Transaction extends Model {
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate(models: any) {
+  static associate(models: { Partner: typeof Partner; Member: typeof Member }) {
     Transaction.belongsTo(models.Partner, {
       foreignKey: 'partnerId',
       onDelete: 'CASCADE'
@@ -56,7 +75,7 @@ Transaction.init(
       type: DataTypes.INTEGER,
       references: {
         model: Partner,
-        key: 'partnerId'
+        key: 'id'
       },
       onDelete: 'CASCADE'
     },
@@ -64,7 +83,7 @@ Transaction.init(
       type: DataTypes.INTEGER,
       references: {
         model: Member,
-        key: 'memberId'
+        key: 'id'
       },
       onDelete: 'CASCADE'
     },
@@ -101,7 +120,7 @@ Transaction.init(
     }
   },
   {
-    modelName: 'transaction',
+    modelName: 'Transaction',
     tableName: 'transactions',
     timestamps: true,
     sequelize
