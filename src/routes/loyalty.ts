@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express'
 
 import { addPartner, findPartnerById, modifyPartner, removePartner } from '@/data-providers/index.ts'
-import { findTransactions } from '@/data-providers/transaction.ts'
+import { addTransaction, findTransactions } from '@/data-providers/transaction.ts'
 import { adminAuthMiddleware, authMiddleware } from '@/middleware/index.ts'
 import {
   createTxnForMember,
@@ -22,7 +22,7 @@ const router = express.Router()
 router.get('/loyalty/:memberId/points/', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId } = getPointsBalance.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId
     })
 
@@ -52,26 +52,32 @@ router.get('/loyalty/:memberId/transactions/', authMiddleware, async (req: Reque
   }
 })
 
-router.post('/loyalty/:memberId/transactions/', authMiddleware, (req: Request, res: Response) => {
+router.post('/loyalty/:memberId/transactions/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, body } = createTxnForMember.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId,
       body: req.body
+    })
+
+    await addTransaction({
+      memberId: parseInt(memberId),
+      partnerId: parseInt(partnerId),
+      ...body
     })
 
     res.json({
       message: `Successfully created transaction for memberId: ${memberId} with amount ${body.txnDescription.amount} by ${partnerId}`
     })
   } catch (error) {
-    res.json({ message: 'An error occurred!', error })
+    res.status(400).json({ message: 'An error occurred!', error })
   }
 })
 
 router.get('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId } = getTxnDetailsForMember.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId,
       txnId: req.params.txnId
     })
@@ -87,7 +93,7 @@ router.get('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Reque
 router.delete('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId } = reverseTxn.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId,
       txnId: req.params.txnId
     })
@@ -101,7 +107,7 @@ router.delete('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Re
 router.put('/loyalty/:memberId/transactions/:txnId', authMiddleware, (req: Request, res: Response) => {
   try {
     const { partnerId, memberId, txnId, body } = putTxnDetailsForMember.parse({
-      partnerId: req.get('partnerId'),
+      partnerId: req.partnerId,
       memberId: req.params.memberId,
       txnId: req.params.txnId,
       body: req.body

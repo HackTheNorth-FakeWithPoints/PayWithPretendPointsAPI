@@ -1,7 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
-import { Member, Partner } from '@/db/models/index.ts'
 
 class Transaction extends Model {
   declare txnId: number
@@ -53,20 +52,10 @@ Transaction.init(
       defaultValue: DataTypes.NOW
     },
     partnerId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Partner,
-        key: 'partnerId'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     memberId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Member,
-        key: 'memberId'
-      },
-      onDelete: 'CASCADE'
+      type: DataTypes.INTEGER
     },
     status: {
       type: DataTypes.ENUM('delete', 'reverse'),
