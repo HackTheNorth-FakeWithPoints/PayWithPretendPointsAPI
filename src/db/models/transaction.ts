@@ -1,21 +1,36 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
 
-class Transaction extends Model {
-  declare txnId: number
-  declare refId: string
+interface TransactionAttributes {
+  id: number
+  reference: string
+  partnerRefId?: string
+  transactedAt: Date
+  partnerId: number
+  memberId: number
+  status: 'delete' | 'reverse'
+  type: string
+  amount: number
+  description?: Record<string, any>
+  createdAt: Date
+  updatedAt: Date
+}
+
+type TransactionCreationAttributes = Optional<TransactionAttributes, 'id'>
+
+class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
+  declare id: number
+  declare reference: string
   declare partnerRefId?: string
-  declare timestamp: Date
+  declare transactedAt: Date
   declare partnerId: number
   declare memberId: number
   declare status: 'delete' | 'reverse'
-  declare txnType: string
+  declare type: string
   declare amount: number
-  declare description1?: string
-  declare description2?: string
-  declare description3?: string
+  declare description?: Record<string, any>
   declare createdAt: Date
   declare updatedAt: Date
 
@@ -34,45 +49,37 @@ class Transaction extends Model {
 
 Transaction.init(
   {
-    txnId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true
     },
-    refId: {
+    reference: {
       type: DataTypes.STRING,
       allowNull: false
     },
     partnerRefId: {
       type: DataTypes.STRING
     },
-    timestamp: {
+    transactedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
     partnerId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: Partner,
-        key: 'partnerId'
-      },
-      onDelete: 'CASCADE'
+      allowNull: false
     },
     memberId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: Member,
-        key: 'memberId'
-      },
-      onDelete: 'CASCADE'
+      allowNull: false
     },
     status: {
       type: DataTypes.ENUM('delete', 'reverse'),
       allowNull: false
     },
-    txnType: {
+    type: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -80,14 +87,8 @@ Transaction.init(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false
     },
-    description1: {
-      type: DataTypes.STRING
-    },
-    description2: {
-      type: DataTypes.STRING
-    },
-    description3: {
-      type: DataTypes.STRING
+    description: {
+      type: DataTypes.JSONB
     },
     createdAt: {
       allowNull: false,
@@ -101,7 +102,7 @@ Transaction.init(
     }
   },
   {
-    modelName: 'transaction',
+    modelName: 'Transaction',
     tableName: 'transactions',
     timestamps: true,
     sequelize

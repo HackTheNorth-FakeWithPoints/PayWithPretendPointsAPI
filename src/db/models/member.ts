@@ -1,24 +1,38 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
-import { Contact, Partner } from '@/db/models/index.ts'
+import { Partner } from '@/db/models/index.ts'
 
-class Member extends Model {
-  declare memberId: number
+interface MemberAttributes {
+  id: number
+  partnerId: number
+  name: string
+  address: string
+  phone: string
+  email: string
+  balance: number
+  status: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+type MemberCreationAttributes = Optional<MemberAttributes, 'id'>
+
+class Member extends Model<MemberAttributes, MemberCreationAttributes> {
+  declare id: number
   declare partnerId: number
   declare name: string
-  declare contactId: number
+  declare address: string
+  declare phone: string
+  declare email: string
   declare balance: number
   declare status: string
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate(models: { Partner: typeof Partner; Contact: typeof Contact }) {
+  static associate(models: { Partner: typeof Partner }) {
     Member.belongsTo(models.Partner, {
-      onDelete: 'CASCADE'
-    })
-
-    Member.belongsTo(models.Contact, {
+      foreignKey: 'partnerId',
       onDelete: 'CASCADE'
     })
   }
@@ -26,7 +40,7 @@ class Member extends Model {
 
 Member.init(
   {
-    memberId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
@@ -39,8 +53,14 @@ Member.init(
       type: DataTypes.STRING,
       allowNull: false
     },
-    contactId: {
-      type: DataTypes.INTEGER
+    address: {
+      type: DataTypes.STRING
+    },
+    phone: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
     },
     balance: {
       type: DataTypes.DECIMAL(10, 2),
