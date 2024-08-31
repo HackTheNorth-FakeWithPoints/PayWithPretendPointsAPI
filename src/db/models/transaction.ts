@@ -19,7 +19,7 @@ class Transaction extends Model {
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate(models: any) {
+  static associate(models: { Partner: typeof Partner; Member: typeof Member }) {
     Transaction.belongsTo(models.Partner, {
       foreignKey: 'partnerId',
       onDelete: 'CASCADE'

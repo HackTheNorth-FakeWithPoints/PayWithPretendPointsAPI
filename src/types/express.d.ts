@@ -1,7 +1,7 @@
-import { Request } from 'express'
+import { Request as ExpressRequest } from 'express'
 
 declare module 'express' {
-  export interface Request {
+  export interface Request extends ExpressRequest {
     partnerId?: number
   }
 }

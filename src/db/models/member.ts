@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
+import { Contact, Partner } from '@/db/models/index.ts'
 
 class Member extends Model {
   declare memberId: number
@@ -12,7 +13,7 @@ class Member extends Model {
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate = (models: any) => {
+  static associate(models: { Partner: typeof Partner; Contact: typeof Contact }) {
     Member.belongsTo(models.Partner, {
       onDelete: 'CASCADE'
     })

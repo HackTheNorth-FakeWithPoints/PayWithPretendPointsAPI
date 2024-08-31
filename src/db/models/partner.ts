@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
+import { Contact } from '@/db/models/index.ts'
 
 class Partner extends Model {
   declare partnerId: number
@@ -13,7 +14,7 @@ class Partner extends Model {
   declare emailId: string
   declare password: string
 
-  static associate(models: any) {
+  static associate(models: { Contact: typeof Contact }) {
     Partner.belongsTo(models.Contact, {
       onDelete: 'CASCADE',
       foreignKey: 'contactId',
