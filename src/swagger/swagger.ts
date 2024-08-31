@@ -14,6 +14,7 @@ import {
   patchMemberTransactionSwagger,
   postMemberTransactionSwagger
 } from '@/routes/member-transactions/index.ts'
+import { deleteMemberSwagger, getMemberSwagger, patchMemberSwagger, postMemberSwagger } from '@/routes/members/index.ts'
 import { getPartnerTransactionSwagger, getPartnerTransactionsSwagger } from '@/routes/partner-transactions/index.ts'
 import {
   deletePartnerSwagger,
@@ -41,7 +42,11 @@ const generateSwaggerDocument = () => {
     getPartnerSwagger,
     postPartnerSwagger,
     patchPartnerSwagger,
-    deletePartnerSwagger
+    deletePartnerSwagger,
+    getMemberSwagger,
+    postMemberSwagger,
+    patchMemberSwagger,
+    deleteMemberSwagger
   ]
 
   const registry = new OpenAPIRegistry()
@@ -63,6 +68,10 @@ const generateSwaggerDocument = () => {
 
   const swaggerDocument = generator.generateDocument({
     openapi: '3.0.0',
+    servers: [
+      { url: 'paywithpretendpointsapi.onrender.com/', description: 'Production' },
+      { url: 'localhost:3000/', description: 'Development' }
+    ],
     info: {
       version: process.env.npm_package_version as string,
       title: 'Pay With Pretend Points API',

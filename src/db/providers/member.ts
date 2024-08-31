@@ -18,12 +18,12 @@ const addMember = (member: MemberCreationAttributes) => {
   return Member.create(member)
 }
 
-const modifyMember = (id: number, partnerId: number, member: Partial<Member>) => {
-  return Member.update(member, { where: { id, partnerId }, returning: true })
+const modifyMember = (id: number, member: Partial<Member>) => {
+  return Member.update(member, { where: { id }, returning: true })
 }
 
-const removeMember = (id: number, partnerId: number) => {
-  return Member.destroy({ where: { id, partnerId } })
+const removeMember = (id: number) => {
+  return Member.destroy({ where: { id } })
 }
 
 export { findMembers, findMember, findMemberById, addMember, modifyMember, removeMember }

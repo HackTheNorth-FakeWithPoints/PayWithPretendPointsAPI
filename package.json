@@ -30,6 +30,7 @@
     "migrate": "npx sequelize-cli db:migrate",
     "format": "npx prettier --write . && npx eslint --fix .",
     "validate": "npx prettier --check . && npx eslint . && npx tsc",
+    "complete": "npx tsx src/swagger/swagger.ts && npx prettier --write . && npx eslint --fix . && npx tsc && npm run build",
     "action:build": "npx tsup src/index.ts --minify",
     "action:format": "npx prettier --check .",
     "action:lint": "npx eslint .",

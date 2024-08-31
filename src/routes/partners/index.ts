@@ -5,5 +5,5 @@ export {
   getPartnerSwagger,
   patchPartnerSwagger,
   deletePartnerSwagger
-} from '@/routes/partners/partner.schemas.ts'
+} from '@/routes/partners/partners.schemas.ts'
 export { partnerRouter } from '@/routes/partners/partners.ts'
