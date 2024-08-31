@@ -62,12 +62,11 @@ router.post('/loyalty/:memberId/transactions/', authMiddleware, async (req: Requ
 
     await addTransaction({
       memberId: parseInt(memberId),
-      partnerId: parseInt(partnerId),
       ...body
     })
 
     res.json({
-      message: `Successfully created transaction for memberId: ${memberId} with amount ${body.txnDescription.amount} by ${partnerId}`
+      message: `Successfully created transaction for memberId: ${memberId} with amount ${body.amount} by ${partnerId}`
     })
   } catch (error) {
     res.status(400).json({ message: 'An error occurred!', error })

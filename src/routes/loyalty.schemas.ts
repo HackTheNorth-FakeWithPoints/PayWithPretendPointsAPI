@@ -58,13 +58,14 @@ const PartnerDetailsResponse = z.object({
 })
 
 const TxnDescription = z.object({
-  refId: z.string(),
-  timestamp: z.string().datetime(),
-  partnerRefId: z.string().optional(),
-  partnerId: z.string(),
+  timestamp: z.date(),
+  partnerId: z.number().int(),
   amount: z.number().int(),
-  txnType: z.enum(['earn', 'burn']),
-  txnDescription: z.array(z.string())
+  type: z.enum(['earn', 'burn']),
+  description: z.object({}),
+  status: z.enum(['delete', 'reverse']),
+  transactedAt: z.date(),
+  reference: z.string()
 })
 
 const TxnHistoryResponse = z.object({
@@ -156,7 +157,7 @@ const CreateTxnRequest = z.object({
 const createTxnForMember = z.object({
   memberId: z.string(),
   partnerId: z.string(),
-  body: CreateTxnRequest
+  body: TxnDescription
 })
 
 const CreateTxnResponse = z.object({
