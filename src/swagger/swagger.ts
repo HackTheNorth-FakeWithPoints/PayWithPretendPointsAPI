@@ -5,39 +5,43 @@ import { fileURLToPath } from 'url'
 import { z } from 'zod'
 
 import { logger } from '@/logger/logger.ts'
+import { postAdminAuthSwagger, postPartnerAuthSwagger } from '@/routes/auth/index.ts'
+import { getHealthSwagger } from '@/routes/health/index.ts'
 import {
-  createPartnerSwagger,
-  createTxnForMemberSwagger,
+  deleteMemberTransactionSwagger,
+  getMemberTransactionSwagger,
+  getMemberTransactionsSwagger,
+  patchMemberTransactionSwagger,
+  postMemberTransactionSwagger
+} from '@/routes/member-transactions/index.ts'
+import { getPartnerTransactionSwagger, getPartnerTransactionsSwagger } from '@/routes/partner-transactions/index.ts'
+import {
   deletePartnerDetailsSwagger,
   getPartnerDetailsSwagger,
-  getPointsSwagger,
-  getTransactionHistoryByClientSwagger,
-  getTransactionHistoryByPartnerSwagger,
-  getTxnDetailForPartnerSwagger,
-  getTxnDetailsForMemberSwagger,
-  healthSwagger,
-  putTxnDetailsForMemberSwagger,
-  reverseTxnSwagger,
-  updatePartnerDetailsSwagger
-} from '@/routes/index.ts'
+  patchPartnerDetailsSwagger,
+  postPartnerSwagger
+} from '@/routes/partners/index.ts'
+import { getPointsSwagger } from '@/routes/points/index.ts'
 
 const generateSwaggerDocument = () => {
   extendZodWithOpenApi(z)
 
   const registryPaths: RouteConfig[] = [
-    healthSwagger,
-    getPointsSwagger,
-    getTransactionHistoryByClientSwagger,
-    createTxnForMemberSwagger,
-    getTxnDetailsForMemberSwagger,
-    reverseTxnSwagger,
-    putTxnDetailsForMemberSwagger,
-    createPartnerSwagger,
-    getPartnerDetailsSwagger,
-    updatePartnerDetailsSwagger,
+    getHealthSwagger,
+    postAdminAuthSwagger,
+    postPartnerAuthSwagger,
     deletePartnerDetailsSwagger,
-    getTransactionHistoryByPartnerSwagger,
-    getTxnDetailForPartnerSwagger
+    getPartnerDetailsSwagger,
+    patchPartnerDetailsSwagger,
+    postPartnerSwagger,
+    deleteMemberTransactionSwagger,
+    getMemberTransactionSwagger,
+    getMemberTransactionsSwagger,
+    patchMemberTransactionSwagger,
+    postMemberTransactionSwagger,
+    getPartnerTransactionSwagger,
+    getPartnerTransactionsSwagger,
+    getPointsSwagger
   ]
 
   const registry = new OpenAPIRegistry()

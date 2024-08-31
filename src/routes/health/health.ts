@@ -8,17 +8,9 @@ router.get('/health', async (_: Request, res: Response) => {
   try {
     await sequelize.authenticate()
 
-    res.json({
-      status: 'SUCCESS',
-      message: 'Database Connection Healthy',
-      error: null
-    })
+    return res.json({ status: 'SUCCESS', message: 'Database Healthy', error: null })
   } catch (error) {
-    res.json({
-      status: 'ERROR',
-      message: 'Database Connection Failed',
-      error: (error as Record<string, unknown>)?.message || 'Unknown Error'
-    })
+    return res.json({ status: 'ERROR', message: 'Database Unreachable', error })
   }
 })
 
