@@ -27,6 +27,17 @@ const postPartner = z.object({
 
 const patchPartner = postPartner.partial()
 
+const getPartnersSwagger: RouteConfig = {
+  method: 'get',
+  path: `${ROUTE_PREFIX}/loyalty/partners`,
+  tags: ['Partner Operations (Admin)'],
+  description: 'Get all partners.',
+  request: {
+    params: partnerId
+  },
+  responses: zodHTTPCodeResponses(z.object({ partners: z.array(PartnerZod) }))
+}
+
 const getPartnerSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
@@ -72,4 +83,12 @@ const deletePartnerSwagger: RouteConfig = {
   responses: zodHTTPCodeResponses(z.object({ count: z.number().int().openapi({ example: 1 }) }))
 }
 
-export { postPartner, patchPartner, postPartnerSwagger, getPartnerSwagger, patchPartnerSwagger, deletePartnerSwagger }
+export {
+  postPartner,
+  patchPartner,
+  postPartnerSwagger,
+  getPartnerSwagger,
+  getPartnersSwagger,
+  patchPartnerSwagger,
+  deletePartnerSwagger
+}

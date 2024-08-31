@@ -190,7 +190,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -201,8 +201,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                       },
                       "required": [
                         "id",
@@ -257,7 +257,7 @@
                           "partnerRefId": { "type": "number", "example": 1 },
                           "transactedAt": {
                             "type": "string",
-                            "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                            "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
@@ -268,8 +268,8 @@
                             "type": "object",
                             "additionalProperties": { "type": "string", "example": "Description" }
                           },
-                          "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                          "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                         },
                         "required": [
                           "id",
@@ -326,7 +326,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -337,8 +337,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                       },
                       "required": [
                         "id",
@@ -416,7 +416,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -427,8 +427,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                       },
                       "required": [
                         "id",
@@ -515,7 +515,7 @@
                           "partnerRefId": { "type": "number", "example": 1 },
                           "transactedAt": {
                             "type": "string",
-                            "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                            "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
@@ -526,8 +526,8 @@
                             "type": "object",
                             "additionalProperties": { "type": "string", "example": "Description" }
                           },
-                          "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                          "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                         },
                         "required": [
                           "id",
@@ -606,7 +606,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:49:15 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -617,8 +617,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.817Z" }
                       },
                       "required": [
                         "id",
@@ -676,8 +676,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" }
                       },
                       "required": [
                         "id",
@@ -756,8 +756,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" }
                       },
                       "required": [
                         "id",
@@ -818,6 +818,66 @@
       }
     },
     "/api/v1/loyalty/partners": {
+      "get": {
+        "tags": ["Partner Operations (Admin)"],
+        "description": "Get all partners.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "partners": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "number", "example": 1 },
+                          "status": { "type": "string", "example": "ACTIVE" },
+                          "name": { "type": "string", "example": "Partner Name" },
+                          "description": { "type": "string", "example": "Partner Description" },
+                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                          "phone": { "type": "string", "example": "4161234567" },
+                          "email": { "type": "string", "example": "partner@example.com" },
+                          "permission": { "type": "string", "example": "Read" },
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" }
+                        },
+                        "required": [
+                          "id",
+                          "status",
+                          "name",
+                          "description",
+                          "address",
+                          "phone",
+                          "email",
+                          "permission",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["partners"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
       "post": {
         "tags": ["Partner Operations (Admin)"],
         "description": "Create a new partner.",
@@ -865,8 +925,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.814Z" }
                       },
                       "required": [
                         "id",
@@ -924,8 +984,8 @@
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" }
                       },
                       "required": [
                         "id",
@@ -968,9 +1028,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "address": { "type": "string" },
-                  "phone": { "type": "string" },
+                  "name": { "type": "string", "example": "John Doe" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "number", "example": 1000 },
                   "status": { "type": "string", "example": "ACTIVE" }
@@ -998,8 +1058,8 @@
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" }
                       },
                       "required": [
                         "id",
@@ -1060,6 +1120,66 @@
       }
     },
     "/api/v1/loyalty/members": {
+      "get": {
+        "tags": ["Member Operations (Admin)"],
+        "description": "Get all members.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "number", "example": 1 },
+                          "partnerId": { "type": "number", "example": 1 },
+                          "name": { "type": "string", "example": "John Doe" },
+                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                          "phone": { "type": "string", "example": "4161234567" },
+                          "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                          "balance": { "type": "number", "example": 1000 },
+                          "status": { "type": "string", "example": "ACTIVE" },
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" }
+                        },
+                        "required": [
+                          "id",
+                          "partnerId",
+                          "name",
+                          "address",
+                          "phone",
+                          "email",
+                          "balance",
+                          "status",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["members"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
       "post": {
         "tags": ["Member Operations (Admin)"],
         "description": "Create a new member.",
@@ -1070,9 +1190,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "address": { "type": "string" },
-                  "phone": { "type": "string" },
+                  "name": { "type": "string", "example": "John Doe" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "number", "example": 1000 },
                   "status": { "type": "string", "example": "ACTIVE" }
@@ -1101,8 +1221,8 @@
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:49:15.816Z" }
                       },
                       "required": [
                         "id",

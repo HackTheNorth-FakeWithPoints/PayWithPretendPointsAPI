@@ -3,6 +3,7 @@ export {
   patchMember,
   postMemberSwagger,
   getMemberSwagger,
+  getMembersSwagger,
   patchMemberSwagger,
   deleteMemberSwagger
 } from '@/routes/members/members.schemas.ts'

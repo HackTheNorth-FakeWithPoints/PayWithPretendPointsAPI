@@ -12,15 +12,26 @@ const memberId = z.object({
 })
 
 const postMember = z.object({
-  name: z.string(),
-  address: z.string(),
-  phone: z.string(),
+  name: z.string().openapi({ example: 'John Doe' }),
+  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().openapi({ example: '4161234567' }),
   email: z.string().email().openapi({ example: 'member@example.com' }),
   balance: z.number().openapi({ example: 1000 }),
   status: z.string().openapi({ example: 'ACTIVE' })
 })
 
 const patchMember = postMember.partial()
+
+const getMembersSwagger: RouteConfig = {
+  method: 'get',
+  path: `${ROUTE_PREFIX}/loyalty/members`,
+  tags: ['Member Operations (Admin)'],
+  description: 'Get all members.',
+  request: {
+    params: memberId
+  },
+  responses: zodHTTPCodeResponses(z.object({ members: z.array(MemberZod) }))
+}
 
 const getMemberSwagger: RouteConfig = {
   method: 'get',
@@ -67,4 +78,12 @@ const deleteMemberSwagger: RouteConfig = {
   responses: zodHTTPCodeResponses(z.object({ count: z.number().int().openapi({ example: 1 }) }))
 }
 
-export { postMember, patchMember, postMemberSwagger, getMemberSwagger, patchMemberSwagger, deleteMemberSwagger }
+export {
+  postMember,
+  patchMember,
+  postMemberSwagger,
+  getMemberSwagger,
+  getMembersSwagger,
+  patchMemberSwagger,
+  deleteMemberSwagger
+}

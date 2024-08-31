@@ -1,9 +1,19 @@
 import express, { type Request, type Response } from 'express'
 
-import { addPartner, findPartnerById, modifyPartner, removePartner } from '@/db/providers/index.ts'
+import { addPartner, findPartnerById, findPartners, modifyPartner, removePartner } from '@/db/providers/index.ts'
 import { patchPartner, postPartner } from '@/routes/partners/index.ts'
 
 const router = express.Router()
+
+router.get('/loyalty/partners', async (_: Request, res: Response) => {
+  try {
+    const partners = await findPartners({})
+
+    return res.json({ partners })
+  } catch (error) {
+    return res.json({ error })
+  }
+})
 
 router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
   try {

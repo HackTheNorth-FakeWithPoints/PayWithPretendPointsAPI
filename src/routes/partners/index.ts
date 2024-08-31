@@ -3,6 +3,7 @@ export {
   patchPartner,
   postPartnerSwagger,
   getPartnerSwagger,
+  getPartnersSwagger,
   patchPartnerSwagger,
   deletePartnerSwagger
 } from '@/routes/partners/partners.schemas.ts'

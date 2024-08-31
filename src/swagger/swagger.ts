@@ -14,11 +14,18 @@ import {
   patchMemberTransactionSwagger,
   postMemberTransactionSwagger
 } from '@/routes/member-transactions/index.ts'
-import { deleteMemberSwagger, getMemberSwagger, patchMemberSwagger, postMemberSwagger } from '@/routes/members/index.ts'
+import {
+  deleteMemberSwagger,
+  getMemberSwagger,
+  getMembersSwagger,
+  patchMemberSwagger,
+  postMemberSwagger
+} from '@/routes/members/index.ts'
 import { getPartnerTransactionSwagger, getPartnerTransactionsSwagger } from '@/routes/partner-transactions/index.ts'
 import {
   deletePartnerSwagger,
   getPartnerSwagger,
+  getPartnersSwagger,
   patchPartnerSwagger,
   postPartnerSwagger
 } from '@/routes/partners/index.ts'
@@ -40,10 +47,12 @@ const generateSwaggerDocument = () => {
     patchMemberTransactionSwagger,
     deleteMemberTransactionSwagger,
     getPartnerSwagger,
+    getPartnersSwagger,
     postPartnerSwagger,
     patchPartnerSwagger,
     deletePartnerSwagger,
     getMemberSwagger,
+    getMembersSwagger,
     postMemberSwagger,
     patchMemberSwagger,
     deleteMemberSwagger
