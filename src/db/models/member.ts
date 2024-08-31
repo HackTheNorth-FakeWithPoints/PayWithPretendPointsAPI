@@ -16,7 +16,7 @@ interface MemberAttributes {
   updatedAt: Date
 }
 
-type MemberCreationAttributes = Optional<MemberAttributes, 'id'>
+type MemberCreationAttributes = Optional<MemberAttributes, 'id' | 'createdAt' | 'updatedAt'>
 
 class Member extends Model<MemberAttributes, MemberCreationAttributes> {
   declare id: number
@@ -89,4 +89,4 @@ Member.init(
   }
 )
 
-export { Member }
+export { Member, type MemberCreationAttributes }

@@ -27,7 +27,7 @@
     "build": "npx tsup src/index.ts --minify",
     "start": "npx tsup src/index.ts --minify && node ./dist/index.cjs",
     "format": "npx prettier --write . && npx eslint --fix .",
-    "validate": "npx prettier --check . && npx eslint .",
+    "validate": "npx prettier --check . && npx eslint . && npx tsc",
     "swagger": "npx tsx src/swagger/swagger.ts",
     "migrate": "npx sequelize-cli db:migrate"
   },

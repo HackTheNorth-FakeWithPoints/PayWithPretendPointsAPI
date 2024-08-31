@@ -121,7 +121,7 @@ router.post('/loyalty/partners/', adminAuthMiddleware, async (req: Request, res:
 
     const partner = await addPartner(partnerPayload)
 
-    res.json({ message: `Successfully created partner with partnerId: ${partner.partnerId}`, partner })
+    res.json({ message: `Successfully created partner with partnerId: ${partner.id}`, partner })
   } catch (error) {
     res.json({ message: 'An error occurred!', error })
   }

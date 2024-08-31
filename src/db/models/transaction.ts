@@ -18,7 +18,7 @@ interface TransactionAttributes {
   updatedAt: Date
 }
 
-type TransactionCreationAttributes = Optional<TransactionAttributes, 'id'>
+type TransactionCreationAttributes = Optional<TransactionAttributes, 'id' | 'createdAt' | 'updatedAt'>
 
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
   declare id: number
@@ -109,4 +109,4 @@ Transaction.init(
   }
 )
 
-export { Transaction }
+export { Transaction, type TransactionCreationAttributes }

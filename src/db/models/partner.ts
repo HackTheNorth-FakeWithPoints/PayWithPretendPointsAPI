@@ -17,7 +17,7 @@ interface PartnerAttributes {
   updatedAt: Date
 }
 
-type PartnerCreationAttributes = Optional<PartnerAttributes, 'id'>
+type PartnerCreationAttributes = Optional<PartnerAttributes, 'id' | 'createdAt' | 'updatedAt'>
 
 class Partner extends Model<PartnerAttributes, PartnerCreationAttributes> {
   declare id: number
@@ -90,4 +90,4 @@ Partner.init(
   }
 )
 
-export { Partner }
+export { Partner, type PartnerCreationAttributes }
