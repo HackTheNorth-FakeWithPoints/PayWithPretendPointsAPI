@@ -9,17 +9,14 @@
         "description": "Returns the status of the database connection.",
         "responses": {
           "200": {
-            "description": "Object with database success status information.",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "examples": ["SUCCESS", "ERROR"] },
-                    "message": {
-                      "type": "string",
-                      "examples": ["Database Connection Healthy", "Database Connection Failed"]
-                    },
+                    "status": { "type": "string", "example": "SUCCESS" },
+                    "message": { "type": "string", "example": "Database Healthy" },
                     "error": {
                       "anyOf": [
                         { "nullable": true },
@@ -35,474 +32,210 @@
               }
             }
           },
-          "500": {
-            "description": "Object with database error status information.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "examples": ["SUCCESS", "ERROR"] },
-                    "message": {
-                      "type": "string",
-                      "examples": ["Database Connection Healthy", "Database Connection Failed"]
-                    },
-                    "error": {
-                      "anyOf": [
-                        { "nullable": true },
-                        { "type": "object", "properties": {} },
-                        { "nullable": true },
-                        { "nullable": true }
-                      ],
-                      "examples": [null, {}]
-                    }
-                  },
-                  "required": ["status", "message"]
-                }
-              }
-            }
-          }
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
-    "/api/v1/loyalty/{memberId}/points": {
-      "get": {
-        "tags": ["Points Operations"],
-        "description": "Gets total points from a single accounts of a member",
-        "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "memberId": { "type": "string" },
-                    "partnerId": { "type": "string" },
-                    "accountStatus": { "type": "string", "enum": ["active", "inactive", "locked"] },
-                    "pointBalance": { "type": "integer" }
-                  },
-                  "required": ["status", "memberId", "pointBalance"]
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
-          "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/loyalty/{memberId}/transactions": {
-      "get": {
-        "tags": ["Txn History"],
-        "description": "gets transaction history from an account of a member",
-        "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "transactions": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "refId": { "type": "string" },
-                          "timestamp": { "type": "string", "format": "date-time" },
-                          "partnerRefId": { "type": "string" },
-                          "partnerId": { "type": "string" },
-                          "amount": { "type": "integer" },
-                          "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                          "txnDescription": { "type": "array", "items": { "type": "string" } }
-                        },
-                        "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                      }
-                    }
-                  },
-                  "required": ["status", "transactions"]
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
-          "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/v1/admin-auth": {
       "post": {
-        "tags": ["Txn History"],
-        "description": "earn or burn points for a member for a partner",
-        "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
-        ],
+        "tags": ["Authentication"],
+        "description": "Login as an administrator.",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "txnDescription": {
-                    "type": "object",
-                    "properties": {
-                      "refId": { "type": "string" },
-                      "timestamp": { "type": "string", "format": "date-time" },
-                      "partnerRefId": { "type": "string" },
-                      "partnerId": { "type": "string" },
-                      "amount": { "type": "integer" },
-                      "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                      "txnDescription": { "type": "array", "items": { "type": "string" } }
-                    },
-                    "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                  }
+                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                  "password": { "type": "string", "example": "*********" }
                 },
-                "required": ["txnDescription"]
+                "required": ["email", "password"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "txnDescription": {
-                      "type": "object",
-                      "properties": {
-                        "refId": { "type": "string" },
-                        "timestamp": { "type": "string", "format": "date-time" },
-                        "partnerRefId": { "type": "string" },
-                        "partnerId": { "type": "string" },
-                        "amount": { "type": "integer" },
-                        "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                        "txnDescription": { "type": "array", "items": { "type": "string" } }
-                      },
-                      "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                    }
-                  },
-                  "required": ["status", "txnDescription"]
+                  "properties": { "accessToken": { "type": "string", "example": "JWT Token" } },
+                  "required": ["accessToken"]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
-    "/api/v1/loyalty/{memberId}/transactions/{txnId}": {
-      "get": {
-        "tags": ["Txn History"],
-        "description": "get the details of a single txn",
-        "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "txnId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "transaction": {
-                      "type": "object",
-                      "properties": {
-                        "refId": { "type": "string" },
-                        "timestamp": { "type": "string", "format": "date-time" },
-                        "partnerRefId": { "type": "string" },
-                        "partnerId": { "type": "string" },
-                        "amount": { "type": "integer" },
-                        "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                        "txnDescription": { "type": "array", "items": { "type": "string" } }
-                      },
-                      "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                    }
-                  },
-                  "required": ["status", "transaction"]
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
-          "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
+    "/api/v1/auth": {
+      "post": {
+        "tags": ["Authentication"],
+        "description": "Login to a partner.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                  "password": { "type": "string", "example": "*********" }
+                },
+                "required": ["email", "password"]
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "accessToken": { "type": "string", "example": "JWT Token" } },
+                  "required": ["accessToken"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
         }
-      },
+      }
+    },
+    "/api/v1/loyalty/partners/{partnerId}": {
       "delete": {
-        "tags": ["Txn History"],
-        "description": "Reverses txn",
+        "tags": ["Partner Operations"],
+        "description": "Delete a specific partner.",
         "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "txnId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
         ],
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
+                    "status": { "type": "string", "example": "ACTIVE" },
+                    "name": { "type": "string", "example": "Partner Name" },
+                    "description": { "type": "string", "example": "Partner Description" },
+                    "contactId": { "type": "integer", "example": 1 },
+                    "permission": {
+                      "type": "string",
+                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                      "example": "Read"
                     },
-                    "transaction": {
-                      "type": "object",
-                      "properties": {
-                        "refId": { "type": "string" },
-                        "timestamp": { "type": "string", "format": "date-time" },
-                        "partnerRefId": { "type": "string" },
-                        "partnerId": { "type": "string" },
-                        "amount": { "type": "integer" },
-                        "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                        "txnDescription": { "type": "array", "items": { "type": "string" } }
-                      },
-                      "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                    }
+                    "email": { "type": "string", "example": "partner@example.com" },
+                    "password": { "type": "string", "example": "******************" },
+                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                    "phone": { "type": "string", "example": "4161234567" }
                   },
-                  "required": ["status", "transaction"]
+                  "required": [
+                    "status",
+                    "name",
+                    "description",
+                    "contactId",
+                    "permission",
+                    "email",
+                    "password",
+                    "address",
+                    "phone"
+                  ]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       },
-      "put": {
-        "tags": ["Txn History"],
-        "description": "update the details of a single txn",
+      "get": {
+        "tags": ["Partner Operations"],
+        "description": "Get a specific partner.",
         "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "txnId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "header" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ACTIVE" },
+                    "name": { "type": "string", "example": "Partner Name" },
+                    "description": { "type": "string", "example": "Partner Description" },
+                    "contactId": { "type": "integer", "example": 1 },
+                    "permission": {
+                      "type": "string",
+                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                      "example": "Read"
+                    },
+                    "email": { "type": "string", "example": "partner@example.com" },
+                    "password": { "type": "string", "example": "******************" },
+                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                    "phone": { "type": "string", "example": "4161234567" }
+                  },
+                  "required": [
+                    "status",
+                    "name",
+                    "description",
+                    "contactId",
+                    "permission",
+                    "email",
+                    "password",
+                    "address",
+                    "phone"
+                  ]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "patch": {
+        "tags": ["Partner Operations"],
+        "description": "Update a specific partner.",
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
         ],
         "requestBody": {
           "content": {
@@ -510,104 +243,75 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "txnDescription": {
-                    "type": "object",
-                    "properties": {
-                      "refId": { "type": "string" },
-                      "timestamp": { "type": "string", "format": "date-time" },
-                      "partnerRefId": { "type": "string" },
-                      "partnerId": { "type": "string" },
-                      "amount": { "type": "integer" },
-                      "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                      "txnDescription": { "type": "array", "items": { "type": "string" } }
-                    },
-                    "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                  }
-                },
-                "required": ["txnDescription"]
+                  "status": { "type": "string", "example": "ACTIVE" },
+                  "name": { "type": "string", "example": "Partner Name" },
+                  "description": { "type": "string", "example": "Partner Description" },
+                  "contactId": { "type": "integer", "example": 1 },
+                  "permission": {
+                    "type": "string",
+                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                    "example": "Read"
+                  },
+                  "email": { "type": "string", "example": "partner@example.com" },
+                  "password": { "type": "string", "example": "******************" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" }
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
+                    "status": { "type": "string", "example": "ACTIVE" },
+                    "name": { "type": "string", "example": "Partner Name" },
+                    "description": { "type": "string", "example": "Partner Description" },
+                    "contactId": { "type": "integer", "example": 1 },
+                    "permission": {
+                      "type": "string",
+                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                      "example": "Read"
                     },
-                    "transaction": {
-                      "type": "object",
-                      "properties": {
-                        "refId": { "type": "string" },
-                        "timestamp": { "type": "string", "format": "date-time" },
-                        "partnerRefId": { "type": "string" },
-                        "partnerId": { "type": "string" },
-                        "amount": { "type": "integer" },
-                        "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                        "txnDescription": { "type": "array", "items": { "type": "string" } }
-                      },
-                      "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                    }
+                    "email": { "type": "string", "example": "partner@example.com" },
+                    "password": { "type": "string", "example": "******************" },
+                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                    "phone": { "type": "string", "example": "4161234567" }
                   },
-                  "required": ["status", "transaction"]
+                  "required": [
+                    "status",
+                    "name",
+                    "description",
+                    "contactId",
+                    "permission",
+                    "email",
+                    "password",
+                    "address",
+                    "phone"
+                  ]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
     "/api/v1/loyalty/partners": {
       "post": {
         "tags": ["Partner Operations"],
-        "description": "create partner record",
+        "description": "Create a new partner.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -623,169 +327,144 @@
                     "enum": ["Read", "Read", "Write", "Balance Inquiry"],
                     "example": "Read"
                   },
-                  "emailId": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" }
+                  "email": { "type": "string", "example": "partner@example.com" },
+                  "password": { "type": "string", "example": "******************" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" }
                 },
-                "required": ["status", "name", "description", "contactId", "permission", "emailId", "password"]
+                "required": [
+                  "status",
+                  "name",
+                  "description",
+                  "contactId",
+                  "permission",
+                  "email",
+                  "password",
+                  "address",
+                  "phone"
+                ]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string" },
-                    "partner": {
-                      "type": "object",
-                      "properties": {
-                        "status": { "type": "string", "example": "ACTIVE" },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "contactId": { "type": "integer", "example": 1 },
-                        "permission": {
-                          "type": "string",
-                          "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                          "example": "Read"
-                        },
-                        "emailId": { "type": "string", "example": "partner@example.com" },
-                        "password": { "type": "string", "example": "******************" }
-                      },
-                      "required": ["status", "name", "description", "contactId", "permission", "emailId", "password"]
-                    }
+                    "status": { "type": "string", "example": "ACTIVE" },
+                    "name": { "type": "string", "example": "Partner Name" },
+                    "description": { "type": "string", "example": "Partner Description" },
+                    "contactId": { "type": "integer", "example": 1 },
+                    "permission": {
+                      "type": "string",
+                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                      "example": "Read"
+                    },
+                    "email": { "type": "string", "example": "partner@example.com" },
+                    "password": { "type": "string", "example": "******************" },
+                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                    "phone": { "type": "string", "example": "4161234567" }
                   },
-                  "required": ["message", "partner"]
+                  "required": [
+                    "status",
+                    "name",
+                    "description",
+                    "contactId",
+                    "permission",
+                    "email",
+                    "password",
+                    "address",
+                    "phone"
+                  ]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
-    "/api/v1/loyalty/partners/{partnerId}": {
-      "get": {
-        "tags": ["Partner Operations"],
-        "description": "gets details of a particular partner",
+    "/api/v1/loyalty/{memberId}/transactions/{transactionId}": {
+      "delete": {
+        "tags": ["Member Transactions"],
+        "description": "Reverses txn",
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
         ],
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "get": {
+        "tags": ["Member Transactions"],
+        "description": "get the details of a single txn",
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string" },
-                    "partner": {
+                    "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                    "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                    "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                    "type": { "type": "string", "example": "Type" },
+                    "amount": { "type": "number", "example": 100 },
+                    "description": {
                       "type": "object",
                       "properties": {
-                        "status": { "type": "string", "example": "ACTIVE" },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "contactId": { "type": "integer", "example": 1 },
-                        "permission": {
-                          "type": "string",
-                          "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                          "example": "Read"
-                        },
-                        "emailId": { "type": "string", "example": "partner@example.com" },
-                        "password": { "type": "string", "example": "******************" }
-                      },
-                      "required": ["status", "name", "description", "contactId", "permission", "emailId", "password"]
+                        "description1": { "type": "string", "example": "Description" },
+                        "description2": { "type": "string", "example": "Description" },
+                        "description3": { "type": "string", "example": "Description" }
+                      }
                     }
                   },
-                  "required": ["message", "partner"]
+                  "required": ["status", "reference", "type", "amount"]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       },
       "patch": {
-        "tags": ["Partner Operations"],
-        "description": "updates details of a particular partner",
+        "tags": ["Member Transactions"],
+        "description": "update the details of a single txn",
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
         ],
         "requestBody": {
           "content": {
@@ -793,17 +472,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "example": "ACTIVE" },
-                  "name": { "type": "string", "example": "Partner Name" },
-                  "description": { "type": "string", "example": "Partner Description" },
-                  "contactId": { "type": "integer", "example": 1 },
-                  "permission": {
-                    "type": "string",
-                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                    "example": "Read"
-                  },
-                  "emailId": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" }
+                  "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                  "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                  "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                  "type": { "type": "string", "example": "Type" },
+                  "amount": { "type": "number", "example": 100 },
+                  "description": {
+                    "type": "object",
+                    "properties": {
+                      "description1": { "type": "string", "example": "Description" },
+                      "description2": { "type": "string", "example": "Description" },
+                      "description3": { "type": "string", "example": "Description" }
+                    }
+                  }
                 }
               }
             }
@@ -811,297 +492,228 @@
         },
         "responses": {
           "200": {
-            "description": "successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": { "type": "string" },
-                    "partner": {
-                      "type": "object",
-                      "properties": {
-                        "status": { "type": "string", "example": "ACTIVE" },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "contactId": { "type": "integer", "example": 1 },
-                        "permission": {
-                          "type": "string",
-                          "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                          "example": "Read"
-                        },
-                        "emailId": { "type": "string", "example": "partner@example.com" },
-                        "password": { "type": "string", "example": "******************" }
-                      },
-                      "required": ["status", "name", "description", "contactId", "permission", "emailId", "password"]
-                    }
-                  },
-                  "required": ["message", "partner"]
-                }
-              }
-            }
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
-      },
-      "delete": {
-        "tags": ["Partner Operations"],
-        "description": "deletes details of a particular partner",
+      }
+    },
+    "/api/v1/loyalty/{memberId}/transactions": {
+      "get": {
+        "tags": ["Member Transactions"],
+        "description": "gets transaction history from an account of a member",
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
         ],
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": { "message": { "type": "string" }, "count": { "type": "integer", "example": 1 } },
-                  "required": ["message", "count"]
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                      "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                      "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                      "type": { "type": "string", "example": "Type" },
+                      "amount": { "type": "number", "example": 100 },
+                      "description": {
+                        "type": "object",
+                        "properties": {
+                          "description1": { "type": "string", "example": "Description" },
+                          "description2": { "type": "string", "example": "Description" },
+                          "description3": { "type": "string", "example": "Description" }
+                        }
+                      }
+                    },
+                    "required": ["status", "reference", "type", "amount"]
+                  }
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "post": {
+        "tags": ["Member Transactions"],
+        "description": "earn or burn points for a member for a partner",
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                  "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                  "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                  "type": { "type": "string", "example": "Type" },
+                  "amount": { "type": "number", "example": 100 },
+                  "description": {
+                    "type": "object",
+                    "properties": {
+                      "description1": { "type": "string", "example": "Description" },
+                      "description2": { "type": "string", "example": "Description" },
+                      "description3": { "type": "string", "example": "Description" }
+                    }
+                  }
+                },
+                "required": ["status", "reference", "type", "amount"]
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/partners/{partnerId}/transactions/{transactionId}": {
+      "get": {
+        "tags": ["Partner Transactions"],
+        "description": "Get a specific transaction for a partner.",
+        "parameters": [
+          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" },
+          { "schema": { "type": "string" }, "required": true, "name": "transactionId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                    "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                    "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                    "type": { "type": "string", "example": "Type" },
+                    "amount": { "type": "number", "example": 100 },
+                    "description": {
+                      "type": "object",
+                      "properties": {
+                        "description1": { "type": "string", "example": "Description" },
+                        "description2": { "type": "string", "example": "Description" },
+                        "description3": { "type": "string", "example": "Description" }
+                      }
+                    }
+                  },
+                  "required": ["status", "reference", "type", "amount"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
     "/api/v1/loyalty/partners/{partnerId}/transactions": {
       "get": {
-        "tags": ["Txn History By Partner"],
-        "description": "gets txn history for a single partner",
+        "tags": ["Partner Transactions"],
+        "description": "Get transactions for a partner.",
         "parameters": [{ "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" }],
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "transactions": {
-                      "type": "array",
-                      "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
+                      "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
+                      "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
+                      "type": { "type": "string", "example": "Type" },
+                      "amount": { "type": "number", "example": 100 },
+                      "description": {
                         "type": "object",
                         "properties": {
-                          "refId": { "type": "string" },
-                          "timestamp": { "type": "string", "format": "date-time" },
-                          "partnerRefId": { "type": "string" },
-                          "partnerId": { "type": "string" },
-                          "amount": { "type": "integer" },
-                          "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                          "txnDescription": { "type": "array", "items": { "type": "string" } }
-                        },
-                        "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
+                          "description1": { "type": "string", "example": "Description" },
+                          "description2": { "type": "string", "example": "Description" },
+                          "description3": { "type": "string", "example": "Description" }
+                        }
                       }
-                    }
-                  },
-                  "required": ["status", "transactions"]
+                    },
+                    "required": ["status", "reference", "type", "amount"]
+                  }
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       }
     },
-    "/api/v1/loyalty/partners/{partnerId}/transactions/{txnId}": {
+    "/api/v1/loyalty/{memberId}/points": {
       "get": {
-        "tags": ["Txn History"],
-        "description": "get the details of a single txn",
+        "tags": ["Points"],
+        "description": "Get the points balance for a specific member.",
         "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "txnId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
         ],
         "responses": {
           "200": {
-            "description": "successful response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "object",
-                      "properties": {
-                        "code": { "type": "string" },
-                        "message": { "type": "string" },
-                        "nestedStatus": { "type": "object" }
-                      }
-                    },
-                    "transaction": {
-                      "type": "object",
-                      "properties": {
-                        "refId": { "type": "string" },
-                        "timestamp": { "type": "string", "format": "date-time" },
-                        "partnerRefId": { "type": "string" },
-                        "partnerId": { "type": "string" },
-                        "amount": { "type": "integer" },
-                        "txnType": { "type": "string", "enum": ["earn", "burn"] },
-                        "txnDescription": { "type": "array", "items": { "type": "string" } }
-                      },
-                      "required": ["refId", "timestamp", "partnerId", "amount", "txnType", "txnDescription"]
-                    }
-                  },
-                  "required": ["status", "transaction"]
+                  "properties": { "balance": { "type": "integer", "example": 1000 } },
+                  "required": ["balance"]
                 }
               }
             }
           },
-          "204": {
-            "description": "No Content",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Bad Request / validation error in given data" },
-          "401": { "description": "Not authenticated" },
-          "403": { "description": "Not authorized to view this resource" },
-          "404": { "description": "resource not found" },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" },
-          "503": {
-            "description": "Service Unavailable",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "statusCode": { "type": "integer" },
-                    "timestamp": { "type": "integer" },
-                    "message": { "type": "string" }
-                  },
-                  "required": ["statusCode", "timestamp", "message"]
-                }
-              }
-            }
-          }
+          "503": { "description": "Service Unavailable" }
         }
       }
     }

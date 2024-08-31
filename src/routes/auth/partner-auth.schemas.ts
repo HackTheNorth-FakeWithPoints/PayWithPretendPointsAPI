@@ -2,52 +2,35 @@ import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openap
 import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
+import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
 
-/*****************************************************************
- * /auth
- */
-const auth = z.object({
+const postPartnerAuth = z.object({
   email: z.string().email().openapi({ example: 'example@email.com' }),
   password: z.string().openapi({ example: '*********' })
 })
 
-const authResponse = z.object({
+const postPartnerAuthResponse = z.object({
   accessToken: z.string().openapi({ example: 'JWT Token' })
 })
 
-const authSwagger: RouteConfig = {
+const postPartnerAuthSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/auth`,
   tags: ['Authentication'],
-  description: 'auth into partner account',
+  description: 'Login to a partner.',
   request: {
     body: {
       required: true,
       content: {
         'application/json': {
-          schema: auth
+          schema: postPartnerAuth
         }
       }
     }
   },
-  responses: {
-    200: {
-      description: 'Object with auth data.',
-      content: {
-        'application/json': {
-          schema: authResponse
-        }
-      }
-    },
-    400: {
-      description: 'Bad Request'
-    },
-    500: {
-      description: 'Internal Server Error'
-    }
-  }
+  responses: zodHTTPCodeResponses(postPartnerAuthResponse)
 }
 
-export { auth, authResponse, authSwagger }
+export { postPartnerAuth, postPartnerAuthResponse, postPartnerAuthSwagger }
