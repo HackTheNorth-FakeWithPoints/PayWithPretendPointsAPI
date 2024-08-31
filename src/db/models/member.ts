@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize'
+import { z } from 'zod'
 
 import { sequelize } from '@/db/index.ts'
 import { Partner } from '@/db/models/index.ts'
@@ -89,4 +90,17 @@ Member.init(
   }
 )
 
-export { Member, type MemberCreationAttributes }
+const MemberZod = z.object({
+  id: z.number(),
+  partnerId: z.number(),
+  name: z.string(),
+  address: z.string(),
+  phone: z.string(),
+  email: z.string(),
+  balance: z.number(),
+  status: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date()
+})
+
+export { Member, MemberZod, type MemberCreationAttributes }

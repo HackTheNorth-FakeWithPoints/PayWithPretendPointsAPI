@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize'
+import { z } from 'zod'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
@@ -90,4 +91,18 @@ Partner.init(
   }
 )
 
-export { Partner, type PartnerCreationAttributes }
+const PartnerZod = z.object({
+  id: z.number(),
+  status: z.string(),
+  name: z.string(),
+  description: z.string(),
+  address: z.string(),
+  phone: z.string(),
+  email: z.string(),
+  permission: z.string(),
+  password: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date()
+})
+
+export { Partner, PartnerZod, type PartnerCreationAttributes }

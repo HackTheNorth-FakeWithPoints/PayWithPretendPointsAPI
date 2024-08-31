@@ -8,6 +8,7 @@ import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
+import { serverHeaders } from '@/middleware/server-headers.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'
 import { memberTransactionRouter } from '@/routes/member-transactions/index.ts'
@@ -20,6 +21,7 @@ const app = express()
 
 app.use(helmet())
 app.use(rateLimiter)
+app.use(serverHeaders)
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -37,7 +39,15 @@ app.use(
   `/`,
   serve,
   setup(swaggerJSON, {
-    customSiteTitle: 'Pay With Pretend Points API'
+    customSiteTitle: 'Pay With Pretend Points API',
+    swaggerOptions: {
+      operationsSorter: (a: { get: (arg0: string) => string }, b: { get: (arg0: string) => string }) => {
+        const methodsOrder = ['get', 'post', 'patch', 'delete']
+        const result = methodsOrder.indexOf(a.get('method')) - methodsOrder.indexOf(b.get('method'))
+        const comparedResult = result === 0 ? a.get('path').localeCompare(b.get('path')) : result
+        return comparedResult
+      }
+    }
   })
 )
 

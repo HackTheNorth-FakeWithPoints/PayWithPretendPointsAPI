@@ -16,9 +16,9 @@ import {
 } from '@/routes/member-transactions/index.ts'
 import { getPartnerTransactionSwagger, getPartnerTransactionsSwagger } from '@/routes/partner-transactions/index.ts'
 import {
-  deletePartnerDetailsSwagger,
-  getPartnerDetailsSwagger,
-  patchPartnerDetailsSwagger,
+  deletePartnerSwagger,
+  getPartnerSwagger,
+  patchPartnerSwagger,
   postPartnerSwagger
 } from '@/routes/partners/index.ts'
 import { getPointsSwagger } from '@/routes/points/index.ts'
@@ -28,26 +28,35 @@ const generateSwaggerDocument = () => {
 
   const registryPaths: RouteConfig[] = [
     getHealthSwagger,
-    postAdminAuthSwagger,
     postPartnerAuthSwagger,
-    deletePartnerDetailsSwagger,
-    getPartnerDetailsSwagger,
-    patchPartnerDetailsSwagger,
-    postPartnerSwagger,
-    deleteMemberTransactionSwagger,
-    getMemberTransactionSwagger,
-    getMemberTransactionsSwagger,
-    patchMemberTransactionSwagger,
-    postMemberTransactionSwagger,
+    postAdminAuthSwagger,
+    getPointsSwagger,
     getPartnerTransactionSwagger,
     getPartnerTransactionsSwagger,
-    getPointsSwagger
+    getMemberTransactionSwagger,
+    getMemberTransactionsSwagger,
+    postMemberTransactionSwagger,
+    patchMemberTransactionSwagger,
+    deleteMemberTransactionSwagger,
+    getPartnerSwagger,
+    postPartnerSwagger,
+    patchPartnerSwagger,
+    deletePartnerSwagger
   ]
 
   const registry = new OpenAPIRegistry()
 
+  const securityScheme = registry.registerComponent('securitySchemes', 'bearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT'
+  })
+
   registryPaths.forEach((registryPath) => {
-    registry.registerPath(registryPath)
+    registry.registerPath({
+      ...registryPath,
+      ...(!registryPath?.tags?.[0].match(/Status|Authentication/gi) && { security: [{ [securityScheme.name]: [] }] })
+    })
   })
 
   const generator = new OpenApiGeneratorV3(registry.definitions)
