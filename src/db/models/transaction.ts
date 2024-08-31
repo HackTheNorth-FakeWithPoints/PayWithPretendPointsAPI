@@ -1,24 +1,39 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 
 import { sequelize } from '@/db/index.ts'
 
-class Transaction extends Model {
-  declare txnId: number
-  declare refId: string
+interface TransactionAttributes {
+  id: number
+  reference: string
+  partnerRefId?: string
+  transactedAt: Date
+  partnerId: number
+  memberId: number
+  status: 'delete' | 'reverse'
+  type: string
+  amount: number
+  description?: { [key: string]: string }
+  createdAt: Date
+  updatedAt: Date
+}
+
+type TransactionCreationAttributes = Optional<TransactionAttributes, 'id' | 'createdAt' | 'updatedAt'>
+
+class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
+  declare id: number
+  declare reference: string
   declare partnerRefId?: string
-  declare timestamp: Date
+  declare transactedAt: Date
   declare partnerId: number
   declare memberId: number
   declare status: 'delete' | 'reverse'
-  declare txnType: string
+  declare type: string
   declare amount: number
-  declare description1?: string
-  declare description2?: string
-  declare description3?: string
+  declare description?: { [key: string]: string }
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate(models: any) {
+  static associate(models: { Partner: typeof Partner; Member: typeof Member }) {
     Transaction.belongsTo(models.Partner, {
       foreignKey: 'partnerId',
       onDelete: 'CASCADE'
@@ -33,35 +48,37 @@ class Transaction extends Model {
 
 Transaction.init(
   {
-    txnId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true
     },
-    refId: {
+    reference: {
       type: DataTypes.STRING,
       allowNull: false
     },
     partnerRefId: {
       type: DataTypes.STRING
     },
-    timestamp: {
+    transactedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
     partnerId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     memberId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     status: {
       type: DataTypes.ENUM('delete', 'reverse'),
       allowNull: false
     },
-    txnType: {
+    type: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -69,14 +86,8 @@ Transaction.init(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false
     },
-    description1: {
-      type: DataTypes.STRING
-    },
-    description2: {
-      type: DataTypes.STRING
-    },
-    description3: {
-      type: DataTypes.STRING
+    description: {
+      type: DataTypes.JSONB
     },
     createdAt: {
       allowNull: false,
@@ -97,4 +108,4 @@ Transaction.init(
   }
 )
 
-export { Transaction }
+export { Transaction, type TransactionCreationAttributes }

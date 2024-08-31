@@ -13,7 +13,7 @@ router.post('/auth', async (req: Request, res: Response) => {
 
     const partner = await Partner.findOne({
       where: {
-        emailId: email
+        email
       }
     })
 
@@ -27,7 +27,7 @@ router.post('/auth', async (req: Request, res: Response) => {
       return res.status(403).json({ message: `Incorrect credentials!` })
     }
 
-    const accessToken = jwt.sign({ email, partnerId: partner.partnerId }, process.env.JWT_SECRET as string, {
+    const accessToken = jwt.sign({ email, id: partner.id }, process.env.JWT_SECRET as string, {
       expiresIn: '1h'
     })
 

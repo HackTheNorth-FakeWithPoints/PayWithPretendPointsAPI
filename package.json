@@ -7,6 +7,13 @@
   "description": "Node Version of Points API",
   "license": "AGPL-3.0-only",
   "main": "src/index.ts",
+  "keywords": [
+    "Loyalty and Rewards API",
+    "Hack The North",
+    "Points API",
+    "Hackathon",
+    "Points"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI.git"
@@ -19,17 +26,15 @@
     "dev": "npx tsx watch src/index.ts",
     "build": "npx tsup src/index.ts --minify",
     "start": "npx tsup src/index.ts --minify && node ./dist/index.cjs",
-    "format": "npx prettier --write . && npx eslint --fix .",
     "swagger": "npx tsx src/swagger/swagger.ts",
-    "migrate": "npx sequelize-cli db:migrate"
+    "migrate": "npx sequelize-cli db:migrate",
+    "format": "npx prettier --write . && npx eslint --fix .",
+    "validate": "npx prettier --check . && npx eslint . && npx tsc",
+    "action:build": "npx tsup src/index.ts --minify",
+    "action:format": "npx prettier --check .",
+    "action:lint": "npx eslint .",
+    "action:types": "npx tsc"
   },
-  "keywords": [
-    "Loyalty and Rewards API",
-    "Hack The North",
-    "Points API",
-    "Hackathon",
-    "Points"
-  ],
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
     "bcryptjs": "^2.4.3",

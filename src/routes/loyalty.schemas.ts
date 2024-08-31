@@ -33,8 +33,10 @@ const partnerData = z.object({
   permission: z
     .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS)])
     .openapi({ example: PARTNER_PERMISSIONS.READ }),
-  emailId: z.string().openapi({ example: 'partner@example.com' }),
-  password: z.string().openapi({ example: '******************' })
+  email: z.string().openapi({ example: 'partner@example.com' }),
+  password: z.string().openapi({ example: '******************' }),
+  address: z.string().openapi({ example: '123 Main St, Anytown USA' }),
+  phone: z.string().openapi({ example: '+1234567890' })
 })
 
 const optionalPartnerData = z.object({

@@ -8,20 +8,20 @@ module.exports = {
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('transactions', {
-      txnId: {
+      id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
       },
-      refId: {
+      reference: {
         type: Sequelize.STRING,
         allowNull: false
       },
       partnerRefId: {
         type: Sequelize.STRING
       },
-      timestamp: {
+      transactedAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -46,7 +46,7 @@ module.exports = {
         type: Sequelize.ENUM('delete', 'reverse'),
         allowNull: false
       },
-      txnType: {
+      type: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -54,14 +54,8 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
-      description1: {
-        type: Sequelize.STRING
-      },
-      description2: {
-        type: Sequelize.STRING
-      },
-      description3: {
-        type: Sequelize.STRING
+      description: {
+        type: Sequelize.JSONB
       },
       createdAt: {
         allowNull: false,

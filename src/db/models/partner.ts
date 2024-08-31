@@ -1,30 +1,41 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
 
-class Partner extends Model {
-  declare partnerId: number
+interface PartnerAttributes {
+  id: number
+  status: string
+  name: string
+  description: string
+  address: string
+  phone: string
+  email: string
+  permission: string
+  password: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+type PartnerCreationAttributes = Optional<PartnerAttributes, 'id' | 'createdAt' | 'updatedAt'>
+
+class Partner extends Model<PartnerAttributes, PartnerCreationAttributes> {
+  declare id: number
   declare status: string
   declare name: string
   declare description: string
-  declare contactId: number
+  declare address: string
+  declare phone: string
+  declare email: string
   declare permission: string
-  declare emailId: string
   declare password: string
-
-  static associate(models: any) {
-    Partner.belongsTo(models.Contact, {
-      onDelete: 'CASCADE',
-      foreignKey: 'contactId',
-      targetKey: 'id'
-    })
-  }
+  declare createdAt: Date
+  declare updatedAt: Date
 }
 
 Partner.init(
   {
-    partnerId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
@@ -41,21 +52,34 @@ Partner.init(
     description: {
       type: DataTypes.TEXT
     },
-    contactId: {
-      type: DataTypes.INTEGER
+    address: {
+      type: DataTypes.STRING
+    },
+    phone: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
     permission: {
       type: DataTypes.ENUM(...Object.values(PARTNER_PERMISSIONS)),
       allowNull: false
     },
-    emailId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   },
   {
@@ -66,4 +90,4 @@ Partner.init(
   }
 )
 
-export { Partner }
+export { Partner, type PartnerCreationAttributes }

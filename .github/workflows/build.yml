@@ -1,0 +1,26 @@
+name: PayWithPretendPointsAPI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.7.0'
+      - name: Install dependencies
+        uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npm run action:format
+      - run: npm run action:lint
+      - run: npm run action:types
+      - run: npm run action:build

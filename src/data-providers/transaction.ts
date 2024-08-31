@@ -1,6 +1,6 @@
 import { WhereOptions } from 'sequelize'
 
-import { Transaction } from '@/db/models/index.ts'
+import { Transaction, TransactionCreationAttributes } from '@/db/models/index.ts'
 
 const findTransactions = (where: WhereOptions<Transaction>) => {
   return Transaction.findAll({ where })
@@ -10,16 +10,16 @@ const findTransactionById = (id: number) => {
   return Transaction.findByPk(id)
 }
 
-const addTransaction = (transaction: Partial<Transaction>) => {
+const addTransaction = (transaction: TransactionCreationAttributes) => {
   return Transaction.create(transaction)
 }
 
-const modifyTransaction = (transactionId: number, transaction: Partial<Transaction>) => {
-  return Transaction.update(transaction, { where: { transactionId }, returning: true })
+const modifyTransaction = (id: number, transaction: Partial<Transaction>) => {
+  return Transaction.update(transaction, { where: { id }, returning: true })
 }
 
-const removeTransaction = (transactionId: number) => {
-  return Transaction.destroy({ where: { transactionId } })
+const removeTransaction = (id: number) => {
+  return Transaction.destroy({ where: { id } })
 }
 
 export { findTransactions, findTransactionById, addTransaction, modifyTransaction, removeTransaction }
