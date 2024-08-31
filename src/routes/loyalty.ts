@@ -1,7 +1,6 @@
 import express, { type Request, type Response } from 'express'
 
-import { addPartner, findPartnerById, modifyPartner, removePartner } from '@/data-providers/index.ts'
-import { findTransactions } from '@/data-providers/transaction.ts'
+import { addPartner, findPartnerById, findTransactions, modifyPartner, removePartner } from '@/db/providers/index.ts'
 import { adminAuthMiddleware, authMiddleware } from '@/middleware/index.ts'
 import {
   createTxnForMember,
