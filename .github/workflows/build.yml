@@ -20,15 +20,7 @@ jobs:
       - name: Install dependencies
         uses: actions/setup-node@v4
       - run: npm ci
-      - name: Check prettier formatting
-        uses: actions/setup-node@v4
       - run: npm run action:format
-      - name: Check eslint compliance
-        uses: actions/setup-node@v4
       - run: npm run action:lint
-      - name: Check typescript types
-        uses: actions/setup-node@v4
       - run: npm run action:types
-      - name: Build Express.js app
-        uses: actions/setup-node@v4
       - run: npm run action:build
