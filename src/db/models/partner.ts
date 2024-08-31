@@ -2,7 +2,6 @@ import { DataTypes, Model, Optional } from 'sequelize'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
-import { Contact } from '@/db/models/index.ts'
 
 interface PartnerAttributes {
   id: number

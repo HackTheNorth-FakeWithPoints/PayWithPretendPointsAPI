@@ -13,7 +13,7 @@ interface TransactionAttributes {
   status: 'delete' | 'reverse'
   type: string
   amount: number
-  description?: Record<string, any>
+  description?: { [key: string]: string }
   createdAt: Date
   updatedAt: Date
 }
@@ -30,7 +30,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
   declare status: 'delete' | 'reverse'
   declare type: string
   declare amount: number
-  declare description?: Record<string, any>
+  declare description?: { [key: string]: string }
   declare createdAt: Date
   declare updatedAt: Date
 
@@ -102,7 +102,7 @@ Transaction.init(
     }
   },
   {
-    modelName: 'Transaction',
+    modelName: 'transaction',
     tableName: 'transactions',
     timestamps: true,
     sequelize
