@@ -11,7 +11,7 @@ import { patchTransaction, postTransaction } from '@/routes/member-transactions/
 
 const router = express.Router()
 
-router.get('/loyalty/:memberId/transactions/', async (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/transactions', async (req: Request, res: Response) => {
   try {
     const transactions = await findTransactions({
       memberId: parseInt(req.params.memberId),
@@ -40,7 +40,7 @@ router.get('/loyalty/:memberId/transactions/:transactionId', async (req: Request
   }
 })
 
-router.post('/loyalty/:memberId/transactions/', async (req: Request, res: Response) => {
+router.post('/loyalty/:memberId/transactions', async (req: Request, res: Response) => {
   try {
     const transactionPayload = postTransaction.parse(req.body)
 

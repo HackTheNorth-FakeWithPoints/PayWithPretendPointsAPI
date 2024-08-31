@@ -1,8 +1,11 @@
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
 import { PARTNER_PERMISSIONS } from '@/constants/partner-permissions.ts'
 import { sequelize } from '@/db/index.ts'
+
+extendZodWithOpenApi(z)
 
 interface PartnerAttributes {
   id: number
@@ -92,17 +95,16 @@ Partner.init(
 )
 
 const PartnerZod = z.object({
-  id: z.number(),
-  status: z.string(),
-  name: z.string(),
-  description: z.string(),
-  address: z.string(),
-  phone: z.string(),
-  email: z.string(),
-  permission: z.string(),
-  password: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date()
+  id: z.number().openapi({ example: 1 }),
+  status: z.string().openapi({ example: 'ACTIVE' }),
+  name: z.string().openapi({ example: 'Partner Name' }),
+  description: z.string().openapi({ example: 'Partner Description' }),
+  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().openapi({ example: '4161234567' }),
+  email: z.string().openapi({ example: 'partner@example.com' }),
+  permission: z.string().openapi({ example: PARTNER_PERMISSIONS.READ }),
+  createdAt: z.date().openapi({ example: new Date().toISOString().toString() }),
+  updatedAt: z.date().openapi({ example: new Date().toISOString().toString() })
 })
 
 export { Partner, PartnerZod, type PartnerCreationAttributes }

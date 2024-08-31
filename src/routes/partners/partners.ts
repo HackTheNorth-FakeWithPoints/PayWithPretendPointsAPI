@@ -5,11 +5,9 @@ import { patchPartner, postPartner } from '@/routes/partners/index.ts'
 
 const router = express.Router()
 
-router.post('/loyalty/partners/', async (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
   try {
-    const partnerPayload = postPartner.parse(req.body)
-
-    const partner = await addPartner(partnerPayload)
+    const partner = await findPartnerById(parseInt(req.params.partnerId))
 
     return res.json({ partner })
   } catch (error) {
@@ -17,11 +15,13 @@ router.post('/loyalty/partners/', async (req: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
+router.post('/loyalty/partners', async (req: Request, res: Response) => {
   try {
-    const partner = await findPartnerById(parseInt(req.params.partnerId))
+    const partnerPayload = postPartner.parse(req.body)
 
-    return res.json({ partner })
+    const partner = await addPartner(partnerPayload)
+
+    return res.json({ partner: { ...partner.get({ plain: true }), password: null } })
   } catch (error) {
     return res.json({ error })
   }
@@ -33,7 +33,7 @@ router.patch('/loyalty/partners/:partnerId', async (req: Request, res: Response)
 
     const [, partners] = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
 
-    return res.json({ partner: partners[0] })
+    return res.json({ partner: { ...partners[0].get({ plain: true }), password: null } })
   } catch (error) {
     return res.json({ error })
   }

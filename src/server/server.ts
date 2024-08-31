@@ -12,6 +12,7 @@ import { serverHeaders } from '@/middleware/server-headers.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'
 import { memberTransactionRouter } from '@/routes/member-transactions/index.ts'
+import { memberRouter } from '@/routes/members/index.ts'
 import { partnerTransactionsRouter } from '@/routes/partner-transactions/index.ts'
 import { partnerRouter } from '@/routes/partners/index.ts'
 import { pointsRouter } from '@/routes/points/index.ts'
@@ -31,6 +32,7 @@ app.use(`${ROUTE_PREFIX}`, healthRouter)
 app.use(`${ROUTE_PREFIX}`, adminAuthRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthRouter)
 app.use(`${ROUTE_PREFIX}`, adminAuthMiddleware, partnerRouter)
+app.use(`${ROUTE_PREFIX}`, adminAuthMiddleware, memberRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, pointsRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, memberTransactionRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, partnerTransactionsRouter)

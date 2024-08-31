@@ -1,8 +1,11 @@
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
+
+extendZodWithOpenApi(z)
 
 interface TransactionAttributes {
   id: number
@@ -111,18 +114,18 @@ Transaction.init(
 )
 
 const TransactionZod = z.object({
-  id: z.number(),
-  reference: z.string(),
-  partnerRefId: z.string().optional(),
-  transactedAt: z.date(),
-  partnerId: z.number(),
-  memberId: z.number(),
-  status: z.enum(['delete', 'reverse']),
-  type: z.string(),
-  amount: z.number(),
-  description: z.record(z.string()).optional(),
-  createdAt: z.date(),
-  updatedAt: z.date()
+  id: z.number().openapi({ example: 1 }),
+  reference: z.string().openapi({ example: 'AAAA-0000-BBBB' }),
+  partnerRefId: z.number().optional().openapi({ example: 1 }),
+  transactedAt: z.date().openapi({ example: new Date().toString() }),
+  partnerId: z.number().openapi({ example: 1 }),
+  memberId: z.number().openapi({ example: 1 }),
+  status: z.enum(['delete', 'reverse']).openapi({ example: 'reverse' }),
+  type: z.string().openapi({ example: 'Purchase' }),
+  amount: z.number().openapi({ example: 100 }),
+  description: z.record(z.string().openapi({ example: 'Description' })).optional(),
+  createdAt: z.date().openapi({ example: new Date().toISOString().toString() }),
+  updatedAt: z.date().openapi({ example: new Date().toISOString().toString() })
 })
 
 export { Transaction, TransactionZod, type TransactionCreationAttributes }
