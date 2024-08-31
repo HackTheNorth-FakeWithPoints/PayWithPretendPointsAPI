@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize'
+import { z } from 'zod'
 
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
@@ -109,4 +110,19 @@ Transaction.init(
   }
 )
 
-export { Transaction, type TransactionCreationAttributes }
+const TransactionZod = z.object({
+  id: z.number(),
+  reference: z.string(),
+  partnerRefId: z.string().optional(),
+  transactedAt: z.date(),
+  partnerId: z.number(),
+  memberId: z.number(),
+  status: z.enum(['delete', 'reverse']),
+  type: z.string(),
+  amount: z.number(),
+  description: z.record(z.string()).optional(),
+  createdAt: z.date(),
+  updatedAt: z.date()
+})
+
+export { Transaction, TransactionZod, type TransactionCreationAttributes }

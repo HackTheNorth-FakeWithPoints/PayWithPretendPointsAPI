@@ -10,7 +10,7 @@ const memberId = z.object({
   memberId: z.string().openapi({ example: '1' })
 })
 
-const getPointsResponse = z.object({
+const balance = z.object({
   balance: z.number().int().openapi({ example: 1000 })
 })
 
@@ -22,7 +22,7 @@ const getPointsSwagger: RouteConfig = {
   request: {
     params: memberId
   },
-  responses: zodHTTPCodeResponses(getPointsResponse)
+  responses: zodHTTPCodeResponses(balance)
 }
 
 export { getPointsSwagger }

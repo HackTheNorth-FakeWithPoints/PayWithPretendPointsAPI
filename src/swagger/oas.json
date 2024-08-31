@@ -1,7 +1,11 @@
 {
   "openapi": "3.0.0",
   "info": { "version": "1.0.0", "title": "Pay With Pretend Points API" },
-  "components": { "schemas": {}, "parameters": {} },
+  "components": {
+    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
+    "schemas": {},
+    "parameters": {}
+  },
   "paths": {
     "/api/v1/health": {
       "get": {
@@ -28,48 +32,6 @@
                     }
                   },
                   "required": ["status", "message"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      }
-    },
-    "/api/v1/admin-auth": {
-      "post": {
-        "tags": ["Authentication"],
-        "description": "Login as an administrator.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                  "password": { "type": "string", "example": "*********" }
-                },
-                "required": ["email", "password"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": { "accessToken": { "type": "string", "example": "JWT Token" } },
-                  "required": ["accessToken"]
                 }
               }
             }
@@ -126,137 +88,21 @@
         }
       }
     },
-    "/api/v1/loyalty/partners/{partnerId}": {
-      "delete": {
-        "tags": ["Partner Operations"],
-        "description": "Delete a specific partner.",
-        "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "ACTIVE" },
-                    "name": { "type": "string", "example": "Partner Name" },
-                    "description": { "type": "string", "example": "Partner Description" },
-                    "contactId": { "type": "integer", "example": 1 },
-                    "permission": {
-                      "type": "string",
-                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                      "example": "Read"
-                    },
-                    "email": { "type": "string", "example": "partner@example.com" },
-                    "password": { "type": "string", "example": "******************" },
-                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                    "phone": { "type": "string", "example": "4161234567" }
-                  },
-                  "required": [
-                    "status",
-                    "name",
-                    "description",
-                    "contactId",
-                    "permission",
-                    "email",
-                    "password",
-                    "address",
-                    "phone"
-                  ]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
-      "get": {
-        "tags": ["Partner Operations"],
-        "description": "Get a specific partner.",
-        "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "ACTIVE" },
-                    "name": { "type": "string", "example": "Partner Name" },
-                    "description": { "type": "string", "example": "Partner Description" },
-                    "contactId": { "type": "integer", "example": 1 },
-                    "permission": {
-                      "type": "string",
-                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                      "example": "Read"
-                    },
-                    "email": { "type": "string", "example": "partner@example.com" },
-                    "password": { "type": "string", "example": "******************" },
-                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                    "phone": { "type": "string", "example": "4161234567" }
-                  },
-                  "required": [
-                    "status",
-                    "name",
-                    "description",
-                    "contactId",
-                    "permission",
-                    "email",
-                    "password",
-                    "address",
-                    "phone"
-                  ]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
-      "patch": {
-        "tags": ["Partner Operations"],
-        "description": "Update a specific partner.",
-        "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
-        ],
+    "/api/v1/admin-auth": {
+      "post": {
+        "tags": ["Authentication"],
+        "description": "Login as an administrator.",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "example": "ACTIVE" },
-                  "name": { "type": "string", "example": "Partner Name" },
-                  "description": { "type": "string", "example": "Partner Description" },
-                  "contactId": { "type": "integer", "example": 1 },
-                  "permission": {
-                    "type": "string",
-                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                    "example": "Read"
-                  },
-                  "email": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" }
-                }
+                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                  "password": { "type": "string", "example": "*********" }
+                },
+                "required": ["email", "password"]
               }
             }
           }
@@ -268,32 +114,8 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "ACTIVE" },
-                    "name": { "type": "string", "example": "Partner Name" },
-                    "description": { "type": "string", "example": "Partner Description" },
-                    "contactId": { "type": "integer", "example": 1 },
-                    "permission": {
-                      "type": "string",
-                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                      "example": "Read"
-                    },
-                    "email": { "type": "string", "example": "partner@example.com" },
-                    "password": { "type": "string", "example": "******************" },
-                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                    "phone": { "type": "string", "example": "4161234567" }
-                  },
-                  "required": [
-                    "status",
-                    "name",
-                    "description",
-                    "contactId",
-                    "permission",
-                    "email",
-                    "password",
-                    "address",
-                    "phone"
-                  ]
+                  "properties": { "accessToken": { "type": "string", "example": "JWT Token" } },
+                  "required": ["accessToken"]
                 }
               }
             }
@@ -308,45 +130,46 @@
         }
       }
     },
-    "/api/v1/loyalty/partners": {
-      "post": {
-        "tags": ["Partner Operations"],
-        "description": "Create a new partner.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "status": { "type": "string", "example": "ACTIVE" },
-                  "name": { "type": "string", "example": "Partner Name" },
-                  "description": { "type": "string", "example": "Partner Description" },
-                  "contactId": { "type": "integer", "example": 1 },
-                  "permission": {
-                    "type": "string",
-                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                    "example": "Read"
-                  },
-                  "email": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" }
-                },
-                "required": [
-                  "status",
-                  "name",
-                  "description",
-                  "contactId",
-                  "permission",
-                  "email",
-                  "password",
-                  "address",
-                  "phone"
-                ]
+    "/api/v1/loyalty/{memberId}/points": {
+      "get": {
+        "tags": ["Points"],
+        "description": "Get the points balance for a specific member.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "balance": { "type": "integer", "example": 1000 } },
+                  "required": ["balance"]
+                }
               }
             }
-          }
-        },
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/partners/{partnerId}/transactions/{transactionId}": {
+      "get": {
+        "tags": ["Partner Transactions"],
+        "description": "Get a specific transaction for a partner.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" },
+          { "schema": { "type": "string" }, "required": true, "name": "transactionId", "in": "path" }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -355,31 +178,99 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "example": "ACTIVE" },
-                    "name": { "type": "string", "example": "Partner Name" },
-                    "description": { "type": "string", "example": "Partner Description" },
-                    "contactId": { "type": "integer", "example": 1 },
-                    "permission": {
-                      "type": "string",
-                      "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                      "example": "Read"
-                    },
-                    "email": { "type": "string", "example": "partner@example.com" },
-                    "password": { "type": "string", "example": "******************" },
-                    "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                    "phone": { "type": "string", "example": "4161234567" }
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "reference": { "type": "string" },
+                        "partnerRefId": { "type": "string" },
+                        "transactedAt": { "type": "string" },
+                        "partnerId": { "type": "number" },
+                        "memberId": { "type": "number" },
+                        "status": { "type": "string", "enum": ["delete", "reverse"] },
+                        "type": { "type": "string" },
+                        "amount": { "type": "number" },
+                        "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "reference",
+                        "transactedAt",
+                        "partnerId",
+                        "memberId",
+                        "status",
+                        "type",
+                        "amount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
                   },
-                  "required": [
-                    "status",
-                    "name",
-                    "description",
-                    "contactId",
-                    "permission",
-                    "email",
-                    "password",
-                    "address",
-                    "phone"
-                  ]
+                  "required": ["transaction"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/partners/{partnerId}/transactions": {
+      "get": {
+        "tags": ["Partner Transactions"],
+        "description": "Get transactions for a partner.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "number" },
+                          "reference": { "type": "string" },
+                          "partnerRefId": { "type": "string" },
+                          "transactedAt": { "type": "string" },
+                          "partnerId": { "type": "number" },
+                          "memberId": { "type": "number" },
+                          "status": { "type": "string", "enum": ["delete", "reverse"] },
+                          "type": { "type": "string" },
+                          "amount": { "type": "number" },
+                          "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                          "createdAt": { "type": "string" },
+                          "updatedAt": { "type": "string" }
+                        },
+                        "required": [
+                          "id",
+                          "reference",
+                          "transactedAt",
+                          "partnerId",
+                          "memberId",
+                          "status",
+                          "type",
+                          "amount",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["transactions"]
                 }
               }
             }
@@ -395,30 +286,10 @@
       }
     },
     "/api/v1/loyalty/{memberId}/transactions/{transactionId}": {
-      "delete": {
-        "tags": ["Member Transactions"],
-        "description": "Reverses txn",
-        "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
       "get": {
         "tags": ["Member Transactions"],
-        "description": "get the details of a single txn",
+        "description": "Get a specific transaction for a member.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
@@ -431,21 +302,37 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                    "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                    "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                    "type": { "type": "string", "example": "Type" },
-                    "amount": { "type": "number", "example": 100 },
-                    "description": {
+                    "transaction": {
                       "type": "object",
                       "properties": {
-                        "description1": { "type": "string", "example": "Description" },
-                        "description2": { "type": "string", "example": "Description" },
-                        "description3": { "type": "string", "example": "Description" }
-                      }
+                        "id": { "type": "number" },
+                        "reference": { "type": "string" },
+                        "partnerRefId": { "type": "string" },
+                        "transactedAt": { "type": "string" },
+                        "partnerId": { "type": "number" },
+                        "memberId": { "type": "number" },
+                        "status": { "type": "string", "enum": ["delete", "reverse"] },
+                        "type": { "type": "string" },
+                        "amount": { "type": "number" },
+                        "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "reference",
+                        "transactedAt",
+                        "partnerId",
+                        "memberId",
+                        "status",
+                        "type",
+                        "amount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
                     }
                   },
-                  "required": ["status", "reference", "type", "amount"]
+                  "required": ["transaction"]
                 }
               }
             }
@@ -461,7 +348,8 @@
       },
       "patch": {
         "tags": ["Member Transactions"],
-        "description": "update the details of a single txn",
+        "description": "Update a specific transaction for a member.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
@@ -493,7 +381,75 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "reference": { "type": "string" },
+                        "partnerRefId": { "type": "string" },
+                        "transactedAt": { "type": "string" },
+                        "partnerId": { "type": "number" },
+                        "memberId": { "type": "number" },
+                        "status": { "type": "string", "enum": ["delete", "reverse"] },
+                        "type": { "type": "string" },
+                        "amount": { "type": "number" },
+                        "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "reference",
+                        "transactedAt",
+                        "partnerId",
+                        "memberId",
+                        "status",
+                        "type",
+                        "amount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["transaction"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "delete": {
+        "tags": ["Member Transactions"],
+        "description": "Reverses a transaction for a member.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "count": { "type": "integer", "example": 1 } },
+                  "required": ["count"]
+                }
+              }
+            }
           },
           "204": { "description": "No Content" },
           "400": { "description": "Bad Request" },
@@ -508,7 +464,8 @@
     "/api/v1/loyalty/{memberId}/transactions": {
       "get": {
         "tags": ["Member Transactions"],
-        "description": "gets transaction history from an account of a member",
+        "description": "Get all transactions of a member.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
         ],
@@ -518,26 +475,42 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                      "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                      "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                      "type": { "type": "string", "example": "Type" },
-                      "amount": { "type": "number", "example": 100 },
-                      "description": {
+                  "type": "object",
+                  "properties": {
+                    "transactions": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "description1": { "type": "string", "example": "Description" },
-                          "description2": { "type": "string", "example": "Description" },
-                          "description3": { "type": "string", "example": "Description" }
-                        }
+                          "id": { "type": "number" },
+                          "reference": { "type": "string" },
+                          "partnerRefId": { "type": "string" },
+                          "transactedAt": { "type": "string" },
+                          "partnerId": { "type": "number" },
+                          "memberId": { "type": "number" },
+                          "status": { "type": "string", "enum": ["delete", "reverse"] },
+                          "type": { "type": "string" },
+                          "amount": { "type": "number" },
+                          "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                          "createdAt": { "type": "string" },
+                          "updatedAt": { "type": "string" }
+                        },
+                        "required": [
+                          "id",
+                          "reference",
+                          "transactedAt",
+                          "partnerId",
+                          "memberId",
+                          "status",
+                          "type",
+                          "amount",
+                          "createdAt",
+                          "updatedAt"
+                        ]
                       }
-                    },
-                    "required": ["status", "reference", "type", "amount"]
-                  }
+                    }
+                  },
+                  "required": ["transactions"]
                 }
               }
             }
@@ -553,7 +526,8 @@
       },
       "post": {
         "tags": ["Member Transactions"],
-        "description": "earn or burn points for a member for a partner",
+        "description": "Create a new transaction for a member.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
         ],
@@ -585,7 +559,45 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "type": "object", "properties": {} } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "reference": { "type": "string" },
+                        "partnerRefId": { "type": "string" },
+                        "transactedAt": { "type": "string" },
+                        "partnerId": { "type": "number" },
+                        "memberId": { "type": "number" },
+                        "status": { "type": "string", "enum": ["delete", "reverse"] },
+                        "type": { "type": "string" },
+                        "amount": { "type": "number" },
+                        "description": { "type": "object", "additionalProperties": { "type": "string" } },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "reference",
+                        "transactedAt",
+                        "partnerId",
+                        "memberId",
+                        "status",
+                        "type",
+                        "amount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["transaction"]
+                }
+              }
+            }
           },
           "204": { "description": "No Content" },
           "400": { "description": "Bad Request" },
@@ -597,13 +609,13 @@
         }
       }
     },
-    "/api/v1/loyalty/partners/{partnerId}/transactions/{transactionId}": {
+    "/api/v1/loyalty/partners/{partnerId}": {
       "get": {
-        "tags": ["Partner Transactions"],
-        "description": "Get a specific transaction for a partner.",
+        "tags": ["Partner Operations"],
+        "description": "Get a specific partner.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "transactionId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
         ],
         "responses": {
           "200": {
@@ -613,21 +625,37 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                    "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                    "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                    "type": { "type": "string", "example": "Type" },
-                    "amount": { "type": "number", "example": 100 },
-                    "description": {
+                    "partner": {
                       "type": "object",
                       "properties": {
-                        "description1": { "type": "string", "example": "Description" },
-                        "description2": { "type": "string", "example": "Description" },
-                        "description3": { "type": "string", "example": "Description" }
-                      }
+                        "id": { "type": "number" },
+                        "status": { "type": "string" },
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "address": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "permission": { "type": "string" },
+                        "password": { "type": "string" },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "status",
+                        "name",
+                        "description",
+                        "address",
+                        "phone",
+                        "email",
+                        "permission",
+                        "password",
+                        "createdAt",
+                        "updatedAt"
+                      ]
                     }
                   },
-                  "required": ["status", "reference", "type", "amount"]
+                  "required": ["partner"]
                 }
               }
             }
@@ -640,39 +668,76 @@
           "500": { "description": "Internal Server Error" },
           "503": { "description": "Service Unavailable" }
         }
-      }
-    },
-    "/api/v1/loyalty/partners/{partnerId}/transactions": {
-      "get": {
-        "tags": ["Partner Transactions"],
-        "description": "Get transactions for a partner.",
-        "parameters": [{ "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" }],
+      },
+      "patch": {
+        "tags": ["Partner Operations"],
+        "description": "Update a specific partner.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string", "example": "ACTIVE" },
+                  "name": { "type": "string", "example": "Partner Name" },
+                  "description": { "type": "string", "example": "Partner Description" },
+                  "permission": {
+                    "type": "string",
+                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                    "example": "Read"
+                  },
+                  "email": { "type": "string", "example": "partner@example.com" },
+                  "password": { "type": "string", "example": "******************" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                      "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                      "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                      "type": { "type": "string", "example": "Type" },
-                      "amount": { "type": "number", "example": 100 },
-                      "description": {
-                        "type": "object",
-                        "properties": {
-                          "description1": { "type": "string", "example": "Description" },
-                          "description2": { "type": "string", "example": "Description" },
-                          "description3": { "type": "string", "example": "Description" }
-                        }
-                      }
-                    },
-                    "required": ["status", "reference", "type", "amount"]
-                  }
+                  "type": "object",
+                  "properties": {
+                    "partner": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "status": { "type": "string" },
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "address": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "permission": { "type": "string" },
+                        "password": { "type": "string" },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "status",
+                        "name",
+                        "description",
+                        "address",
+                        "phone",
+                        "email",
+                        "permission",
+                        "password",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["partner"]
                 }
               }
             }
@@ -685,14 +750,13 @@
           "500": { "description": "Internal Server Error" },
           "503": { "description": "Service Unavailable" }
         }
-      }
-    },
-    "/api/v1/loyalty/{memberId}/points": {
-      "get": {
-        "tags": ["Points"],
-        "description": "Get the points balance for a specific member.",
+      },
+      "delete": {
+        "tags": ["Partner Operations"],
+        "description": "Delete a specific partner.",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
         ],
         "responses": {
           "200": {
@@ -701,8 +765,90 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": { "balance": { "type": "integer", "example": 1000 } },
-                  "required": ["balance"]
+                  "properties": { "count": { "type": "integer", "example": 1 } },
+                  "required": ["count"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/partners": {
+      "post": {
+        "tags": ["Partner Operations"],
+        "description": "Create a new partner.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string", "example": "ACTIVE" },
+                  "name": { "type": "string", "example": "Partner Name" },
+                  "description": { "type": "string", "example": "Partner Description" },
+                  "permission": {
+                    "type": "string",
+                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
+                    "example": "Read"
+                  },
+                  "email": { "type": "string", "example": "partner@example.com" },
+                  "password": { "type": "string", "example": "******************" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" }
+                },
+                "required": ["status", "name", "description", "permission", "email", "password", "address", "phone"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "partner": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "status": { "type": "string" },
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "address": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "email": { "type": "string" },
+                        "permission": { "type": "string" },
+                        "password": { "type": "string" },
+                        "createdAt": { "type": "string" },
+                        "updatedAt": { "type": "string" }
+                      },
+                      "required": [
+                        "id",
+                        "status",
+                        "name",
+                        "description",
+                        "address",
+                        "phone",
+                        "email",
+                        "permission",
+                        "password",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["partner"]
                 }
               }
             }

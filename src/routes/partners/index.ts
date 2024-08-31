@@ -2,8 +2,8 @@ export {
   postPartner,
   patchPartner,
   postPartnerSwagger,
-  getPartnerDetailsSwagger,
-  patchPartnerDetailsSwagger,
-  deletePartnerDetailsSwagger
+  getPartnerSwagger,
+  patchPartnerSwagger,
+  deletePartnerSwagger
 } from '@/routes/partners/partner.schemas.ts'
 export { partnerRouter } from '@/routes/partners/partners.ts'
