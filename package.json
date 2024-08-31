@@ -7,6 +7,13 @@
   "description": "Node Version of Points API",
   "license": "AGPL-3.0-only",
   "main": "src/index.ts",
+  "keywords": [
+    "Loyalty and Rewards API",
+    "Hack The North",
+    "Points API",
+    "Hackathon",
+    "Points"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI.git"
@@ -24,13 +31,6 @@
     "swagger": "npx tsx src/swagger/swagger.ts",
     "migrate": "npx sequelize-cli db:migrate"
   },
-  "keywords": [
-    "Loyalty and Rewards API",
-    "Hack The North",
-    "Points API",
-    "Hackathon",
-    "Points"
-  ],
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
     "bcryptjs": "^2.4.3",
