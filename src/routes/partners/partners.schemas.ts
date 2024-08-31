@@ -30,7 +30,7 @@ const patchPartner = postPartner.partial()
 const getPartnerSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
-  tags: ['Partner Operations'],
+  tags: ['Partner Operations (Admin)'],
   description: 'Get a specific partner.',
   request: {
     params: partnerId
@@ -41,7 +41,7 @@ const getPartnerSwagger: RouteConfig = {
 const postPartnerSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/loyalty/partners`,
-  tags: ['Partner Operations'],
+  tags: ['Partner Operations (Admin)'],
   description: 'Create a new partner.',
   request: {
     body: { content: { 'application/json': { schema: postPartner } } }
@@ -52,7 +52,7 @@ const postPartnerSwagger: RouteConfig = {
 const patchPartnerSwagger: RouteConfig = {
   method: 'patch',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
-  tags: ['Partner Operations'],
+  tags: ['Partner Operations (Admin)'],
   description: 'Update a specific partner.',
   request: {
     params: partnerId,
@@ -64,7 +64,7 @@ const patchPartnerSwagger: RouteConfig = {
 const deletePartnerSwagger: RouteConfig = {
   method: 'delete',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}`,
-  tags: ['Partner Operations'],
+  tags: ['Partner Operations (Admin)'],
   description: 'Delete a specific partner.',
   request: {
     params: partnerId

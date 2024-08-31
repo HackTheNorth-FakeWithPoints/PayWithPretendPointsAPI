@@ -96,9 +96,9 @@ Member.init(
 const MemberZod = z.object({
   id: z.number().openapi({ example: 1 }),
   partnerId: z.number().openapi({ example: 1 }),
-  name: z.string(),
-  address: z.string(),
-  phone: z.string(),
+  name: z.string().openapi({ example: 'John Doe' }),
+  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().openapi({ example: '4161234567' }),
   email: z.string().email().openapi({ example: 'member@example.com' }),
   balance: z.number().openapi({ example: 1000 }),
   status: z.string().openapi({ example: 'ACTIVE' }),

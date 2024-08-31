@@ -190,7 +190,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -201,8 +201,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                       },
                       "required": [
                         "id",
@@ -257,7 +257,7 @@
                           "partnerRefId": { "type": "number", "example": 1 },
                           "transactedAt": {
                             "type": "string",
-                            "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                            "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
@@ -268,8 +268,8 @@
                             "type": "object",
                             "additionalProperties": { "type": "string", "example": "Description" }
                           },
-                          "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                          "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                         },
                         "required": [
                           "id",
@@ -326,7 +326,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -337,8 +337,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                       },
                       "required": [
                         "id",
@@ -416,7 +416,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -427,8 +427,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                       },
                       "required": [
                         "id",
@@ -515,7 +515,7 @@
                           "partnerRefId": { "type": "number", "example": 1 },
                           "transactedAt": {
                             "type": "string",
-                            "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                            "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
@@ -526,8 +526,8 @@
                             "type": "object",
                             "additionalProperties": { "type": "string", "example": "Description" }
                           },
-                          "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                          "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                          "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                          "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                         },
                         "required": [
                           "id",
@@ -606,7 +606,7 @@
                         "partnerRefId": { "type": "number", "example": 1 },
                         "transactedAt": {
                           "type": "string",
-                          "example": "Sat Aug 31 2024 18:27:36 GMT-0400 (Eastern Daylight Time)"
+                          "example": "Sat Aug 31 2024 18:36:09 GMT-0400 (Eastern Daylight Time)"
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
@@ -617,8 +617,8 @@
                           "type": "object",
                           "additionalProperties": { "type": "string", "example": "Description" }
                         },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.849Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.297Z" }
                       },
                       "required": [
                         "id",
@@ -651,7 +651,7 @@
     },
     "/api/v1/loyalty/partners/{partnerId}": {
       "get": {
-        "tags": ["Partner Operations"],
+        "tags": ["Partner Operations (Admin)"],
         "description": "Get a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -676,8 +676,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
                       },
                       "required": [
                         "id",
@@ -708,7 +708,7 @@
         }
       },
       "patch": {
-        "tags": ["Partner Operations"],
+        "tags": ["Partner Operations (Admin)"],
         "description": "Update a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -756,8 +756,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
                       },
                       "required": [
                         "id",
@@ -788,7 +788,7 @@
         }
       },
       "delete": {
-        "tags": ["Partner Operations"],
+        "tags": ["Partner Operations (Admin)"],
         "description": "Delete a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -819,7 +819,7 @@
     },
     "/api/v1/loyalty/partners": {
       "post": {
-        "tags": ["Partner Operations"],
+        "tags": ["Partner Operations (Admin)"],
         "description": "Create a new partner.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -865,8 +865,8 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "example": "partner@example.com" },
                         "permission": { "type": "string", "example": "Read" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.846Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.294Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.295Z" }
                       },
                       "required": [
                         "id",
@@ -899,7 +899,7 @@
     },
     "/api/v1/loyalty/members/{memberId}": {
       "get": {
-        "tags": ["Member Operations"],
+        "tags": ["Member Operations (Admin)"],
         "description": "Get a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -918,14 +918,14 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string" },
-                        "address": { "type": "string" },
-                        "phone": { "type": "string" },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
                       },
                       "required": [
                         "id",
@@ -956,7 +956,7 @@
         }
       },
       "patch": {
-        "tags": ["Member Operations"],
+        "tags": ["Member Operations (Admin)"],
         "description": "Update a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -992,14 +992,14 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string" },
-                        "address": { "type": "string" },
-                        "phone": { "type": "string" },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
                       },
                       "required": [
                         "id",
@@ -1030,7 +1030,7 @@
         }
       },
       "delete": {
-        "tags": ["Member Operations"],
+        "tags": ["Member Operations (Admin)"],
         "description": "Delete a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -1061,7 +1061,7 @@
     },
     "/api/v1/loyalty/members": {
       "post": {
-        "tags": ["Member Operations"],
+        "tags": ["Member Operations (Admin)"],
         "description": "Create a new member.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -1095,14 +1095,14 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string" },
-                        "address": { "type": "string" },
-                        "phone": { "type": "string" },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
                         "status": { "type": "string", "example": "ACTIVE" },
-                        "createdAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" },
-                        "updatedAt": { "type": "string", "example": "2024-08-31T22:27:36.848Z" }
+                        "createdAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" },
+                        "updatedAt": { "type": "string", "example": "2024-08-31T22:36:09.296Z" }
                       },
                       "required": [
                         "id",

@@ -25,7 +25,7 @@ const patchMember = postMember.partial()
 const getMemberSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations'],
+  tags: ['Member Operations (Admin)'],
   description: 'Get a specific member.',
   request: {
     params: memberId
@@ -36,7 +36,7 @@ const getMemberSwagger: RouteConfig = {
 const postMemberSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/loyalty/members`,
-  tags: ['Member Operations'],
+  tags: ['Member Operations (Admin)'],
   description: 'Create a new member.',
   request: {
     body: { content: { 'application/json': { schema: postMember } } }
@@ -47,7 +47,7 @@ const postMemberSwagger: RouteConfig = {
 const patchMemberSwagger: RouteConfig = {
   method: 'patch',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations'],
+  tags: ['Member Operations (Admin)'],
   description: 'Update a specific member.',
   request: {
     params: memberId,
@@ -59,7 +59,7 @@ const patchMemberSwagger: RouteConfig = {
 const deleteMemberSwagger: RouteConfig = {
   method: 'delete',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations'],
+  tags: ['Member Operations (Admin)'],
   description: 'Delete a specific member.',
   request: {
     params: memberId
