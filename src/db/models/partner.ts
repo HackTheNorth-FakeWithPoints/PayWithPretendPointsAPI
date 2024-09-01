@@ -103,8 +103,8 @@ const PartnerZod = z.object({
   phone: z.string().openapi({ example: '4161234567' }),
   email: z.string().openapi({ example: 'partner@example.com' }),
   permission: z.string().openapi({ example: PARTNER_PERMISSIONS.READ }),
-  createdAt: z.date().openapi({ example: new Date().toISOString().toString() }),
-  updatedAt: z.date().openapi({ example: new Date().toISOString().toString() })
+  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
+  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })
 
 export { Partner, PartnerZod, type PartnerCreationAttributes }
