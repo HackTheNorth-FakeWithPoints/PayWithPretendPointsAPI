@@ -1,6 +1,6 @@
 {
   "openapi": "3.0.0",
-  "servers": [{ "url": "", "description": "Production" }],
+  "servers": [{ "url": "https://paywithpretendpointsapi.onrender.com", "description": "Production" }],
   "info": { "version": "1.0.0", "title": "Pay With Pretend Points API" },
   "components": {
     "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
