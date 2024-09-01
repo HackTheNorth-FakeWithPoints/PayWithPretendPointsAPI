@@ -7,11 +7,12 @@ import {
   modifyTransaction,
   removeTransaction
 } from '@/db/providers/index.ts'
+import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
 
 const router = express.Router()
 
-router.get('/loyalty/:memberId/transactions', async (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const transactions = await findTransactions({
       memberId: parseInt(req.params.memberId),
@@ -26,21 +27,25 @@ router.get('/loyalty/:memberId/transactions', async (req: Request, res: Response
   }
 })
 
-router.get('/loyalty/:memberId/transactions/:transactionId', async (req: Request, res: Response) => {
-  try {
-    const transaction = await findTransaction({
-      id: parseInt(req.params.transactionId),
-      memberId: parseInt(req.params.memberId),
-      partnerId: parseInt(req.get('partnerId') as string)
-    })
+router.get(
+  '/loyalty/:memberId/transactions/:transactionId',
+  partnerAuthMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const transaction = await findTransaction({
+        id: parseInt(req.params.transactionId),
+        memberId: parseInt(req.params.memberId),
+        partnerId: parseInt(req.get('partnerId') as string)
+      })
 
-    return res.json({ transaction })
-  } catch (error) {
-    return res.json({ error })
+      return res.json({ transaction })
+    } catch (error) {
+      return res.json({ error })
+    }
   }
-})
+)
 
-router.post('/loyalty/:memberId/transactions', async (req: Request, res: Response) => {
+router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const transactionPayload = postTransaction.parse(req.body)
 
@@ -56,37 +61,45 @@ router.post('/loyalty/:memberId/transactions', async (req: Request, res: Respons
   }
 })
 
-router.patch('/loyalty/:memberId/transactions/:transactionId', async (req: Request, res: Response) => {
-  try {
-    const transactionPayload = patchTransaction.parse(req.body)
+router.patch(
+  '/loyalty/:memberId/transactions/:transactionId',
+  partnerAuthMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const transactionPayload = patchTransaction.parse(req.body)
 
-    const [, transactions] = await modifyTransaction(
-      parseInt(req.params.transactionId),
-      parseInt(req.get('partnerId') as string),
-      parseInt(req.params.memberId),
-      {
-        ...transactionPayload
-      }
-    )
+      const [, transactions] = await modifyTransaction(
+        parseInt(req.params.transactionId),
+        parseInt(req.get('partnerId') as string),
+        parseInt(req.params.memberId),
+        {
+          ...transactionPayload
+        }
+      )
 
-    return res.json({ transaction: transactions[0] })
-  } catch (error) {
-    return res.json({ error })
+      return res.json({ transaction: transactions[0] })
+    } catch (error) {
+      return res.json({ error })
+    }
   }
-})
+)
 
-router.delete('/loyalty/:memberId/transactions/:transactionId', async (req: Request, res: Response) => {
-  try {
-    const count = await removeTransaction(
-      parseInt(req.params.transactionId),
-      parseInt(req.get('partnerId') as string),
-      parseInt(req.params.memberId)
-    )
+router.delete(
+  '/loyalty/:memberId/transactions/:transactionId',
+  partnerAuthMiddleware,
+  async (req: Request, res: Response) => {
+    try {
+      const count = await removeTransaction(
+        parseInt(req.params.transactionId),
+        parseInt(req.get('partnerId') as string),
+        parseInt(req.params.memberId)
+      )
 
-    return res.json({ count })
-  } catch (error) {
-    return res.json({ error })
+      return res.json({ count })
+    } catch (error) {
+      return res.json({ error })
+    }
   }
-})
+)
 
 export { router as memberTransactionRouter }

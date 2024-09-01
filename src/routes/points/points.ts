@@ -1,10 +1,11 @@
 import express, { type Request, type Response } from 'express'
 
 import { findMember } from '@/db/providers/index.ts'
+import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 
 const router = express.Router()
 
-router.get('/loyalty/:memberId/points', async (req: Request, res: Response) => {
+router.get('/loyalty/:memberId/points', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const member = await findMember({ partnerId: req.get('partnerId'), id: parseInt(req.params.memberId) })
 

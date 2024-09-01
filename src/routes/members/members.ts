@@ -1,11 +1,12 @@
 import express, { type Request, type Response } from 'express'
 
 import { addMember, findMemberById, findMembers, modifyMember, removeMember } from '@/db/providers/index.ts'
+import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
 import { patchMember, postMember } from '@/routes/members/index.ts'
 
 const router = express.Router()
 
-router.get('/loyalty/members', async (_: Request, res: Response) => {
+router.get('/loyalty/members', adminAuthMiddleware, async (_: Request, res: Response) => {
   try {
     const members = await findMembers({})
 
@@ -15,7 +16,7 @@ router.get('/loyalty/members', async (_: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/members/:memberId', async (req: Request, res: Response) => {
+router.get('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const member = await findMemberById(parseInt(req.params.memberId))
 
@@ -25,7 +26,7 @@ router.get('/loyalty/members/:memberId', async (req: Request, res: Response) => 
   }
 })
 
-router.post('/loyalty/members', async (req: Request, res: Response) => {
+router.post('/loyalty/members', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const memberPayload = postMember.parse(req.body)
 
@@ -37,7 +38,7 @@ router.post('/loyalty/members', async (req: Request, res: Response) => {
   }
 })
 
-router.patch('/loyalty/members/:memberId', async (req: Request, res: Response) => {
+router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const memberPayload = patchMember.parse(req.body)
 
@@ -49,7 +50,7 @@ router.patch('/loyalty/members/:memberId', async (req: Request, res: Response) =
   }
 })
 
-router.delete('/loyalty/members/:memberId', async (req: Request, res: Response) => {
+router.delete('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const count = await removeMember(parseInt(req.params.memberId))
 

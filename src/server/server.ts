@@ -5,8 +5,6 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 
 import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
-import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
-import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'
@@ -33,11 +31,11 @@ app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 app.use(`${ROUTE_PREFIX}`, healthRouter)
 app.use(`${ROUTE_PREFIX}`, adminAuthRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthRouter)
-app.use(`${ROUTE_PREFIX}`, adminAuthMiddleware, partnerRouter)
-app.use(`${ROUTE_PREFIX}`, adminAuthMiddleware, memberRouter)
-app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, pointsRouter)
-app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, memberTransactionRouter)
-app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, partnerTransactionsRouter)
+app.use(`${ROUTE_PREFIX}`, partnerRouter)
+app.use(`${ROUTE_PREFIX}`, memberRouter)
+app.use(`${ROUTE_PREFIX}`, pointsRouter)
+app.use(`${ROUTE_PREFIX}`, memberTransactionRouter)
+app.use(`${ROUTE_PREFIX}`, partnerTransactionsRouter)
 
 app.use(`/`, apiReference({}))
 

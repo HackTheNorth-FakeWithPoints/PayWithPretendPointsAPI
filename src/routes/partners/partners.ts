@@ -1,11 +1,12 @@
 import express, { type Request, type Response } from 'express'
 
 import { addPartner, findPartnerById, findPartners, modifyPartner, removePartner } from '@/db/providers/index.ts'
+import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
 import { patchPartner, postPartner } from '@/routes/partners/index.ts'
 
 const router = express.Router()
 
-router.get('/loyalty/partners', async (_: Request, res: Response) => {
+router.get('/loyalty/partners', adminAuthMiddleware, async (_: Request, res: Response) => {
   try {
     const partners = await findPartners({})
 
@@ -15,7 +16,7 @@ router.get('/loyalty/partners', async (_: Request, res: Response) => {
   }
 })
 
-router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
+router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const partner = await findPartnerById(parseInt(req.params.partnerId))
 
@@ -25,7 +26,7 @@ router.get('/loyalty/partners/:partnerId', async (req: Request, res: Response) =
   }
 })
 
-router.post('/loyalty/partners', async (req: Request, res: Response) => {
+router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const partnerPayload = postPartner.parse(req.body)
 
@@ -37,7 +38,7 @@ router.post('/loyalty/partners', async (req: Request, res: Response) => {
   }
 })
 
-router.patch('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
+router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const partnerPayload = patchPartner.parse(req.body)
 
@@ -49,7 +50,7 @@ router.patch('/loyalty/partners/:partnerId', async (req: Request, res: Response)
   }
 })
 
-router.delete('/loyalty/partners/:partnerId', async (req: Request, res: Response) => {
+router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const count = await removePartner(parseInt(req.params.partnerId))
 
