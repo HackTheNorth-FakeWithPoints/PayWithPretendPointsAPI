@@ -1,0 +1,19 @@
+meta {
+  name: patchPartner
+  type: http
+  seq: 4
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+params:path {
+  partnerId: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/loyalty/partners/:partnerId
+}

@@ -1,0 +1,19 @@
+meta {
+  name: deletePartner
+  type: http
+  seq: 5
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+params:path {
+  partnerId: 1
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/loyalty/partners/:partnerId
+}

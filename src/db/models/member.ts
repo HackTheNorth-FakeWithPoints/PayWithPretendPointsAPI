@@ -1,7 +1,11 @@
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
+import { z } from 'zod'
 
 import { sequelize } from '@/db/index.ts'
 import { Partner } from '@/db/models/index.ts'
+
+extendZodWithOpenApi(z)
 
 interface MemberAttributes {
   id: number
@@ -16,7 +20,7 @@ interface MemberAttributes {
   updatedAt: Date
 }
 
-type MemberCreationAttributes = Optional<MemberAttributes, 'id' | 'createdAt' | 'updatedAt'>
+type MemberCreationAttributes = Optional<MemberAttributes, 'id' | 'partnerId' | 'createdAt' | 'updatedAt'>
 
 class Member extends Model<MemberAttributes, MemberCreationAttributes> {
   declare id: number
@@ -89,4 +93,17 @@ Member.init(
   }
 )
 
-export { Member, type MemberCreationAttributes }
+const MemberZod = z.object({
+  id: z.number().openapi({ example: 1 }),
+  partnerId: z.number().openapi({ example: 1 }),
+  name: z.string().openapi({ example: 'John Doe' }),
+  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().openapi({ example: '4161234567' }),
+  email: z.string().email().openapi({ example: 'member@example.com' }),
+  balance: z.number().openapi({ example: 1000 }),
+  status: z.string().openapi({ example: 'ACTIVE' }),
+  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
+  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
+})
+
+export { Member, MemberZod, type MemberCreationAttributes }

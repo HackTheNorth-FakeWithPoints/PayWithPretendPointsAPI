@@ -1,0 +1,1887 @@
+openapi: 3.0.0
+servers:
+  - url: https://paywithpretendpointsapi.onrender.com
+    description: Production
+info:
+  version: 1.0.0
+  title: Pay With Pretend Points API
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Partner:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        status:
+          type: string
+          example: ACTIVE
+        name:
+          type: string
+          example: Partner Name
+        description:
+          type: string
+          example: Partner Description
+        address:
+          type: string
+          example: 123 Main St, Toronto, ON
+        phone:
+          type: string
+          example: '4161234567'
+        email:
+          type: string
+          example: partner@example.com
+        permission:
+          type: string
+          example: Read
+        createdAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+        updatedAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+      required:
+        - id
+        - status
+        - name
+        - description
+        - address
+        - phone
+        - email
+        - permission
+        - createdAt
+        - updatedAt
+    Member:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        partnerId:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: John Doe
+        address:
+          type: string
+          example: 123 Main St, Toronto, ON
+        phone:
+          type: string
+          example: '4161234567'
+        email:
+          type: string
+          format: email
+          example: member@example.com
+        balance:
+          type: number
+          example: 1000
+        status:
+          type: string
+          example: ACTIVE
+        createdAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+        updatedAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+      required:
+        - id
+        - partnerId
+        - name
+        - address
+        - phone
+        - email
+        - balance
+        - status
+        - createdAt
+        - updatedAt
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        reference:
+          type: string
+          example: AAAA-0000-BBBB
+        partnerRefId:
+          type: number
+          example: 1
+        transactedAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+        partnerId:
+          type: number
+          example: 1
+        memberId:
+          type: number
+          example: 1
+        status:
+          type: string
+          enum: &a1
+            - delete
+            - reverse
+          example: reverse
+        type:
+          type: string
+          example: Purchase
+        amount:
+          type: number
+          example: 100
+        description:
+          type: object
+          additionalProperties:
+            type: string
+            example: Description
+        createdAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+        updatedAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
+      required:
+        - id
+        - reference
+        - transactedAt
+        - partnerId
+        - memberId
+        - status
+        - type
+        - amount
+        - createdAt
+        - updatedAt
+  parameters: {}
+paths:
+  /api/v1/health:
+    get:
+      tags:
+        - Status
+      description: Returns the status of the database connection.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: SUCCESS
+                  message:
+                    type: string
+                    example: Database Healthy
+                  error:
+                    anyOf:
+                      - nullable: true
+                      - type: object
+                        properties: {}
+                      - nullable: true
+                      - nullable: true
+                    examples:
+                      - null
+                      - {}
+                required:
+                  - status
+                  - message
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/auth:
+    post:
+      tags:
+        - Authentication
+      description: Login to a partner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@email.com
+                password:
+                  type: string
+                  example: '*********'
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: JWT Token
+                required:
+                  - accessToken
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/admin-auth:
+    post:
+      tags:
+        - Authentication
+      description: Login as an administrator.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@email.com
+                password:
+                  type: string
+                  example: '*********'
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: JWT Token
+                required:
+                  - accessToken
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/{memberId}/points:
+    get:
+      tags:
+        - Points
+      description: Get the points balance for a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+                    example: 1000
+                required:
+                  - balance
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/partners/{partnerId}/transactions/{transactionId}:
+    get:
+      tags:
+        - Partner Transactions
+      description: Get a specific transaction for a partner.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: partnerId
+          in: path
+        - schema:
+            type: string
+          required: true
+          name: transactionId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      reference:
+                        type: string
+                        example: AAAA-0000-BBBB
+                      partnerRefId:
+                        type: number
+                        example: 1
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      partnerId:
+                        type: number
+                        example: 1
+                      memberId:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        enum: *a1
+                        example: reverse
+                      type:
+                        type: string
+                        example: Purchase
+                      amount:
+                        type: number
+                        example: 100
+                      description:
+                        type: object
+                        additionalProperties:
+                          type: string
+                          example: Description
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - reference
+                      - transactedAt
+                      - partnerId
+                      - memberId
+                      - status
+                      - type
+                      - amount
+                      - createdAt
+                      - updatedAt
+                required:
+                  - transaction
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/partners/{partnerId}/transactions:
+    get:
+      tags:
+        - Partner Transactions
+      description: Get transactions for a partner.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: partnerId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        reference:
+                          type: string
+                          example: AAAA-0000-BBBB
+                        partnerRefId:
+                          type: number
+                          example: 1
+                        transactedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        partnerId:
+                          type: number
+                          example: 1
+                        memberId:
+                          type: number
+                          example: 1
+                        status:
+                          type: string
+                          enum: *a1
+                          example: reverse
+                        type:
+                          type: string
+                          example: Purchase
+                        amount:
+                          type: number
+                          example: 100
+                        description:
+                          type: object
+                          additionalProperties:
+                            type: string
+                            example: Description
+                        createdAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        updatedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                      required:
+                        - id
+                        - reference
+                        - transactedAt
+                        - partnerId
+                        - memberId
+                        - status
+                        - type
+                        - amount
+                        - createdAt
+                        - updatedAt
+                required:
+                  - transactions
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/{memberId}/transactions/{transactionId}:
+    get:
+      tags:
+        - Member Transactions
+      description: Get a specific transaction for a member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: transactionId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      reference:
+                        type: string
+                        example: AAAA-0000-BBBB
+                      partnerRefId:
+                        type: number
+                        example: 1
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      partnerId:
+                        type: number
+                        example: 1
+                      memberId:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        enum: *a1
+                        example: reverse
+                      type:
+                        type: string
+                        example: Purchase
+                      amount:
+                        type: number
+                        example: 100
+                      description:
+                        type: object
+                        additionalProperties:
+                          type: string
+                          example: Description
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - reference
+                      - transactedAt
+                      - partnerId
+                      - memberId
+                      - status
+                      - type
+                      - amount
+                      - createdAt
+                      - updatedAt
+                required:
+                  - transaction
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - Member Transactions
+      description: Update a specific transaction for a member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: transactionId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: &a2
+                    - reverse
+                    - delete
+                  example: reverse
+                partnerRefId:
+                  type: string
+                  example: 0000-AAAA-BBBB
+                reference:
+                  type: string
+                  example: 0000-AAAA-BBBB
+                type:
+                  type: string
+                  example: Type
+                amount:
+                  type: number
+                  example: 100
+                description:
+                  type: object
+                  properties:
+                    description1:
+                      type: string
+                      example: Description
+                    description2:
+                      type: string
+                      example: Description
+                    description3:
+                      type: string
+                      example: Description
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      reference:
+                        type: string
+                        example: AAAA-0000-BBBB
+                      partnerRefId:
+                        type: number
+                        example: 1
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      partnerId:
+                        type: number
+                        example: 1
+                      memberId:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        enum: *a1
+                        example: reverse
+                      type:
+                        type: string
+                        example: Purchase
+                      amount:
+                        type: number
+                        example: 100
+                      description:
+                        type: object
+                        additionalProperties:
+                          type: string
+                          example: Description
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - reference
+                      - transactedAt
+                      - partnerId
+                      - memberId
+                      - status
+                      - type
+                      - amount
+                      - createdAt
+                      - updatedAt
+                required:
+                  - transaction
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - Member Transactions
+      description: Reverses a transaction for a member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: transactionId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                required:
+                  - count
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/{memberId}/transactions:
+    get:
+      tags:
+        - Member Transactions
+      description: Get all transactions of a member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        reference:
+                          type: string
+                          example: AAAA-0000-BBBB
+                        partnerRefId:
+                          type: number
+                          example: 1
+                        transactedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        partnerId:
+                          type: number
+                          example: 1
+                        memberId:
+                          type: number
+                          example: 1
+                        status:
+                          type: string
+                          enum: *a1
+                          example: reverse
+                        type:
+                          type: string
+                          example: Purchase
+                        amount:
+                          type: number
+                          example: 100
+                        description:
+                          type: object
+                          additionalProperties:
+                            type: string
+                            example: Description
+                        createdAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        updatedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                      required:
+                        - id
+                        - reference
+                        - transactedAt
+                        - partnerId
+                        - memberId
+                        - status
+                        - type
+                        - amount
+                        - createdAt
+                        - updatedAt
+                required:
+                  - transactions
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - Member Transactions
+      description: Create a new transaction for a member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: *a2
+                  example: reverse
+                partnerRefId:
+                  type: string
+                  example: 0000-AAAA-BBBB
+                reference:
+                  type: string
+                  example: 0000-AAAA-BBBB
+                type:
+                  type: string
+                  example: Type
+                amount:
+                  type: number
+                  example: 100
+                description:
+                  type: object
+                  properties:
+                    description1:
+                      type: string
+                      example: Description
+                    description2:
+                      type: string
+                      example: Description
+                    description3:
+                      type: string
+                      example: Description
+              required:
+                - status
+                - reference
+                - type
+                - amount
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      reference:
+                        type: string
+                        example: AAAA-0000-BBBB
+                      partnerRefId:
+                        type: number
+                        example: 1
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      partnerId:
+                        type: number
+                        example: 1
+                      memberId:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        enum: *a1
+                        example: reverse
+                      type:
+                        type: string
+                        example: Purchase
+                      amount:
+                        type: number
+                        example: 100
+                      description:
+                        type: object
+                        additionalProperties:
+                          type: string
+                          example: Description
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - reference
+                      - transactedAt
+                      - partnerId
+                      - memberId
+                      - status
+                      - type
+                      - amount
+                      - createdAt
+                      - updatedAt
+                required:
+                  - transaction
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/partners/{partnerId}:
+    get:
+      tags:
+        - Partner Operations (Admin)
+      description: Get a specific partner.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: partnerId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        example: ACTIVE
+                      name:
+                        type: string
+                        example: Partner Name
+                      description:
+                        type: string
+                        example: Partner Description
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        example: partner@example.com
+                      permission:
+                        type: string
+                        example: Read
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - status
+                      - name
+                      - description
+                      - address
+                      - phone
+                      - email
+                      - permission
+                      - createdAt
+                      - updatedAt
+                required:
+                  - partner
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - Partner Operations (Admin)
+      description: Update a specific partner.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: partnerId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: ACTIVE
+                name:
+                  type: string
+                  example: Partner Name
+                description:
+                  type: string
+                  example: Partner Description
+                permission:
+                  type: string
+                  enum: &a3
+                    - Read
+                    - Read
+                    - Write
+                    - Balance Inquiry
+                  example: Read
+                email:
+                  type: string
+                  example: partner@example.com
+                password:
+                  type: string
+                  example: '******************'
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        example: ACTIVE
+                      name:
+                        type: string
+                        example: Partner Name
+                      description:
+                        type: string
+                        example: Partner Description
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        example: partner@example.com
+                      permission:
+                        type: string
+                        example: Read
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - status
+                      - name
+                      - description
+                      - address
+                      - phone
+                      - email
+                      - permission
+                      - createdAt
+                      - updatedAt
+                required:
+                  - partner
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - Partner Operations (Admin)
+      description: Delete a specific partner.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: partnerId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                required:
+                  - count
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/partners:
+    get:
+      tags:
+        - Partner Operations (Admin)
+      description: Get all partners.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: partnerId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partners:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        status:
+                          type: string
+                          example: ACTIVE
+                        name:
+                          type: string
+                          example: Partner Name
+                        description:
+                          type: string
+                          example: Partner Description
+                        address:
+                          type: string
+                          example: 123 Main St, Toronto, ON
+                        phone:
+                          type: string
+                          example: '4161234567'
+                        email:
+                          type: string
+                          example: partner@example.com
+                        permission:
+                          type: string
+                          example: Read
+                        createdAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        updatedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                      required:
+                        - id
+                        - status
+                        - name
+                        - description
+                        - address
+                        - phone
+                        - email
+                        - permission
+                        - createdAt
+                        - updatedAt
+                required:
+                  - partners
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - Partner Operations (Admin)
+      description: Create a new partner.
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: ACTIVE
+                name:
+                  type: string
+                  example: Partner Name
+                description:
+                  type: string
+                  example: Partner Description
+                permission:
+                  type: string
+                  enum: *a3
+                  example: Read
+                email:
+                  type: string
+                  example: partner@example.com
+                password:
+                  type: string
+                  example: '******************'
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+              required:
+                - status
+                - name
+                - description
+                - permission
+                - email
+                - password
+                - address
+                - phone
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  partner:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      status:
+                        type: string
+                        example: ACTIVE
+                      name:
+                        type: string
+                        example: Partner Name
+                      description:
+                        type: string
+                        example: Partner Description
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        example: partner@example.com
+                      permission:
+                        type: string
+                        example: Read
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - status
+                      - name
+                      - description
+                      - address
+                      - phone
+                      - email
+                      - permission
+                      - createdAt
+                      - updatedAt
+                required:
+                  - partner
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/members/{memberId}:
+    get:
+      tags:
+        - Member Operations (Admin)
+      description: Get a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        example: ACTIVE
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - status
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - Member Operations (Admin)
+      description: Update a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+                email:
+                  type: string
+                  format: email
+                  example: member@example.com
+                balance:
+                  type: number
+                  example: 1000
+                status:
+                  type: string
+                  example: ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        example: ACTIVE
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - status
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - Member Operations (Admin)
+      description: Delete a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                required:
+                  - count
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/members:
+    get:
+      tags:
+        - Member Operations (Admin)
+      description: Get all members.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            example: '1'
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        partnerId:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: John Doe
+                        address:
+                          type: string
+                          example: 123 Main St, Toronto, ON
+                        phone:
+                          type: string
+                          example: '4161234567'
+                        email:
+                          type: string
+                          format: email
+                          example: member@example.com
+                        balance:
+                          type: number
+                          example: 1000
+                        status:
+                          type: string
+                          example: ACTIVE
+                        createdAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        updatedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                      required:
+                        - id
+                        - partnerId
+                        - name
+                        - address
+                        - phone
+                        - email
+                        - balance
+                        - status
+                        - createdAt
+                        - updatedAt
+                required:
+                  - members
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - Member Operations (Admin)
+      description: Create a new member.
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+                email:
+                  type: string
+                  format: email
+                  example: member@example.com
+                balance:
+                  type: number
+                  example: 1000
+                status:
+                  type: string
+                  example: ACTIVE
+              required:
+                - name
+                - address
+                - phone
+                - email
+                - balance
+                - status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        example: ACTIVE
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - status
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable

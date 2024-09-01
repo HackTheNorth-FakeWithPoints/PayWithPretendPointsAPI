@@ -1,0 +1,20 @@
+meta {
+  name: postMemberTransaction
+  type: http
+  seq: 3
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+params:path {
+  memberId: 1
+  transactionId: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/loyalty/:memberId/transactions
+}
