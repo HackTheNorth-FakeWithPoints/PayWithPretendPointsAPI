@@ -1,7 +1,6 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3, RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import * as fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import * as yaml from 'yaml'
 import { z } from 'zod'
 
@@ -91,14 +90,11 @@ const generateSwaggerDocument = () => {
     }
   })
 
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = path.dirname(__filename)
-
   const jsonFileContent = JSON.stringify(swaggerDocument)
   const yamlFileContent = yaml.stringify(swaggerDocument)
 
-  const jsonSwaggerFileName = `${__dirname}/openAPI.json`
-  const yamlSwaggerFileName = `${__dirname}/openAPI.yml`
+  const jsonSwaggerFileName = path.join(process.cwd(), '/public/openAPI.json')
+  const yamlSwaggerFileName = path.join(process.cwd(), '/public/openAPI.yml')
 
   try {
     fs.writeFileSync(jsonSwaggerFileName, jsonFileContent, {

@@ -15,7 +15,6 @@ import { memberRouter } from '@/routes/members/index.ts'
 import { partnerTransactionsRouter } from '@/routes/partner-transactions/index.ts'
 import { partnerRouter } from '@/routes/partners/index.ts'
 import { pointsRouter } from '@/routes/points/index.ts'
-import swaggerJSON from '@/swagger/openAPI.json'
 
 const app = express()
 
@@ -40,13 +39,6 @@ app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, pointsRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, memberTransactionRouter)
 app.use(`${ROUTE_PREFIX}`, partnerAuthMiddleware, partnerTransactionsRouter)
 
-app.use(
-  `/`,
-  apiReference({
-    spec: {
-      content: swaggerJSON
-    }
-  })
-)
+app.use(`/`, apiReference({}))
 
 export { app }
