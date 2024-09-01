@@ -25,12 +25,11 @@
   "scripts": {
     "dev": "npx tsx watch src/index.ts",
     "build": "npx tsup src/index.ts --minify",
-    "swagger": "npx tsx src/swagger/swagger.ts",
     "migrate": "npx sequelize-cli db:migrate",
-    "format": "npx prettier --write . && npx eslint --fix .",
-    "start": "npx tsup src/index.ts --minify && node ./dist/index.cjs",
+    "swagger": "npx tsx src/swagger/swagger.ts",
+    "start": "npm run build && node ./dist/index.cjs",
     "validate": "npx prettier --check . && npx eslint . && npx tsc && npm run build",
-    "complete": "npx tsx src/swagger/swagger.ts && npx prettier --write . && npx eslint --fix . && npx tsc && npm run build"
+    "format": "npx run swagger && npx prettier --write . && npx eslint --fix . && npx tsc && npm run build"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
