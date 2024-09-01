@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url'
 import * as yaml from 'yaml'
 import { z } from 'zod'
 
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 import { MemberZod, PartnerZod, TransactionZod } from '@/db/models/index.ts'
 import { logger } from '@/logger/logger.ts'
 import { postAdminAuthSwagger, postPartnerAuthSwagger } from '@/routes/auth/index.ts'
@@ -84,7 +83,7 @@ const generateSwaggerDocument = () => {
 
   const swaggerDocument = generator.generateDocument({
     openapi: '3.0.0',
-    servers: [{ url: ROUTE_PREFIX, description: 'Production' }],
+    servers: [{ url: '', description: 'Production' }],
     info: {
       version: process.env.npm_package_version as string,
       title: 'Pay With Pretend Points API',
