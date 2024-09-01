@@ -16,14 +16,12 @@ router.get('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req:
   try {
     const transactions = await findTransactions({
       memberId: parseInt(req.params.memberId),
-      partnerId: parseInt(req.get('partnerId') as string)
+      partnerId: req.partnerId as number
     })
 
-    res.json({
-      transactions
-    })
+    return res.status(200).json({ transactions })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -35,12 +33,16 @@ router.get(
       const transaction = await findTransaction({
         id: parseInt(req.params.transactionId),
         memberId: parseInt(req.params.memberId),
-        partnerId: parseInt(req.get('partnerId') as string)
+        partnerId: req.partnerId as number
       })
 
-      return res.json({ transaction })
+      if (!transaction) {
+        return res.status(404).json({ error: `Transaction with id of ${req.params.transactionId} not found!` })
+      }
+
+      return res.status(200).json({ transaction })
     } catch (error) {
-      return res.json({ error })
+      return res.status(500).json({ error })
     }
   }
 )
@@ -52,12 +54,16 @@ router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req
     const transaction = await addTransaction({
       ...transactionPayload,
       memberId: parseInt(req.params.memberId),
-      partnerId: parseInt(req.get('partnerId') as string)
+      partnerId: req.partnerId as number
     })
 
-    return res.json({ transaction })
+    if (!transaction) {
+      return res.status(500).json({ error: `Transaction could not be created!` })
+    }
+
+    return res.status(200).json({ transaction })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -70,16 +76,22 @@ router.patch(
 
       const [, transactions] = await modifyTransaction(
         parseInt(req.params.transactionId),
-        parseInt(req.get('partnerId') as string),
+        req.partnerId as number,
         parseInt(req.params.memberId),
         {
           ...transactionPayload
         }
       )
 
-      return res.json({ transaction: transactions[0] })
+      if (transactions.length === 0) {
+        return res
+          .status(500)
+          .json({ error: `Transaction with id of ${req.params.transactionId} could not be updated!` })
+      }
+
+      return res.status(200).json({ transaction: transactions[0] })
     } catch (error) {
-      return res.json({ error })
+      return res.status(500).json({ error })
     }
   }
 )
@@ -91,13 +103,17 @@ router.delete(
     try {
       const count = await removeTransaction(
         parseInt(req.params.transactionId),
-        parseInt(req.get('partnerId') as string),
+        req.partnerId as number,
         parseInt(req.params.memberId)
       )
 
-      return res.json({ count })
+      if (count === 0) {
+        return res.status(500).json({ error: `No transaction with id of ${req.params.transactionId} was deleted!` })
+      }
+
+      return res.status(200).json({ count })
     } catch (error) {
-      return res.json({ error })
+      return res.status(500).json({ error })
     }
   }
 )

@@ -10,9 +10,9 @@ router.get('/loyalty/partners', adminAuthMiddleware, async (_: Request, res: Res
   try {
     const partners = await findPartners({})
 
-    return res.json({ partners })
+    return res.status(200).json({ partners })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -20,9 +20,13 @@ router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Requ
   try {
     const partner = await findPartnerById(parseInt(req.params.partnerId))
 
-    return res.json({ partner })
+    if (!partner) {
+      return res.status(404).json({ error: `Partner with id of ${req.params.partnerId} was not found!` })
+    }
+
+    return res.status(200).json({ partner })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -32,9 +36,13 @@ router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: 
 
     const partner = await addPartner(partnerPayload)
 
-    return res.json({ partner: { ...partner.get({ plain: true }), password: null } })
+    if (!partner) {
+      return res.status(500).json({ error: `Partner could not be created!` })
+    }
+
+    return res.status(200).json({ partner: { ...partner.get({ plain: true }), password: null } })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -44,9 +52,13 @@ router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Re
 
     const [, partners] = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
 
-    return res.json({ partner: { ...partners[0].get({ plain: true }), password: null } })
+    if (partners.length === 0) {
+      return res.status(500).json({ error: `Partner with id of ${req.params.partnerId} could not be updated!` })
+    }
+
+    return res.status(200).json({ partner: { ...partners[0].get({ plain: true }), password: null } })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
@@ -54,9 +66,13 @@ router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: R
   try {
     const count = await removePartner(parseInt(req.params.partnerId))
 
-    return res.json({ count })
+    if (count === 0) {
+      return res.status(500).json({ error: `No partner with id of ${req.params.partnerId} was deleted!` })
+    }
+
+    return res.status(200).json({ count })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 

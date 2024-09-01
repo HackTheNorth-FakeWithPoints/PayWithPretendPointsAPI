@@ -7,11 +7,18 @@ const router = express.Router()
 
 router.get('/loyalty/:memberId/points', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const member = await findMember({ partnerId: req.get('partnerId'), id: parseInt(req.params.memberId) })
+    const member = await findMember({
+      partnerId: req.partnerId as number,
+      id: parseInt(req.params.memberId)
+    })
 
-    return res.json({ balance: member?.balance })
+    if (!member) {
+      return res.status(404).json({ error: `Member with id of ${req.params.memberId} was not found!` })
+    }
+
+    return res.status(200).json({ balance: member.balance })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 

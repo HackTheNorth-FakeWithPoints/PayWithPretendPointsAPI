@@ -10,6 +10,10 @@ router.post('/admin-auth', async (req: Request, res: Response) => {
   try {
     const { email, password } = postAdminAuth.parse(req.body)
 
+    if (email !== (process.env.JWT_ADMIN_EMAIL as string)) {
+      return res.status(404).json({ error: `Admin with email of ${email} does not exist!` })
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH as string)
 
     if (!isPasswordCorrect) {
@@ -18,9 +22,9 @@ router.post('/admin-auth', async (req: Request, res: Response) => {
 
     const accessToken = jwt.sign({ email }, process.env.JWT_ADMIN_SECRET as string, { expiresIn: '2h' })
 
-    return res.json({ accessToken })
+    return res.status(200).json({ accessToken })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 })
 
