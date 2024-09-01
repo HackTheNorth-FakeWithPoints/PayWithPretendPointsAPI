@@ -27,7 +27,7 @@ router.post('/auth', async (req: Request, res: Response) => {
       return res.status(403).json({ message: `Incorrect credentials!` })
     }
 
-    const accessToken = jwt.sign({ email, id: partner.id }, process.env.JWT_SECRET as string, {
+    const accessToken = jwt.sign({ email, partnerId: partner.id }, process.env.JWT_SECRET as string, {
       expiresIn: '1h'
     })
 

@@ -58,13 +58,12 @@ const PartnerDetailsResponse = z.object({
 })
 
 const TxnDescription = z.object({
-  timestamp: z.date(),
   partnerId: z.number().int(),
   amount: z.number().int(),
   type: z.enum(['earn', 'burn']),
   description: z.object({}),
   status: z.enum(['delete', 'reverse']),
-  transactedAt: z.date(),
+  transactedAt: z.coerce.date(),
   reference: z.string()
 })
 
