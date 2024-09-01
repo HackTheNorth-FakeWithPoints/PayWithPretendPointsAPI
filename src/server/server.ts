@@ -8,7 +8,6 @@ import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
-import { serverHeaders } from '@/middleware/server-headers.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'
 import { memberTransactionRouter } from '@/routes/member-transactions/index.ts'
@@ -22,7 +21,6 @@ const app = express()
 
 app.use(helmet())
 app.use(rateLimiter)
-app.use(serverHeaders)
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
