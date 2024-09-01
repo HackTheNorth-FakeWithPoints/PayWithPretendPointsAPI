@@ -1,0 +1,15 @@
+meta {
+  name: getMembers
+  type: http
+  seq: 1
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+get {
+  url: {{baseUrl}}/api/v1/loyalty/members
+}

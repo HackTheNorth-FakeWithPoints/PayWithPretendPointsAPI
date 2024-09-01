@@ -1,0 +1,19 @@
+meta {
+  name: patchMember
+  type: http
+  seq: 4
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+params:path {
+  memberId: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/loyalty/members/:memberId
+}
