@@ -1,6 +1,8 @@
 # Pay With Pretend Points API
 
-A Node.js API for managing points in a loyalty and rewards system.
+Manage and earn points in a loyalty and rewards system.
+
+![card.png](./public/assets/images/card.png)
 
 ## Getting Started
 
