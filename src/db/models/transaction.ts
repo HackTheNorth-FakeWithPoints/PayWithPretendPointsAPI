@@ -117,15 +117,15 @@ const TransactionZod = z.object({
   id: z.number().openapi({ example: 1 }),
   reference: z.string().openapi({ example: 'AAAA-0000-BBBB' }),
   partnerRefId: z.number().optional().openapi({ example: 1 }),
-  transactedAt: z.date().openapi({ example: new Date().toString() }),
+  transactedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   partnerId: z.number().openapi({ example: 1 }),
   memberId: z.number().openapi({ example: 1 }),
   status: z.enum(['delete', 'reverse']).openapi({ example: 'reverse' }),
   type: z.string().openapi({ example: 'Purchase' }),
   amount: z.number().openapi({ example: 100 }),
   description: z.record(z.string().openapi({ example: 'Description' })).optional(),
-  createdAt: z.date().openapi({ example: new Date().toISOString().toString() }),
-  updatedAt: z.date().openapi({ example: new Date().toISOString().toString() })
+  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
+  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })
 
 export { Transaction, TransactionZod, type TransactionCreationAttributes }

@@ -102,8 +102,8 @@ const MemberZod = z.object({
   email: z.string().email().openapi({ example: 'member@example.com' }),
   balance: z.number().openapi({ example: 1000 }),
   status: z.string().openapi({ example: 'ACTIVE' }),
-  createdAt: z.date().openapi({ example: new Date().toISOString().toString() }),
-  updatedAt: z.date().openapi({ example: new Date().toISOString().toString() })
+  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
+  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })
 
 export { Member, MemberZod, type MemberCreationAttributes }

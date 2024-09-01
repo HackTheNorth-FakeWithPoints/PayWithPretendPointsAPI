@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { z } from 'zod'
 
+import { MemberZod, PartnerZod, TransactionZod } from '@/db/models/index.ts'
 import { logger } from '@/logger/logger.ts'
 import { postAdminAuthSwagger, postPartnerAuthSwagger } from '@/routes/auth/index.ts'
 import { getHealthSwagger } from '@/routes/health/index.ts'
@@ -59,6 +60,10 @@ const generateSwaggerDocument = () => {
   ]
 
   const registry = new OpenAPIRegistry()
+
+  registry.register('Partner', PartnerZod)
+  registry.register('Member', MemberZod)
+  registry.register('Transaction', TransactionZod)
 
   const securityScheme = registry.registerComponent('securitySchemes', 'bearerAuth', {
     type: 'http',
