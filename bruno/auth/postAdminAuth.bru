@@ -1,0 +1,22 @@
+meta {
+  name: postAdminAuth
+  type: http
+  seq: 1
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin-auth
+  body: json
+}
+
+body:json {
+  {
+    "email": "example@email.com",
+    "password": "password"
+  }
+}

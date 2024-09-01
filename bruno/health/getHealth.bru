@@ -1,0 +1,14 @@
+meta {
+  name: getHealth
+  type: http
+  seq: 1
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+}
+
+get {
+  url: {{baseUrl}}/api/v1/health
+}

@@ -1,0 +1,19 @@
+meta {
+  name: getMemberTransactions
+  type: http
+  seq: 1
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
+}
+
+params:path {
+  memberId: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/loyalty/:memberId/transactions
+}
