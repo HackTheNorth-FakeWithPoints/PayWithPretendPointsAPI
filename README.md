@@ -115,18 +115,18 @@ npm run start
 ### **NPM Helpers**
 
 ```bash
-# install dependencies
-npm i
+# install dependencies specified in package.json
+npm install
 
-# check for latest minor and patch versions
+# check for latest minor and patch versions of dependencies
 npm outdated
 
-# update all to latest minor and patch versions
+# update all outdated dependencies to latest minor and patch versions
 npm update
 
-# check for unused dependencies
+# check for unused dependencies (devDependencies and imports may show up here, they can be ignored)
 npx depcheck
 
-# update all packages to latest major versions
-npm npm-check-updates -u
+# update all dependencies to latest major version (breaking changes may come with updating to a major version)
+npx npm-check-updates -u
 ```
