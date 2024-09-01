@@ -2,6 +2,7 @@ import { OpenAPIRegistry, OpenApiGeneratorV3, RouteConfig, extendZodWithOpenApi 
 import * as fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import * as yaml from 'yaml'
 import { z } from 'zod'
 
 import { MemberZod, PartnerZod, TransactionZod } from '@/db/models/index.ts'
@@ -93,17 +94,26 @@ const generateSwaggerDocument = () => {
     }
   })
 
-  const fileContent = JSON.stringify(swaggerDocument)
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
-  const swaggerFileName = `${__dirname}/oas.json`
+
+  const jsonFileContent = JSON.stringify(swaggerDocument)
+  const yamlFileContent = yaml.stringify(swaggerDocument)
+
+  const jsonSwaggerFileName = `${__dirname}/oas.json`
+  const yamlSwaggerFileName = `${__dirname}/oas.yml`
 
   try {
-    fs.writeFileSync(swaggerFileName, fileContent, {
+    fs.writeFileSync(jsonSwaggerFileName, jsonFileContent, {
+      encoding: 'utf-8'
+    })
+
+    fs.writeFileSync(yamlSwaggerFileName, yamlFileContent, {
       encoding: 'utf-8'
     })
   } catch {
-    logger.error(`Failed to write to the file: ${swaggerFileName}!`)
+    logger.error(`Failed to write to the files: ${jsonSwaggerFileName} and ${yamlSwaggerFileName}!`)
+    process.exit(process.exitCode ?? 1)
   }
 }
 
