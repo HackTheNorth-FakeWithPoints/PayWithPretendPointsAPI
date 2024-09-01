@@ -83,7 +83,7 @@ const generateSwaggerDocument = () => {
 
   const swaggerDocument = generator.generateDocument({
     openapi: '3.0.0',
-    servers: [{ url: '', description: 'Production' }],
+    servers: [{ url: 'https://paywithpretendpointsapi.onrender.com', description: 'Production' }],
     info: {
       version: process.env.npm_package_version as string,
       title: 'Pay With Pretend Points API',
@@ -97,8 +97,8 @@ const generateSwaggerDocument = () => {
   const jsonFileContent = JSON.stringify(swaggerDocument)
   const yamlFileContent = yaml.stringify(swaggerDocument)
 
-  const jsonSwaggerFileName = `${__dirname}/oas.json`
-  const yamlSwaggerFileName = `${__dirname}/oas.yml`
+  const jsonSwaggerFileName = `${__dirname}/openAPI.json`
+  const yamlSwaggerFileName = `${__dirname}/openAPI.yml`
 
   try {
     fs.writeFileSync(jsonSwaggerFileName, jsonFileContent, {
