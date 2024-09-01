@@ -20,7 +20,4 @@ jobs:
       - name: Install dependencies
         uses: actions/setup-node@v4
       - run: npm ci
-      - run: npm run action:format
-      - run: npm run action:lint
-      - run: npm run action:types
-      - run: npm run action:build
+      - run: npm run validate
