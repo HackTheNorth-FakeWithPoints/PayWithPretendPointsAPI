@@ -27,6 +27,7 @@ app.use(
 app.use(rateLimiter)
 app.use(morgan('tiny'))
 app.use(express.json())
+app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 
