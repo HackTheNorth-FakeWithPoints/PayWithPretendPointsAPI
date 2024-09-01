@@ -10,7 +10,7 @@ router.get('/loyalty/partners/:partnerId/transactions', async (req: Request, res
       return res.status(401).json({ error: 'Unauthorized' })
     }
 
-    const transactions = await findTransactions({ where: { partnerId: parseInt(req.get('partnerId') as string) } })
+    const transactions = await findTransactions({ partnerId: parseInt(req.get('partnerId') as string) })
 
     return res.json({ transactions })
   } catch (error) {
@@ -25,7 +25,8 @@ router.get('/loyalty/partners/:partnerId/transactions/:transactionId', async (re
     }
 
     const transaction = await findTransaction({
-      where: { partnerId: parseInt(req.get('partnerId') as string), id: parseInt(req.params.transactionId) }
+      partnerId: parseInt(req.get('partnerId') as string),
+      id: parseInt(req.params.transactionId)
     })
 
     return res.json({ transaction })

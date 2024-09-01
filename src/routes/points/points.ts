@@ -6,9 +6,7 @@ const router = express.Router()
 
 router.get('/loyalty/:memberId/points', async (req: Request, res: Response) => {
   try {
-    const member = await findMember({
-      where: { partnerId: req.get('partnerId'), id: parseInt(req.params.memberId) }
-    })
+    const member = await findMember({ partnerId: req.get('partnerId'), id: parseInt(req.params.memberId) })
 
     return res.json({ balance: member?.balance })
   } catch (error) {

@@ -11,7 +11,7 @@ router.post('/auth', async (req: Request, res: Response) => {
   try {
     const { email, password } = postPartnerAuth.parse(req.body)
 
-    const partner = await findPartner({ where: { email } })
+    const partner = await findPartner({ email }, false)
 
     if (!partner) {
       return res.status(404).json({ error: `Partner with email of ${email} does not exist!` })

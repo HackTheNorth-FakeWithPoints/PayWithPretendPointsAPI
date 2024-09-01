@@ -6,8 +6,8 @@ const findPartners = (where: WhereOptions<Partner>) => {
   return Partner.findAll({ where, attributes: { exclude: ['password'] } })
 }
 
-const findPartner = (where: WhereOptions<Partner>) => {
-  return Partner.findOne({ where, attributes: { exclude: ['password'] } })
+const findPartner = (where: WhereOptions<Partner>, excludePassword: boolean = true) => {
+  return Partner.findOne({ where, attributes: { exclude: excludePassword ? ['password'] : [] } })
 }
 
 const findPartnerById = (id: number) => {
