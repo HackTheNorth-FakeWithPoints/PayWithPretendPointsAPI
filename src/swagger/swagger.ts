@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 import * as yaml from 'yaml'
 import { z } from 'zod'
 
+import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
 import { MemberZod, PartnerZod, TransactionZod } from '@/db/models/index.ts'
 import { logger } from '@/logger/logger.ts'
 import { postAdminAuthSwagger, postPartnerAuthSwagger } from '@/routes/auth/index.ts'
@@ -62,15 +63,15 @@ const generateSwaggerDocument = () => {
 
   const registry = new OpenAPIRegistry()
 
-  registry.register('Partner', PartnerZod)
-  registry.register('Member', MemberZod)
-  registry.register('Transaction', TransactionZod)
-
   const securityScheme = registry.registerComponent('securitySchemes', 'bearerAuth', {
     type: 'http',
     scheme: 'bearer',
     bearerFormat: 'JWT'
   })
+
+  registry.register('Partner', PartnerZod)
+  registry.register('Member', MemberZod)
+  registry.register('Transaction', TransactionZod)
 
   registryPaths.forEach((registryPath) => {
     registry.registerPath({
@@ -83,10 +84,7 @@ const generateSwaggerDocument = () => {
 
   const swaggerDocument = generator.generateDocument({
     openapi: '3.0.0',
-    servers: [
-      { url: 'paywithpretendpointsapi.onrender.com/', description: 'Production' },
-      { url: 'localhost:3000/', description: 'Development' }
-    ],
+    servers: [{ url: ROUTE_PREFIX, description: 'Production' }],
     info: {
       version: process.env.npm_package_version as string,
       title: 'Pay With Pretend Points API',

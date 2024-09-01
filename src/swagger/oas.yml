@@ -1,9 +1,7 @@
 openapi: 3.0.0
 servers:
-  - url: paywithpretendpointsapi.onrender.com/
+  - url: /api/v1
     description: Production
-  - url: localhost:3000/
-    description: Development
 info:
   version: 1.0.0
   title: Pay With Pretend Points API
