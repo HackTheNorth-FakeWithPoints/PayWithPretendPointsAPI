@@ -12,7 +12,7 @@ router.get('/loyalty/members', adminAuthMiddleware, async (_: Request, res: Resp
 
     return res.status(200).json({ members })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -26,7 +26,7 @@ router.get('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Reques
 
     return res.status(200).json({ member })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -42,7 +42,7 @@ router.post('/loyalty/members', adminAuthMiddleware, async (req: Request, res: R
 
     return res.status(200).json({ member })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -50,15 +50,15 @@ router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Requ
   try {
     const memberPayload = patchMember.parse(req.body)
 
-    const [, members] = await modifyMember(parseInt(req.params.memberId), memberPayload)
+    const member = await modifyMember(parseInt(req.params.memberId), memberPayload)
 
-    if (members.length === 0) {
+    if (member) {
       return res.status(500).json({ error: `Member with id of ${req.params.memberId} could not be updated!` })
     }
 
-    return res.status(200).json({ member: members[0] })
+    return res.status(200).json({ member })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -72,7 +72,7 @@ router.delete('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Req
 
     return res.status(200).json({ count })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 

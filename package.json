@@ -23,11 +23,11 @@
     "npm": "10.8.2"
   },
   "scripts": {
+    "start": "node ./dist/index.cjs",
     "dev": "npx tsx watch src/index.ts",
     "build": "npx tsup src/index.ts --minify",
     "migrate": "npx sequelize-cli db:migrate",
     "swagger": "npx tsx src/swagger/swagger.ts",
-    "start": "npm run build && node ./dist/index.cjs",
     "validate": "npx prettier --check . && npx eslint . && npx tsc && npm run build",
     "format": "npm run swagger && npx prettier --write . && npx eslint --fix . && npx tsc && npm run build"
   },

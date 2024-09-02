@@ -12,7 +12,7 @@ router.get('/loyalty/partners', adminAuthMiddleware, async (_: Request, res: Res
 
     return res.status(200).json({ partners })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -26,7 +26,7 @@ router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Requ
 
     return res.status(200).json({ partner })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -40,9 +40,9 @@ router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: 
       return res.status(500).json({ error: `Partner could not be created!` })
     }
 
-    return res.status(200).json({ partner: { ...partner.get({ plain: true }), password: null } })
+    return res.status(200).json({ partner, password: null })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -50,15 +50,15 @@ router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Re
   try {
     const partnerPayload = patchPartner.parse(req.body)
 
-    const [, partners] = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
+    const partner = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
 
-    if (partners.length === 0) {
+    if (!partner) {
       return res.status(500).json({ error: `Partner with id of ${req.params.partnerId} could not be updated!` })
     }
 
-    return res.status(200).json({ partner: { ...partners[0].get({ plain: true }), password: null } })
+    return res.status(200).json({ partner, password: null })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -72,7 +72,7 @@ router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: R
 
     return res.status(200).json({ count })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
