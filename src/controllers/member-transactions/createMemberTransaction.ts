@@ -8,9 +8,7 @@ async function createMemberTransaction(transactionPayload: TransactionCreationAt
     throw new Error('Member not found')
   }
 
-  const balance = typeof member.balance === 'string' ? parseFloat(member.balance) : member.balance
-
-  if (balance + transactionPayload.amount < 0) {
+  if (member.balance + transactionPayload.amount < 0) {
     throw new Error('Insufficient balance')
   }
 
