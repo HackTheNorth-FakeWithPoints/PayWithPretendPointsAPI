@@ -3,7 +3,7 @@ import express, { type Request, type Response } from 'express'
 import { createMemberTransaction, updateMemberBalance } from '@/controllers/index.ts'
 import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
-import { patchTransaction } from '@/routes/member-transactions/index.ts'
+import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
 
 const router = express.Router()
 
@@ -44,11 +44,12 @@ router.get(
 
 router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const transactionPayload = postTransaction.parse(req.body)
+
     const memberId = parseInt(req.params.memberId)
     const partnerId = req.partnerId as number
-    const transactionPayload = req.body
 
-    const transaction = await createMemberTransaction(memberId, partnerId, transactionPayload)
+    const transaction = await createMemberTransaction({ ...transactionPayload, memberId, partnerId })
 
     if (!transaction) {
       return res.status(500).json({ error: `Transaction could not be created!` })
