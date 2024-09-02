@@ -1,7 +1,7 @@
-import { Transaction } from '@/db/models/index.ts'
+import { TransactionCreationAttributes } from '@/db/models/index.ts'
 import { findMemberById, modifyMember } from '@/db/providers/index.ts'
 
-async function updateMemberBalance(transaction: Transaction) {
+async function updateMemberBalance(transaction: TransactionCreationAttributes) {
   const member = await findMemberById(transaction.memberId)
 
   if (!member) {
