@@ -2,6 +2,7 @@ import express, { type Request, type Response } from 'express'
 
 import { findMember } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
+import { NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
@@ -13,12 +14,12 @@ router.get('/loyalty/:memberId/points', partnerAuthMiddleware, async (req: Reque
     })
 
     if (!member) {
-      return res.status(404).json({ error: `Member with id of ${req.params.memberId} was not found!` })
+      throw new NotFoundError(`Member with id of ${req.params.memberId} was not found!`)
     }
 
     return res.status(200).json({ balance: member.balance })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 

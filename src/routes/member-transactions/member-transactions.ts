@@ -4,7 +4,7 @@ import { createMemberTransaction, updateMemberBalance } from '@/controllers/inde
 import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
-import { InternalServerError, handleError } from '@/utils/errors.ts'
+import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
@@ -17,7 +17,7 @@ router.get('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req:
 
     return res.status(200).json({ transactions })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -33,12 +33,12 @@ router.get(
       })
 
       if (!transaction) {
-        return res.status(404).json({ error: `Transaction with id of ${req.params.transactionId} not found!` })
+        throw new NotFoundError(`Transaction with id of ${req.params.transactionId} not found!`)
       }
 
       return res.status(200).json({ transaction })
     } catch (error) {
-      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+      handleError(error as Error, res)
     }
   }
 )
@@ -105,12 +105,12 @@ router.delete(
       )
 
       if (count === 0) {
-        return res.status(500).json({ error: `No transaction with id of ${req.params.transactionId} was deleted!` })
+        throw new InternalServerError(`No transaction with id of ${req.params.transactionId} was deleted!`)
       }
 
       return res.status(200).json({ count })
     } catch (error) {
-      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+      handleError(error as Error, res)
     }
   }
 )
