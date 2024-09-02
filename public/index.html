@@ -35,5 +35,11 @@
     </header>
     <script defer id="api-reference" data-url="docs/openapi/openAPI.yml"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script defer>
+      setTimeout(function () {
+        document.getElementsByClassName('darklight-reference-promo')[0].remove()
+        document.getElementsByClassName('darklight')[0].style = 'padding: 20px'
+      }, 1000)
+    </script>
   </body>
 </html>
