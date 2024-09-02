@@ -31,8 +31,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       balance: {
-        type: Sequelize.DECIMAL(10, 2),
-        defaultValue: 0.0
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       status: {
         type: Sequelize.STRING,
