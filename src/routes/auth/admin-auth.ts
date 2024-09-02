@@ -24,7 +24,7 @@ router.post('/admin-auth', async (req: Request, res: Response) => {
 
     return res.status(200).json({ accessToken })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 

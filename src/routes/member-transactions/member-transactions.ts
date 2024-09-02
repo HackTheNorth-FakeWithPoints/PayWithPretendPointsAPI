@@ -21,7 +21,7 @@ router.get('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req:
 
     return res.status(200).json({ transactions })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -42,7 +42,7 @@ router.get(
 
       return res.status(200).json({ transaction })
     } catch (error) {
-      return res.status(500).json({ error })
+      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
     }
   }
 )
@@ -63,7 +63,7 @@ router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req
 
     return res.status(200).json({ transaction })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
   }
 })
 
@@ -91,7 +91,7 @@ router.patch(
 
       return res.status(200).json({ transaction })
     } catch (error) {
-      return res.status(500).json({ error })
+      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
     }
   }
 )
@@ -113,7 +113,7 @@ router.delete(
 
       return res.status(200).json({ count })
     } catch (error) {
-      return res.status(500).json({ error })
+      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
     }
   }
 )
