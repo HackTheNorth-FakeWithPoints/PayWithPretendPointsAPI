@@ -3,6 +3,7 @@ import express, { type Request, type Response } from 'express'
 import { addPartner, findPartnerById, findPartners, modifyPartner, removePartner } from '@/db/providers/index.ts'
 import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
 import { patchPartner, postPartner } from '@/routes/partners/index.ts'
+import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
@@ -12,7 +13,7 @@ router.get('/loyalty/partners', adminAuthMiddleware, async (_: Request, res: Res
 
     return res.status(200).json({ partners })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -21,12 +22,12 @@ router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Requ
     const partner = await findPartnerById(parseInt(req.params.partnerId))
 
     if (!partner) {
-      return res.status(404).json({ error: `Partner with id of ${req.params.partnerId} was not found!` })
+      throw new NotFoundError(`Partner with id of ${req.params.partnerId} was not found!`)
     }
 
     return res.status(200).json({ partner })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -37,12 +38,12 @@ router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: 
     const partner = await addPartner(partnerPayload)
 
     if (!partner) {
-      return res.status(500).json({ error: `Partner could not be created!` })
+      throw new InternalServerError(`Partner could not be created!`)
     }
 
     return res.status(200).json({ partner, password: null })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -53,12 +54,12 @@ router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Re
     const partner = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
 
     if (!partner) {
-      return res.status(500).json({ error: `Partner with id of ${req.params.partnerId} could not be updated!` })
+      throw new InternalServerError(`Partner with id of ${req.params.partnerId} could not be updated!`)
     }
 
     return res.status(200).json({ partner, password: null })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -67,12 +68,12 @@ router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: R
     const count = await removePartner(parseInt(req.params.partnerId))
 
     if (count === 0) {
-      return res.status(500).json({ error: `No partner with id of ${req.params.partnerId} was deleted!` })
+      throw new InternalServerError(`No partner with id of ${req.params.partnerId} was deleted!`)
     }
 
     return res.status(200).json({ count })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
