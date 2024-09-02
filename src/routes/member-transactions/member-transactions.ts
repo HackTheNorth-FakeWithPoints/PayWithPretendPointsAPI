@@ -4,6 +4,7 @@ import { createMemberTransaction, updateMemberBalance } from '@/controllers/inde
 import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
+import { InternalServerError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
@@ -52,14 +53,14 @@ router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req
     const transaction = await createMemberTransaction({ ...transactionPayload, memberId, partnerId })
 
     if (!transaction) {
-      return res.status(500).json({ error: `Transaction could not be created!` })
+      throw new InternalServerError('Transaction could not be created!')
     }
 
     await updateMemberBalance(transaction)
 
     return res.status(200).json({ transaction })
   } catch (error) {
-    return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+    handleError(error as Error, res)
   }
 })
 
@@ -87,7 +88,7 @@ router.patch(
 
       return res.status(200).json({ transaction })
     } catch (error) {
-      return res.status(500).json({ error: (error as Error)?.message || 'An unexpected error occurred!' })
+      handleError(error as Error, res)
     }
   }
 )
