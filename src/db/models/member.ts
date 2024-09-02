@@ -68,6 +68,9 @@ Member.init(
     },
     balance: {
       type: DataTypes.DECIMAL(10, 2),
+      get() {
+        return parseFloat(this.getDataValue('balance') as unknown as string)
+      },
       defaultValue: 0.0
     },
     status: {

@@ -1,15 +1,9 @@
 import express, { type Request, type Response } from 'express'
 
-import {
-  addTransaction,
-  findMemberById,
-  findTransaction,
-  findTransactions,
-  modifyTransaction,
-  removeTransaction
-} from '@/db/providers/index.ts'
+import { createMemberTransaction, updateMemberBalance } from '@/controllers/index.ts'
+import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
-import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
+import { patchTransaction } from '@/routes/member-transactions/index.ts'
 
 const router = express.Router()
 
@@ -50,32 +44,22 @@ router.get(
 
 router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const member = await findMemberById(parseInt(req.params.memberId))
+    const memberId = parseInt(req.params.memberId)
+    const partnerId = req.partnerId as number
+    const transactionPayload = req.body
 
-    if (!member) {
-      return res.status(404).json({ error: 'Member not found' })
-    }
-
-    const transactionPayload = postTransaction.parse(req.body)
-    const balance = typeof member.balance === 'string' ? parseFloat(member.balance) : member.balance
-
-    if (balance + transactionPayload.amount < 0) {
-      return res.status(400).json({ error: 'Insufficient balance' })
-    }
-
-    const transaction = await addTransaction({
-      ...transactionPayload,
-      memberId: parseInt(req.params.memberId),
-      partnerId: req.partnerId as number
-    })
+    const transaction = await createMemberTransaction(memberId, partnerId, transactionPayload)
 
     if (!transaction) {
       return res.status(500).json({ error: `Transaction could not be created!` })
     }
 
+    await updateMemberBalance(transaction)
+
     return res.status(200).json({ transaction })
   } catch (error) {
-    return res.status(500).json({ error })
+    const errorMessage = (error as Error).message || 'An unexpected error occurred.'
+    return res.status(500).json({ error: errorMessage })
   }
 })
 
