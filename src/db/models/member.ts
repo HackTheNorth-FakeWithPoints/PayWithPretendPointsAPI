@@ -60,6 +60,7 @@ Member.init(
         model: Partner,
         key: 'id'
       },
+      onDelete: 'CASCADE',
       validate: {
         isInt: true
       }
@@ -74,6 +75,7 @@ Member.init(
     },
     address: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         is: /^[\w\s.-]+$/gi,
         len: [2, 255]
@@ -81,6 +83,7 @@ Member.init(
     },
     phone: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         is: /^[\w\s.()-]+$/gi,
         len: [2, 25]

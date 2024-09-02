@@ -12,19 +12,33 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+          isInt: true
+        }
       },
       reference: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.()-]+$/gi,
+          len: [2, 25]
+        }
       },
       partnerRefId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+          is: /^[\w\s.()-]+$/gi,
+          len: [2, 25]
+        }
       },
       transactedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        }
       },
       partnerId: {
         type: Sequelize.INTEGER,
@@ -32,7 +46,10 @@ module.exports = {
           model: 'partners',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        validate: {
+          isInt: true
+        }
       },
       memberId: {
         type: Sequelize.INTEGER,
@@ -40,32 +57,54 @@ module.exports = {
           model: 'members',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        validate: {
+          isInt: true
+        }
       },
       status: {
         type: Sequelize.ENUM('delete', 'reverse'),
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi
+        }
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi
+        }
       },
       amount: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          isInt: true
+        }
       },
       description: {
-        type: Sequelize.JSONB
+        type: Sequelize.JSONB,
+        validate: {
+          is: /^[\w\s.,!?'"()-]+$/gi,
+          len: [2, 500]
+        }
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        }
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        }
       }
     })
   },

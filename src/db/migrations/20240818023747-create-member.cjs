@@ -12,7 +12,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+          isInt: true
+        }
       },
       partnerId: {
         type: Sequelize.INTEGER,
@@ -20,38 +23,73 @@ module.exports = {
           model: 'partners',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        validate: {
+          isInt: true
+        }
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi,
+          len: [2, 50]
+        }
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.-]+$/gi,
+          len: [2, 255]
+        }
       },
       phone: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.()-]+$/gi,
+          len: [2, 25]
+        }
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true
+        }
       },
       balance: {
         type: Sequelize.INTEGER,
-        defaultValue: 0
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          isInt: true
+        }
       },
       status: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi
+        }
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        }
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        }
       }
     })
   },

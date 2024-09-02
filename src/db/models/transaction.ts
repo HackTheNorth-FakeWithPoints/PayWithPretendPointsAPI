@@ -92,6 +92,7 @@ Transaction.init(
         model: Partner,
         key: 'id'
       },
+      onDelete: 'CASCADE',
       validate: {
         isInt: true
       }
@@ -103,6 +104,7 @@ Transaction.init(
         model: Member,
         key: 'id'
       },
+      onDelete: 'CASCADE',
       validate: {
         isInt: true
       }

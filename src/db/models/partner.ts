@@ -65,6 +65,7 @@ Partner.init(
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
       validate: {
         is: /^[\w\s.,!?'"()-]+$/gi,
         len: [2, 500]
@@ -72,6 +73,7 @@ Partner.init(
     },
     address: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         is: /^[\w\s.-]+$/gi,
         len: [2, 255]
@@ -79,6 +81,7 @@ Partner.init(
     },
     phone: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         is: /^[\w\s.()-]+$/gi,
         len: [2, 25]
