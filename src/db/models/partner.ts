@@ -43,47 +43,85 @@ Partner.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      validate: {
+        isInt: true
+      }
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi
+      }
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi,
+        len: [2, 50]
+      }
     },
     description: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      validate: {
+        is: /^[\w\s.,!?'"()-]+$/gi,
+        len: [2, 500]
+      }
     },
     address: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        is: /^[\w\s.-]+$/gi,
+        len: [2, 255]
+      }
     },
     phone: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        is: /^[\w\s.()-]+$/gi,
+        len: [2, 25]
+      }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     permission: {
       type: DataTypes.ENUM(...Object.values(PARTNER_PERMISSIONS)),
-      allowNull: false
+      allowNull: false,
+      defaultValue: PARTNER_PERMISSIONS.READ,
+      validate: {
+        is: /^[\w\s]+$/gi
+      }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /\$2[ayb]\$.{56}/gi
+      }
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     }
   },
   {

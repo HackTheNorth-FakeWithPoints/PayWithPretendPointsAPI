@@ -48,41 +48,82 @@ Member.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      validate: {
+        isInt: true
+      }
     },
     partnerId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Partner,
+        key: 'id'
+      },
+      validate: {
+        isInt: true
+      }
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi,
+        len: [2, 50]
+      }
     },
     address: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        is: /^[\w\s.-]+$/gi,
+        len: [2, 255]
+      }
     },
     phone: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        is: /^[\w\s.()-]+$/gi,
+        len: [2, 25]
+      }
     },
     email: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     balance: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      allowNull: false,
+      defaultValue: 0,
+      validate: {
+        isInt: true
+      }
     },
     status: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi
+      }
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     }
   },
   {

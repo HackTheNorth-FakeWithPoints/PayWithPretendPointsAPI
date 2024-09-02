@@ -57,52 +57,99 @@ Transaction.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      validate: {
+        isInt: true
+      }
     },
     reference: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s.()-]+$/gi,
+        len: [2, 25]
+      }
     },
     partnerRefId: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        is: /^[\w\s.()-]+$/gi,
+        len: [2, 25]
+      }
     },
     transactedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     },
     partnerId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: Partner,
+        key: 'id'
+      },
+      validate: {
+        isInt: true
+      }
     },
     memberId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: Member,
+        key: 'id'
+      },
+      validate: {
+        isInt: true
+      }
     },
     status: {
       type: DataTypes.ENUM('delete', 'reverse'),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi
+      }
     },
     type: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^[\w\s]+$/gi
+      }
     },
     amount: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isInt: true
+      }
     },
     description: {
-      type: DataTypes.JSONB
+      type: DataTypes.JSONB,
+      validate: {
+        is: /^[\w\s.,!?'"()-]+$/gi,
+        len: [2, 500]
+      }
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+      defaultValue: DataTypes.NOW,
+      validate: {
+        isDate: true
+      }
     }
   },
   {

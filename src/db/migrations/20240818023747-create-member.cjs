@@ -1,6 +1,11 @@
 'use strict'
 
 module.exports = {
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @param {import('sequelize').Sequelize & import('sequelize').DataTypes} Sequelize
+   * @returns {Promise<void>}
+   */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('members', {
       id: {
@@ -50,6 +55,10 @@ module.exports = {
       }
     })
   },
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @returns {Promise<void>}
+   */
   down: async (queryInterface) => {
     await queryInterface.dropTable('members')
   }
