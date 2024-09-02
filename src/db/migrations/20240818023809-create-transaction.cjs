@@ -42,6 +42,7 @@ module.exports = {
       },
       partnerId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'partners',
           key: 'id'
@@ -53,6 +54,7 @@ module.exports = {
       },
       memberId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'members',
           key: 'id'

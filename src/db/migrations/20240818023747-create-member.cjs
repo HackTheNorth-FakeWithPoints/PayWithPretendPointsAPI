@@ -19,6 +19,7 @@ module.exports = {
       },
       partnerId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'partners',
           key: 'id'
