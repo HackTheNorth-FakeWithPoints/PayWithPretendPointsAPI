@@ -74,7 +74,7 @@ router.patch(
     try {
       const transactionPayload = patchTransaction.parse(req.body)
 
-      const [, transactions] = await modifyTransaction(
+      const transaction = await modifyTransaction(
         parseInt(req.params.transactionId),
         req.partnerId as number,
         parseInt(req.params.memberId),
@@ -83,13 +83,13 @@ router.patch(
         }
       )
 
-      if (transactions.length === 0) {
+      if (transaction) {
         return res
           .status(500)
           .json({ error: `Transaction with id of ${req.params.transactionId} could not be updated!` })
       }
 
-      return res.status(200).json({ transaction: transactions[0] })
+      return res.status(200).json({ transaction })
     } catch (error) {
       return res.status(500).json({ error })
     }

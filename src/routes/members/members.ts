@@ -50,13 +50,13 @@ router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Requ
   try {
     const memberPayload = patchMember.parse(req.body)
 
-    const [, members] = await modifyMember(parseInt(req.params.memberId), memberPayload)
+    const member = await modifyMember(parseInt(req.params.memberId), memberPayload)
 
-    if (members.length === 0) {
+    if (member) {
       return res.status(500).json({ error: `Member with id of ${req.params.memberId} could not be updated!` })
     }
 
-    return res.status(200).json({ member: members[0] })
+    return res.status(200).json({ member })
   } catch (error) {
     return res.status(500).json({ error })
   }
