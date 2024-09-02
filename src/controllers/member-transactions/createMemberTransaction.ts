@@ -14,9 +14,7 @@ async function createMemberTransaction(transactionPayload: TransactionCreationAt
     throw new Error('Insufficient balance')
   }
 
-  return addTransaction({
-    ...transactionPayload
-  })
+  return addTransaction(transactionPayload)
 }
 
 export { createMemberTransaction }
