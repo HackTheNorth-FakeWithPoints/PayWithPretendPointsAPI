@@ -2,6 +2,7 @@ import express, { type Request, type Response } from 'express'
 
 import {
   addTransaction,
+  findMemberById,
   findTransaction,
   findTransactions,
   modifyTransaction,
@@ -49,7 +50,18 @@ router.get(
 
 router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const member = await findMemberById(parseInt(req.params.memberId))
+
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' })
+    }
+
     const transactionPayload = postTransaction.parse(req.body)
+    const balance = typeof member.balance === 'string' ? parseFloat(member.balance) : member.balance
+
+    if (balance + transactionPayload.amount < 0) {
+      return res.status(400).json({ error: 'Insufficient balance' })
+    }
 
     const transaction = await addTransaction({
       ...transactionPayload,
