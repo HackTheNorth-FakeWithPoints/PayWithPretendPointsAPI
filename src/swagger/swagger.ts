@@ -93,8 +93,8 @@ const generateSwaggerDocument = () => {
   const jsonFileContent = JSON.stringify(swaggerDocument)
   const yamlFileContent = yaml.stringify(swaggerDocument)
 
-  const jsonSwaggerFileName = path.join(process.cwd(), '/public/openAPI.json')
-  const yamlSwaggerFileName = path.join(process.cwd(), '/public/openAPI.yml')
+  const jsonSwaggerFileName = path.join(process.cwd(), '/public/docs/openapi/openAPI.json')
+  const yamlSwaggerFileName = path.join(process.cwd(), '/public/docs/openapi/openAPI.yml')
 
   try {
     fs.writeFileSync(jsonSwaggerFileName, jsonFileContent, {
