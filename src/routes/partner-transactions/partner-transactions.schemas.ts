@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { TransactionZod } from '@/db/models/transaction.ts'
-import { zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod-common.ts'
+import { zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod.ts'
 
 extendZodWithOpenApi(z)
 

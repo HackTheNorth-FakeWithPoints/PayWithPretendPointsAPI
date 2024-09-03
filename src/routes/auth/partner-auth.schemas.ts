@@ -2,7 +2,7 @@ import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openap
 import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
-import { zodAccessToken, zodCredentials, zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { zodAccessToken, zodCredentials, zodHTTPCodeResponses } from '@/utils/zod.ts'
 
 extendZodWithOpenApi(z)
 

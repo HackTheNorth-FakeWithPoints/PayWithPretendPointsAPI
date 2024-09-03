@@ -1,15 +1,15 @@
 import express, { type Request, type Response } from 'express'
 
-import { addMember, findMemberById, findMembers, modifyMember, removeMember } from '@/db/providers/index.ts'
-import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
+import { addMember, countMembers, findMember, findMembers, modifyMember, removeMember } from '@/db/providers/index.ts'
+import { partnerAuthMiddleware } from '@/middleware/index.ts'
 import { memberIdSchema, patchMember, postMember } from '@/routes/members/index.ts'
 import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
-router.get('/loyalty/members', adminAuthMiddleware, async (_: Request, res: Response) => {
+router.get('/loyalty/members', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const members = await findMembers({})
+    const members = await findMembers({}, req.partnerId as number)
 
     return res.status(200).json({ members })
   } catch (error) {
@@ -17,11 +17,11 @@ router.get('/loyalty/members', adminAuthMiddleware, async (_: Request, res: Resp
   }
 })
 
-router.get('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
+router.get('/loyalty/members/:memberId', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { memberId } = memberIdSchema.parse(req.params)
 
-    const member = await findMemberById(memberId)
+    const member = await findMember({ id: memberId }, req.partnerId as number)
 
     if (!member) {
       throw new NotFoundError(`Member with id of ${memberId} was not found!`)
@@ -33,11 +33,17 @@ router.get('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Reques
   }
 })
 
-router.post('/loyalty/members', adminAuthMiddleware, async (req: Request, res: Response) => {
+router.post('/loyalty/members', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const memberCount = await countMembers({ partnerId: req.partnerId as number })
+
+    if (memberCount > parseInt(process.env.MAX_MEMBERS_PER_PARTNER as string)) {
+      throw new InternalServerError(`Maximum number of members reached for this partner!`)
+    }
+
     const memberPayload = postMember.parse(req.body)
 
-    const member = await addMember(memberPayload)
+    const member = await addMember({ ...memberPayload, partnerId: req.partnerId as number })
 
     if (!member) {
       throw new InternalServerError(`Member could not be created!`)
@@ -49,12 +55,12 @@ router.post('/loyalty/members', adminAuthMiddleware, async (req: Request, res: R
   }
 })
 
-router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
+router.patch('/loyalty/members/:memberId', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { memberId } = memberIdSchema.parse(req.params)
     const memberPayload = patchMember.parse(req.body)
 
-    const member = await modifyMember(memberId, memberPayload)
+    const member = await modifyMember(memberId, req.partnerId as number, memberPayload)
 
     if (member) {
       throw new InternalServerError(`Member with id of ${memberId} could not be updated!`)
@@ -66,11 +72,11 @@ router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Requ
   }
 })
 
-router.delete('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
+router.delete('/loyalty/members/:memberId', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { memberId } = memberIdSchema.parse(req.params)
 
-    const count = await removeMember(memberId)
+    const count = await removeMember(memberId, req.partnerId as number)
 
     if (count === 0) {
       throw new InternalServerError(`No member with id of ${memberId} was deleted!`)

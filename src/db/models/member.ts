@@ -21,7 +21,7 @@ interface MemberAttributes {
   updatedAt: Date
 }
 
-type MemberCreationAttributes = Optional<MemberAttributes, 'id' | 'partnerId' | 'createdAt' | 'updatedAt'>
+type MemberCreationAttributes = Optional<MemberAttributes, 'id' | 'partnerId' | 'createdAt' | 'updatedAt' | 'status'>
 
 class Member extends Model<MemberAttributes, MemberCreationAttributes> {
   declare id: number
@@ -116,7 +116,7 @@ Member.init(
     status: {
       type: DataTypes.ENUM(...Object.values(MEMBER_STATUS)),
       allowNull: false,
-      defaultValue: MEMBER_STATUS.ACTIVE,
+      defaultValue: MEMBER_STATUS.PENDING,
       values: Object.values(MEMBER_STATUS),
       validate: {
         is: /^[\w\s]+$/gi
@@ -124,8 +124,8 @@ Member.init(
       field: 'status'
     },
     createdAt: {
-      allowNull: false,
       type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
       validate: {
         isDate: true
@@ -133,8 +133,8 @@ Member.init(
       field: 'created_at'
     },
     updatedAt: {
-      allowNull: false,
       type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
       validate: {
         isDate: true
@@ -159,8 +159,9 @@ const MemberZod = z.object({
   email: z.string().email().openapi({ example: 'member@example.com' }),
   balance: z.number().openapi({ example: 1000 }),
   status: z
-    .enum([MEMBER_STATUS.ACTIVE, ...Object.values(MEMBER_STATUS).slice(1)])
-    .openapi({ example: MEMBER_STATUS.ACTIVE }),
+    .enum([MEMBER_STATUS.PENDING, ...Object.values(MEMBER_STATUS).slice(1)])
+    .default(MEMBER_STATUS.PENDING)
+    .openapi({ example: MEMBER_STATUS.PENDING }),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })

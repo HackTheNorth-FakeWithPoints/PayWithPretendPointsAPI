@@ -77,10 +77,10 @@ module.exports = {
         field: 'balance'
       },
       status: {
-        type: Sequelize.ENUM('ACTIVE', 'PENDING', 'DEACTIVATED', 'PROBATION', 'BLACKLISTED'),
+        type: Sequelize.ENUM('PENDING', 'ACTIVE', 'DEACTIVATED'),
         allowNull: false,
-        defaultValue: 'ACTIVE',
-        values: ['ACTIVE', 'PENDING', 'DEACTIVATED', 'PROBATION', 'BLACKLISTED'],
+        defaultValue: 'PENDING',
+        values: ['PENDING', 'ACTIVE', 'DEACTIVATED'],
         validate: {
           is: /^[\w\s]+$/gi
         },

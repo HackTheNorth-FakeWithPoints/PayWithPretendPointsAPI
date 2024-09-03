@@ -74,6 +74,7 @@ router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Re
 router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { partnerId } = partnerIdSchema.parse(req.params)
+
     const count = await removePartner(partnerId)
 
     if (count === 0) {

@@ -11,13 +11,13 @@ const partnerAuthMiddleware = async (req: Request, res: Response, next: NextFunc
       throw new ForbiddenError('Bearer token not found!')
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload
 
-    if (!decoded?.id) {
+    if (!decodedToken?.id) {
       throw new ForbiddenError('Invalid token!')
     }
 
-    req.partnerId = decoded.id as number
+    req.partnerId = decodedToken.id as number
 
     if (!req.partnerId) {
       throw new ForbiddenError('Invalid partner!')

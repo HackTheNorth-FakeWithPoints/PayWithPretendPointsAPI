@@ -2,16 +2,16 @@ import { WhereOptions } from 'sequelize'
 
 import { Transaction, TransactionCreationAttributes } from '@/db/models/index.ts'
 
+const countTransactions = (where: WhereOptions<Transaction>) => {
+  return Transaction.count({ where })
+}
+
 const findTransactions = (where: WhereOptions<Transaction>) => {
   return Transaction.findAll({ where, raw: true })
 }
 
 const findTransaction = (where: WhereOptions<Transaction>) => {
   return Transaction.findOne({ where, raw: true })
-}
-
-const findTransactionById = (id: number) => {
-  return Transaction.findByPk(id, { raw: true })
 }
 
 const addTransaction = (transaction: TransactionCreationAttributes) => {
@@ -30,4 +30,4 @@ const removeTransaction = (id: number, partnerId: number, memberId: number) => {
   return Transaction.destroy({ where: { id, partnerId, memberId } })
 }
 
-export { findTransactions, findTransaction, findTransactionById, addTransaction, modifyTransaction, removeTransaction }
+export { countTransactions, findTransactions, findTransaction, addTransaction, modifyTransaction, removeTransaction }

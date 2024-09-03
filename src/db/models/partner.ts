@@ -21,7 +21,7 @@ interface PartnerAttributes {
   updatedAt: Date
 }
 
-type PartnerCreationAttributes = Optional<PartnerAttributes, 'id' | 'createdAt' | 'updatedAt'>
+type PartnerCreationAttributes = Optional<PartnerAttributes, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'permission'>
 
 class Partner extends Model<PartnerAttributes, PartnerCreationAttributes> {
   declare id: number
@@ -107,7 +107,7 @@ Partner.init(
     permission: {
       type: DataTypes.ENUM(...Object.values(PARTNER_PERMISSIONS)),
       allowNull: false,
-      defaultValue: PARTNER_PERMISSIONS.READ,
+      defaultValue: PARTNER_PERMISSIONS.WRITE,
       values: Object.values(PARTNER_PERMISSIONS),
       validate: {
         is: /^[\w\s]+$/gi
@@ -153,6 +153,7 @@ const PartnerZod = z.object({
   id: z.number().openapi({ example: 1 }),
   status: z
     .enum([PARTNER_STATUS.ACTIVE, ...Object.values(PARTNER_STATUS).slice(1)])
+    .default(PARTNER_STATUS.ACTIVE)
     .openapi({ example: PARTNER_STATUS.ACTIVE }),
   name: z.string().openapi({ example: 'Partner Name' }),
   description: z.string().openapi({ example: 'Partner Description' }),
@@ -161,8 +162,9 @@ const PartnerZod = z.object({
   email: z.string().email().openapi({ example: 'example@email.com' }),
   password: z.string().openapi({ example: '*********' }),
   permission: z
-    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS).slice(1)])
-    .openapi({ example: PARTNER_PERMISSIONS.READ }),
+    .enum([PARTNER_PERMISSIONS.WRITE, ...Object.values(PARTNER_PERMISSIONS).slice(1)])
+    .default(PARTNER_PERMISSIONS.WRITE)
+    .openapi({ example: PARTNER_PERMISSIONS.WRITE }),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })

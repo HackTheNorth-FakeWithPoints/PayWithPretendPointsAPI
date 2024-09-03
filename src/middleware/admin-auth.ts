@@ -11,7 +11,17 @@ const adminAuthMiddleware = async (req: Request, res: Response, next: NextFuncti
       throw new ForbiddenError('Bearer token not found!')
     }
 
-    jwt.verify(token, process.env.JWT_ADMIN_SECRET as string)
+    const decodedToken = jwt.verify(token, process.env.JWT_ADMIN_SECRET as string) as jwt.JwtPayload
+
+    if (!decodedToken?.id) {
+      throw new ForbiddenError('Invalid token!')
+    }
+
+    req.adminId = decodedToken.id as string
+
+    if (!req.adminId) {
+      throw new ForbiddenError('Invalid admin!')
+    }
 
     next()
   } catch (error) {

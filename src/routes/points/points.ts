@@ -11,10 +11,12 @@ router.get('/loyalty/:memberId/points', partnerAuthMiddleware, async (req: Reque
   try {
     const { memberId } = memberIdSchema.parse(req.params)
 
-    const member = await findMember({
-      partnerId: req.partnerId as number,
-      id: memberId
-    })
+    const member = await findMember(
+      {
+        id: memberId
+      },
+      req.partnerId as number
+    )
 
     if (!member) {
       throw new NotFoundError(`Member with id of ${memberId} was not found!`)

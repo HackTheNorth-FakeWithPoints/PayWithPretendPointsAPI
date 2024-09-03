@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { MemberZod } from '@/db/models/index.ts'
 import { zodHTTPCodeResponses } from '@/utils/index.ts'
-import { zodDeletedCountResponse, zodIdSchema } from '@/utils/zod-common.ts'
+import { zodDeletedCountResponse, zodIdSchema } from '@/utils/zod.ts'
 
 extendZodWithOpenApi(z)
 
@@ -12,14 +12,14 @@ const memberIdSchema = z.object({
   memberId: zodIdSchema
 })
 
-const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true })
+const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true, status: true, partnerId: true })
 
 const patchMember = postMember.partial()
 
 const getMembersSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/members`,
-  tags: ['Member Operations (Admin)'],
+  tags: ['Member Operations'],
   description: 'Get all members.',
   request: {
     params: memberIdSchema
@@ -30,7 +30,7 @@ const getMembersSwagger: RouteConfig = {
 const getMemberSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations (Admin)'],
+  tags: ['Member Operations'],
   description: 'Get a specific member.',
   request: {
     params: memberIdSchema
@@ -41,7 +41,7 @@ const getMemberSwagger: RouteConfig = {
 const postMemberSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/loyalty/members`,
-  tags: ['Member Operations (Admin)'],
+  tags: ['Member Operations'],
   description: 'Create a new member.',
   request: {
     body: { content: { 'application/json': { schema: postMember } } }
@@ -52,7 +52,7 @@ const postMemberSwagger: RouteConfig = {
 const patchMemberSwagger: RouteConfig = {
   method: 'patch',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations (Admin)'],
+  tags: ['Member Operations'],
   description: 'Update a specific member.',
   request: {
     params: memberIdSchema,
@@ -64,7 +64,7 @@ const patchMemberSwagger: RouteConfig = {
 const deleteMemberSwagger: RouteConfig = {
   method: 'delete',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
-  tags: ['Member Operations (Admin)'],
+  tags: ['Member Operations'],
   description: 'Delete a specific member.',
   request: {
     params: memberIdSchema

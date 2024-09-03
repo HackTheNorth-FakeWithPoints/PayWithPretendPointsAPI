@@ -1,7 +1,6 @@
 openapi: 3.0.0
 servers:
   - url: https://paywithpretendpointsapi.onrender.com
-    description: Production
 info:
   version: 1.0.0
   title: Pay With Pretend Points API
@@ -20,12 +19,11 @@ components:
           example: 1
         status:
           type: string
-          enum: &a3
+          enum: &a4
             - ACTIVE
             - TERMINATED
             - UNAVAILABLE
-            - PENDING
-            - LIMITED_SERVICE
+          default: ACTIVE
           example: ACTIVE
         name:
           type: string
@@ -48,11 +46,12 @@ components:
           example: '*********'
         permission:
           type: string
-          enum: &a4
-            - READ
+          enum: &a5
             - WRITE
+            - READ
             - BALANCE_INQUIRY
-          example: READ
+          default: WRITE
+          example: WRITE
         createdAt:
           type: string
           example: 2024-09-01T01:03:43.004Z
@@ -61,14 +60,12 @@ components:
           example: 2024-09-01T01:03:43.004Z
       required:
         - id
-        - status
         - name
         - description
         - address
         - phone
         - email
         - password
-        - permission
         - createdAt
         - updatedAt
     Member:
@@ -98,13 +95,12 @@ components:
           example: 1000
         status:
           type: string
-          enum: &a5
-            - ACTIVE
+          enum: &a3
             - PENDING
+            - ACTIVE
             - DEACTIVATED
-            - PROBATION
-            - BLACKLISTED
-          example: ACTIVE
+          default: PENDING
+          example: PENDING
         createdAt:
           type: string
           example: 2024-09-01T01:03:43.004Z
@@ -119,7 +115,6 @@ components:
         - phone
         - email
         - balance
-        - status
         - createdAt
         - updatedAt
     Transaction:
@@ -130,13 +125,8 @@ components:
           example: 1
         reference:
           type: string
-          example: AAAA-0000-BBBB
-        partnerRefId:
-          type: string
-          example: AAAA-0000-BBBB
-        transactedAt:
-          type: string
-          example: 2024-09-01T01:03:43.004Z
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
         partnerId:
           type: number
           example: 1
@@ -148,27 +138,26 @@ components:
           enum: &a1
             - PENDING
             - COMPLETED
-            - REVERSED
-            - INVALIDATED
+            - VOIDED
+          default: PENDING
           example: PENDING
         type:
           type: string
           enum: &a2
             - PAYMENT
             - REFUND
-            - ADJUSTMENT
-            - CREDIT
-            - PENALTY
             - INTERNAL
+          default: PAYMENT
           example: PAYMENT
         amount:
           type: number
           example: 100
-        description:
-          type: object
-          additionalProperties:
-            type: string
-            example: Description
+        note:
+          type: string
+          example: This is a note about the transaction.
+        transactedAt:
+          type: string
+          example: 2024-09-01T01:03:43.004Z
         createdAt:
           type: string
           example: 2024-09-01T01:03:43.004Z
@@ -178,12 +167,10 @@ components:
       required:
         - id
         - reference
-        - transactedAt
         - partnerId
         - memberId
-        - status
-        - type
         - amount
+        - transactedAt
         - createdAt
         - updatedAt
   parameters: {}
@@ -416,13 +403,8 @@ paths:
                         example: 1
                       reference:
                         type: string
-                        example: AAAA-0000-BBBB
-                      partnerRefId:
-                        type: string
-                        example: AAAA-0000-BBBB
-                      transactedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174001
                       partnerId:
                         type: number
                         example: 1
@@ -432,19 +414,22 @@ paths:
                       status:
                         type: string
                         enum: *a1
+                        default: PENDING
                         example: PENDING
                       type:
                         type: string
                         enum: *a2
+                        default: PAYMENT
                         example: PAYMENT
                       amount:
                         type: number
                         example: 100
-                      description:
-                        type: object
-                        additionalProperties:
-                          type: string
-                          example: Description
+                      note:
+                        type: string
+                        example: This is a note about the transaction.
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -454,12 +439,10 @@ paths:
                     required:
                       - id
                       - reference
-                      - transactedAt
                       - partnerId
                       - memberId
-                      - status
-                      - type
                       - amount
+                      - transactedAt
                       - createdAt
                       - updatedAt
                 required:
@@ -512,13 +495,8 @@ paths:
                           example: 1
                         reference:
                           type: string
-                          example: AAAA-0000-BBBB
-                        partnerRefId:
-                          type: string
-                          example: AAAA-0000-BBBB
-                        transactedAt:
-                          type: string
-                          example: 2024-09-01T01:03:43.004Z
+                          format: uuid
+                          example: 123e4567-e89b-12d3-a456-426614174001
                         partnerId:
                           type: number
                           example: 1
@@ -528,19 +506,22 @@ paths:
                         status:
                           type: string
                           enum: *a1
+                          default: PENDING
                           example: PENDING
                         type:
                           type: string
                           enum: *a2
+                          default: PAYMENT
                           example: PAYMENT
                         amount:
                           type: number
                           example: 100
-                        description:
-                          type: object
-                          additionalProperties:
-                            type: string
-                            example: Description
+                        note:
+                          type: string
+                          example: This is a note about the transaction.
+                        transactedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
                         createdAt:
                           type: string
                           example: 2024-09-01T01:03:43.004Z
@@ -550,12 +531,10 @@ paths:
                       required:
                         - id
                         - reference
-                        - transactedAt
                         - partnerId
                         - memberId
-                        - status
-                        - type
                         - amount
+                        - transactedAt
                         - createdAt
                         - updatedAt
                 required:
@@ -614,13 +593,8 @@ paths:
                         example: 1
                       reference:
                         type: string
-                        example: AAAA-0000-BBBB
-                      partnerRefId:
-                        type: string
-                        example: AAAA-0000-BBBB
-                      transactedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174001
                       partnerId:
                         type: number
                         example: 1
@@ -630,19 +604,22 @@ paths:
                       status:
                         type: string
                         enum: *a1
+                        default: PENDING
                         example: PENDING
                       type:
                         type: string
                         enum: *a2
+                        default: PAYMENT
                         example: PAYMENT
                       amount:
                         type: number
                         example: 100
-                      description:
-                        type: object
-                        additionalProperties:
-                          type: string
-                          example: Description
+                      note:
+                        type: string
+                        example: This is a note about the transaction.
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -652,12 +629,10 @@ paths:
                     required:
                       - id
                       - reference
-                      - transactedAt
                       - partnerId
                       - memberId
-                      - status
-                      - type
                       - amount
+                      - transactedAt
                       - createdAt
                       - updatedAt
                 required:
@@ -705,28 +680,17 @@ paths:
             schema:
               type: object
               properties:
-                reference:
-                  type: string
-                  example: AAAA-0000-BBBB
-                partnerRefId:
-                  type: string
-                  example: AAAA-0000-BBBB
-                status:
-                  type: string
-                  enum: *a1
-                  example: PENDING
                 type:
                   type: string
                   enum: *a2
+                  default: PAYMENT
                   example: PAYMENT
                 amount:
                   type: number
                   example: 100
-                description:
-                  type: object
-                  additionalProperties:
-                    type: string
-                    example: Description
+                note:
+                  type: string
+                  example: This is a note about the transaction.
       responses:
         '200':
           description: OK
@@ -743,13 +707,8 @@ paths:
                         example: 1
                       reference:
                         type: string
-                        example: AAAA-0000-BBBB
-                      partnerRefId:
-                        type: string
-                        example: AAAA-0000-BBBB
-                      transactedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174001
                       partnerId:
                         type: number
                         example: 1
@@ -759,19 +718,22 @@ paths:
                       status:
                         type: string
                         enum: *a1
+                        default: PENDING
                         example: PENDING
                       type:
                         type: string
                         enum: *a2
+                        default: PAYMENT
                         example: PAYMENT
                       amount:
                         type: number
                         example: 100
-                      description:
-                        type: object
-                        additionalProperties:
-                          type: string
-                          example: Description
+                      note:
+                        type: string
+                        example: This is a note about the transaction.
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -781,12 +743,10 @@ paths:
                     required:
                       - id
                       - reference
-                      - transactedAt
                       - partnerId
                       - memberId
-                      - status
-                      - type
                       - amount
+                      - transactedAt
                       - createdAt
                       - updatedAt
                 required:
@@ -889,13 +849,8 @@ paths:
                           example: 1
                         reference:
                           type: string
-                          example: AAAA-0000-BBBB
-                        partnerRefId:
-                          type: string
-                          example: AAAA-0000-BBBB
-                        transactedAt:
-                          type: string
-                          example: 2024-09-01T01:03:43.004Z
+                          format: uuid
+                          example: 123e4567-e89b-12d3-a456-426614174001
                         partnerId:
                           type: number
                           example: 1
@@ -905,19 +860,22 @@ paths:
                         status:
                           type: string
                           enum: *a1
+                          default: PENDING
                           example: PENDING
                         type:
                           type: string
                           enum: *a2
+                          default: PAYMENT
                           example: PAYMENT
                         amount:
                           type: number
                           example: 100
-                        description:
-                          type: object
-                          additionalProperties:
-                            type: string
-                            example: Description
+                        note:
+                          type: string
+                          example: This is a note about the transaction.
+                        transactedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
                         createdAt:
                           type: string
                           example: 2024-09-01T01:03:43.004Z
@@ -927,12 +885,10 @@ paths:
                       required:
                         - id
                         - reference
-                        - transactedAt
                         - partnerId
                         - memberId
-                        - status
-                        - type
                         - amount
+                        - transactedAt
                         - createdAt
                         - updatedAt
                 required:
@@ -972,32 +928,18 @@ paths:
             schema:
               type: object
               properties:
-                reference:
-                  type: string
-                  example: AAAA-0000-BBBB
-                partnerRefId:
-                  type: string
-                  example: AAAA-0000-BBBB
-                status:
-                  type: string
-                  enum: *a1
-                  example: PENDING
                 type:
                   type: string
                   enum: *a2
+                  default: PAYMENT
                   example: PAYMENT
                 amount:
                   type: number
                   example: 100
-                description:
-                  type: object
-                  additionalProperties:
-                    type: string
-                    example: Description
+                note:
+                  type: string
+                  example: This is a note about the transaction.
               required:
-                - reference
-                - status
-                - type
                 - amount
       responses:
         '200':
@@ -1015,13 +957,8 @@ paths:
                         example: 1
                       reference:
                         type: string
-                        example: AAAA-0000-BBBB
-                      partnerRefId:
-                        type: string
-                        example: AAAA-0000-BBBB
-                      transactedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174001
                       partnerId:
                         type: number
                         example: 1
@@ -1031,19 +968,22 @@ paths:
                       status:
                         type: string
                         enum: *a1
+                        default: PENDING
                         example: PENDING
                       type:
                         type: string
                         enum: *a2
+                        default: PAYMENT
                         example: PAYMENT
                       amount:
                         type: number
                         example: 100
-                      description:
-                        type: object
-                        additionalProperties:
-                          type: string
-                          example: Description
+                      note:
+                        type: string
+                        example: This is a note about the transaction.
+                      transactedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -1053,16 +993,441 @@ paths:
                     required:
                       - id
                       - reference
-                      - transactedAt
                       - partnerId
                       - memberId
-                      - status
-                      - type
                       - amount
+                      - transactedAt
                       - createdAt
                       - updatedAt
                 required:
                   - transaction
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/members/{memberId}:
+    get:
+      tags:
+        - Member Operations
+      description: Get a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        enum: *a3
+                        default: PENDING
+                        example: PENDING
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    patch:
+      tags:
+        - Member Operations
+      description: Update a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+          required: true
+          name: memberId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+                email:
+                  type: string
+                  format: email
+                  example: member@example.com
+                balance:
+                  type: number
+                  example: 1000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        enum: *a3
+                        default: PENDING
+                        example: PENDING
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    delete:
+      tags:
+        - Member Operations
+      description: Delete a specific member.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 1
+                required:
+                  - count
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+  /api/v1/loyalty/members:
+    get:
+      tags:
+        - Member Operations
+      description: Get all members.
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            example: 1
+          required: true
+          name: memberId
+          in: path
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        partnerId:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: John Doe
+                        address:
+                          type: string
+                          example: 123 Main St, Toronto, ON
+                        phone:
+                          type: string
+                          example: '4161234567'
+                        email:
+                          type: string
+                          format: email
+                          example: member@example.com
+                        balance:
+                          type: number
+                          example: 1000
+                        status:
+                          type: string
+                          enum: *a3
+                          default: PENDING
+                          example: PENDING
+                        createdAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                        updatedAt:
+                          type: string
+                          example: 2024-09-01T01:03:43.004Z
+                      required:
+                        - id
+                        - partnerId
+                        - name
+                        - address
+                        - phone
+                        - email
+                        - balance
+                        - createdAt
+                        - updatedAt
+                required:
+                  - members
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '503':
+          description: Service Unavailable
+    post:
+      tags:
+        - Member Operations
+      description: Create a new member.
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                address:
+                  type: string
+                  example: 123 Main St, Toronto, ON
+                phone:
+                  type: string
+                  example: '4161234567'
+                email:
+                  type: string
+                  format: email
+                  example: member@example.com
+                balance:
+                  type: number
+                  example: 1000
+              required:
+                - name
+                - address
+                - phone
+                - email
+                - balance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      partnerId:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: John Doe
+                      address:
+                        type: string
+                        example: 123 Main St, Toronto, ON
+                      phone:
+                        type: string
+                        example: '4161234567'
+                      email:
+                        type: string
+                        format: email
+                        example: member@example.com
+                      balance:
+                        type: number
+                        example: 1000
+                      status:
+                        type: string
+                        enum: *a3
+                        default: PENDING
+                        example: PENDING
+                      createdAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                      updatedAt:
+                        type: string
+                        example: 2024-09-01T01:03:43.004Z
+                    required:
+                      - id
+                      - partnerId
+                      - name
+                      - address
+                      - phone
+                      - email
+                      - balance
+                      - createdAt
+                      - updatedAt
+                required:
+                  - member
         '204':
           description: No Content
         '400':
@@ -1109,7 +1474,8 @@ paths:
                         example: 1
                       status:
                         type: string
-                        enum: *a3
+                        enum: *a4
+                        default: ACTIVE
                         example: ACTIVE
                       name:
                         type: string
@@ -1132,8 +1498,9 @@ paths:
                         example: '*********'
                       permission:
                         type: string
-                        enum: *a4
-                        example: READ
+                        enum: *a5
+                        default: WRITE
+                        example: WRITE
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -1142,14 +1509,12 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - status
                       - name
                       - description
                       - address
                       - phone
                       - email
                       - password
-                      - permission
                       - createdAt
                       - updatedAt
                 required:
@@ -1189,10 +1554,6 @@ paths:
             schema:
               type: object
               properties:
-                status:
-                  type: string
-                  enum: *a3
-                  example: ACTIVE
                 name:
                   type: string
                   example: Partner Name
@@ -1212,10 +1573,6 @@ paths:
                 password:
                   type: string
                   example: '*********'
-                permission:
-                  type: string
-                  enum: *a4
-                  example: READ
       responses:
         '200':
           description: OK
@@ -1232,7 +1589,8 @@ paths:
                         example: 1
                       status:
                         type: string
-                        enum: *a3
+                        enum: *a4
+                        default: ACTIVE
                         example: ACTIVE
                       name:
                         type: string
@@ -1255,8 +1613,9 @@ paths:
                         example: '*********'
                       permission:
                         type: string
-                        enum: *a4
-                        example: READ
+                        enum: *a5
+                        default: WRITE
+                        example: WRITE
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -1265,14 +1624,12 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - status
                       - name
                       - description
                       - address
                       - phone
                       - email
                       - password
-                      - permission
                       - createdAt
                       - updatedAt
                 required:
@@ -1367,7 +1724,8 @@ paths:
                           example: 1
                         status:
                           type: string
-                          enum: *a3
+                          enum: *a4
+                          default: ACTIVE
                           example: ACTIVE
                         name:
                           type: string
@@ -1390,8 +1748,9 @@ paths:
                           example: '*********'
                         permission:
                           type: string
-                          enum: *a4
-                          example: READ
+                          enum: *a5
+                          default: WRITE
+                          example: WRITE
                         createdAt:
                           type: string
                           example: 2024-09-01T01:03:43.004Z
@@ -1400,14 +1759,12 @@ paths:
                           example: 2024-09-01T01:03:43.004Z
                       required:
                         - id
-                        - status
                         - name
                         - description
                         - address
                         - phone
                         - email
                         - password
-                        - permission
                         - createdAt
                         - updatedAt
                 required:
@@ -1438,10 +1795,6 @@ paths:
             schema:
               type: object
               properties:
-                status:
-                  type: string
-                  enum: *a3
-                  example: ACTIVE
                 name:
                   type: string
                   example: Partner Name
@@ -1461,19 +1814,13 @@ paths:
                 password:
                   type: string
                   example: '*********'
-                permission:
-                  type: string
-                  enum: *a4
-                  example: READ
               required:
-                - status
                 - name
                 - description
                 - address
                 - phone
                 - email
                 - password
-                - permission
       responses:
         '200':
           description: OK
@@ -1490,7 +1837,8 @@ paths:
                         example: 1
                       status:
                         type: string
-                        enum: *a3
+                        enum: *a4
+                        default: ACTIVE
                         example: ACTIVE
                       name:
                         type: string
@@ -1513,8 +1861,9 @@ paths:
                         example: '*********'
                       permission:
                         type: string
-                        enum: *a4
-                        example: READ
+                        enum: *a5
+                        default: WRITE
+                        example: WRITE
                       createdAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -1523,461 +1872,16 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - status
                       - name
                       - description
                       - address
                       - phone
                       - email
                       - password
-                      - permission
                       - createdAt
                       - updatedAt
                 required:
                   - partner
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-        '503':
-          description: Service Unavailable
-  /api/v1/loyalty/members/{memberId}:
-    get:
-      tags:
-        - Member Operations (Admin)
-      description: Get a specific member.
-      security:
-        - bearerAuth: []
-      parameters:
-        - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            example: 1
-          required: true
-          name: memberId
-          in: path
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  member:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      partnerId:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: John Doe
-                      address:
-                        type: string
-                        example: 123 Main St, Toronto, ON
-                      phone:
-                        type: string
-                        example: '4161234567'
-                      email:
-                        type: string
-                        format: email
-                        example: member@example.com
-                      balance:
-                        type: number
-                        example: 1000
-                      status:
-                        type: string
-                        enum: *a5
-                        example: ACTIVE
-                      createdAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                      updatedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                    required:
-                      - id
-                      - partnerId
-                      - name
-                      - address
-                      - phone
-                      - email
-                      - balance
-                      - status
-                      - createdAt
-                      - updatedAt
-                required:
-                  - member
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-        '503':
-          description: Service Unavailable
-    patch:
-      tags:
-        - Member Operations (Admin)
-      description: Update a specific member.
-      security:
-        - bearerAuth: []
-      parameters:
-        - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            example: 1
-          required: true
-          name: memberId
-          in: path
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                partnerId:
-                  type: number
-                  example: 1
-                name:
-                  type: string
-                  example: John Doe
-                address:
-                  type: string
-                  example: 123 Main St, Toronto, ON
-                phone:
-                  type: string
-                  example: '4161234567'
-                email:
-                  type: string
-                  format: email
-                  example: member@example.com
-                balance:
-                  type: number
-                  example: 1000
-                status:
-                  type: string
-                  enum: *a5
-                  example: ACTIVE
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  member:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      partnerId:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: John Doe
-                      address:
-                        type: string
-                        example: 123 Main St, Toronto, ON
-                      phone:
-                        type: string
-                        example: '4161234567'
-                      email:
-                        type: string
-                        format: email
-                        example: member@example.com
-                      balance:
-                        type: number
-                        example: 1000
-                      status:
-                        type: string
-                        enum: *a5
-                        example: ACTIVE
-                      createdAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                      updatedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                    required:
-                      - id
-                      - partnerId
-                      - name
-                      - address
-                      - phone
-                      - email
-                      - balance
-                      - status
-                      - createdAt
-                      - updatedAt
-                required:
-                  - member
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-        '503':
-          description: Service Unavailable
-    delete:
-      tags:
-        - Member Operations (Admin)
-      description: Delete a specific member.
-      security:
-        - bearerAuth: []
-      parameters:
-        - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            example: 1
-          required: true
-          name: memberId
-          in: path
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 1
-                required:
-                  - count
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-        '503':
-          description: Service Unavailable
-  /api/v1/loyalty/members:
-    get:
-      tags:
-        - Member Operations (Admin)
-      description: Get all members.
-      security:
-        - bearerAuth: []
-      parameters:
-        - schema:
-            type: integer
-            minimum: 0
-            exclusiveMinimum: true
-            example: 1
-          required: true
-          name: memberId
-          in: path
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  members:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: number
-                          example: 1
-                        partnerId:
-                          type: number
-                          example: 1
-                        name:
-                          type: string
-                          example: John Doe
-                        address:
-                          type: string
-                          example: 123 Main St, Toronto, ON
-                        phone:
-                          type: string
-                          example: '4161234567'
-                        email:
-                          type: string
-                          format: email
-                          example: member@example.com
-                        balance:
-                          type: number
-                          example: 1000
-                        status:
-                          type: string
-                          enum: *a5
-                          example: ACTIVE
-                        createdAt:
-                          type: string
-                          example: 2024-09-01T01:03:43.004Z
-                        updatedAt:
-                          type: string
-                          example: 2024-09-01T01:03:43.004Z
-                      required:
-                        - id
-                        - partnerId
-                        - name
-                        - address
-                        - phone
-                        - email
-                        - balance
-                        - status
-                        - createdAt
-                        - updatedAt
-                required:
-                  - members
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-        '503':
-          description: Service Unavailable
-    post:
-      tags:
-        - Member Operations (Admin)
-      description: Create a new member.
-      security:
-        - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                partnerId:
-                  type: number
-                  example: 1
-                name:
-                  type: string
-                  example: John Doe
-                address:
-                  type: string
-                  example: 123 Main St, Toronto, ON
-                phone:
-                  type: string
-                  example: '4161234567'
-                email:
-                  type: string
-                  format: email
-                  example: member@example.com
-                balance:
-                  type: number
-                  example: 1000
-                status:
-                  type: string
-                  enum: *a5
-                  example: ACTIVE
-              required:
-                - partnerId
-                - name
-                - address
-                - phone
-                - email
-                - balance
-                - status
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  member:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      partnerId:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: John Doe
-                      address:
-                        type: string
-                        example: 123 Main St, Toronto, ON
-                      phone:
-                        type: string
-                        example: '4161234567'
-                      email:
-                        type: string
-                        format: email
-                        example: member@example.com
-                      balance:
-                        type: number
-                        example: 1000
-                      status:
-                        type: string
-                        enum: *a5
-                        example: ACTIVE
-                      createdAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                      updatedAt:
-                        type: string
-                        example: 2024-09-01T01:03:43.004Z
-                    required:
-                      - id
-                      - partnerId
-                      - name
-                      - address
-                      - phone
-                      - email
-                      - balance
-                      - status
-                      - createdAt
-                      - updatedAt
-                required:
-                  - member
         '204':
           description: No Content
         '400':

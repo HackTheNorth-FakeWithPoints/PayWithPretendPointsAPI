@@ -11,31 +11,32 @@ extendZodWithOpenApi(z)
 interface TransactionAttributes {
   id: number
   reference: string
-  partnerRefId?: string
-  transactedAt: Date
   partnerId: number
   memberId: number
   status: keyof typeof TRANSACTION_STATUS
   type: string
   amount: number
-  description?: { [key: string]: string }
+  note?: string
+  transactedAt: Date
   createdAt: Date
   updatedAt: Date
 }
 
-type TransactionCreationAttributes = Optional<TransactionAttributes, 'id' | 'createdAt' | 'updatedAt' | 'transactedAt'>
+type TransactionCreationAttributes = Optional<
+  TransactionAttributes,
+  'id' | 'createdAt' | 'updatedAt' | 'transactedAt' | 'status' | 'reference'
+>
 
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> {
   declare id: number
   declare reference: string
-  declare partnerRefId?: string
-  declare transactedAt: Date
   declare partnerId: number
   declare memberId: number
   declare status: keyof typeof TRANSACTION_STATUS
   declare type: string
   declare amount: number
-  declare description?: { [key: string]: string }
+  declare note?: string
+  declare transactedAt: Date
   declare createdAt: Date
   declare updatedAt: Date
 
@@ -65,21 +66,13 @@ Transaction.init(
       field: 'id'
     },
     reference: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUIDV4,
       allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
       validate: {
-        is: /^[\w\s.()-]+$/gi,
-        len: [2, 25]
+        isUUID: 4
       },
       field: 'reference'
-    },
-    partnerRefId: {
-      type: DataTypes.STRING,
-      validate: {
-        is: /^[\w\s.()-]+$/gi,
-        len: [2, 25]
-      },
-      field: 'partner_ref_id'
     },
     transactedAt: {
       type: DataTypes.DATE,
@@ -144,13 +137,13 @@ Transaction.init(
       },
       field: 'amount'
     },
-    description: {
-      type: DataTypes.JSONB,
+    note: {
+      type: DataTypes.TEXT,
       validate: {
         is: /^[\w\s.,!?'"()-]+$/gi,
         len: [2, 500]
       },
-      field: 'description'
+      field: 'note'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -181,19 +174,20 @@ Transaction.init(
 
 const TransactionZod = z.object({
   id: z.number().openapi({ example: 1 }),
-  reference: z.string().openapi({ example: 'AAAA-0000-BBBB' }),
-  partnerRefId: z.string().optional().openapi({ example: 'AAAA-0000-BBBB' }),
-  transactedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
+  reference: z.string().uuid().openapi({ example: '123e4567-e89b-12d3-a456-426614174001' }),
   partnerId: z.number().openapi({ example: 1 }),
   memberId: z.number().openapi({ example: 1 }),
   status: z
     .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS).slice(1)])
+    .default(TRANSACTION_STATUS.PENDING)
     .openapi({ example: TRANSACTION_STATUS.PENDING }),
   type: z
     .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE).slice(1)])
+    .default(TRANSACTION_TYPE.PAYMENT)
     .openapi({ example: TRANSACTION_TYPE.PAYMENT }),
   amount: z.number().openapi({ example: 100 }),
-  description: z.record(z.string().openapi({ example: 'Description' })).optional(),
+  note: z.string().optional().openapi({ example: 'This is a note about the transaction.' }),
+  transactedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })

@@ -1,6 +1,6 @@
 {
   "openapi": "3.0.0",
-  "servers": [{ "url": "https://paywithpretendpointsapi.onrender.com", "description": "Production" }],
+  "servers": [{ "url": "https://paywithpretendpointsapi.onrender.com" }],
   "info": { "version": "1.0.0", "title": "Pay With Pretend Points API" },
   "components": {
     "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
@@ -11,7 +11,8 @@
           "id": { "type": "number", "example": 1 },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+            "default": "ACTIVE",
             "example": "ACTIVE"
           },
           "name": { "type": "string", "example": "Partner Name" },
@@ -20,23 +21,16 @@
           "phone": { "type": "string", "example": "4161234567" },
           "email": { "type": "string", "format": "email", "example": "example@email.com" },
           "password": { "type": "string", "example": "*********" },
-          "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" },
+          "permission": {
+            "type": "string",
+            "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+            "default": "WRITE",
+            "example": "WRITE"
+          },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
-        "required": [
-          "id",
-          "status",
-          "name",
-          "description",
-          "address",
-          "phone",
-          "email",
-          "password",
-          "permission",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["id", "name", "description", "address", "phone", "email", "password", "createdAt", "updatedAt"]
       },
       "Member": {
         "type": "object",
@@ -50,61 +44,41 @@
           "balance": { "type": "number", "example": 1000 },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-            "example": "ACTIVE"
+            "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+            "default": "PENDING",
+            "example": "PENDING"
           },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
-        "required": [
-          "id",
-          "partnerId",
-          "name",
-          "address",
-          "phone",
-          "email",
-          "balance",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["id", "partnerId", "name", "address", "phone", "email", "balance", "createdAt", "updatedAt"]
       },
       "Transaction": {
         "type": "object",
         "properties": {
           "id": { "type": "number", "example": 1 },
-          "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+          "reference": { "type": "string", "format": "uuid", "example": "123e4567-e89b-12d3-a456-426614174001" },
           "partnerId": { "type": "number", "example": 1 },
           "memberId": { "type": "number", "example": 1 },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+            "enum": ["PENDING", "COMPLETED", "VOIDED"],
+            "default": "PENDING",
             "example": "PENDING"
           },
           "type": {
             "type": "string",
-            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+            "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+            "default": "PAYMENT",
             "example": "PAYMENT"
           },
           "amount": { "type": "number", "example": 100 },
-          "description": { "type": "object", "additionalProperties": { "type": "string", "example": "Description" } },
+          "note": { "type": "string", "example": "This is a note about the transaction." },
+          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
-        "required": [
-          "id",
-          "reference",
-          "transactedAt",
-          "partnerId",
-          "memberId",
-          "status",
-          "type",
-          "amount",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["id", "reference", "partnerId", "memberId", "amount", "transactedAt", "createdAt", "updatedAt"]
       }
     },
     "parameters": {}
@@ -300,38 +274,38 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "reference": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "123e4567-e89b-12d3-a456-426614174001"
+                        },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                          "default": "PENDING",
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                          "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
-                        "description": {
-                          "type": "object",
-                          "additionalProperties": { "type": "string", "example": "Description" }
-                        },
+                        "note": { "type": "string", "example": "This is a note about the transaction." },
+                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
                         "reference",
-                        "transactedAt",
                         "partnerId",
                         "memberId",
-                        "status",
-                        "type",
                         "amount",
+                        "transactedAt",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -379,38 +353,38 @@
                         "type": "object",
                         "properties": {
                           "id": { "type": "number", "example": 1 },
-                          "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                          "reference": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-426614174001"
+                          },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                            "default": "PENDING",
                             "example": "PENDING"
                           },
                           "type": {
                             "type": "string",
-                            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                            "default": "PAYMENT",
                             "example": "PAYMENT"
                           },
                           "amount": { "type": "number", "example": 100 },
-                          "description": {
-                            "type": "object",
-                            "additionalProperties": { "type": "string", "example": "Description" }
-                          },
+                          "note": { "type": "string", "example": "This is a note about the transaction." },
+                          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
                         "required": [
                           "id",
                           "reference",
-                          "transactedAt",
                           "partnerId",
                           "memberId",
-                          "status",
-                          "type",
                           "amount",
+                          "transactedAt",
                           "createdAt",
                           "updatedAt"
                         ]
@@ -463,38 +437,38 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "reference": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "123e4567-e89b-12d3-a456-426614174001"
+                        },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                          "default": "PENDING",
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                          "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
-                        "description": {
-                          "type": "object",
-                          "additionalProperties": { "type": "string", "example": "Description" }
-                        },
+                        "note": { "type": "string", "example": "This is a note about the transaction." },
+                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
                         "reference",
-                        "transactedAt",
                         "partnerId",
                         "memberId",
-                        "status",
-                        "type",
                         "amount",
+                        "transactedAt",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -538,23 +512,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                  "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                  "status": {
-                    "type": "string",
-                    "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
-                    "example": "PENDING"
-                  },
                   "type": {
                     "type": "string",
-                    "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                    "default": "PAYMENT",
                     "example": "PAYMENT"
                   },
                   "amount": { "type": "number", "example": 100 },
-                  "description": {
-                    "type": "object",
-                    "additionalProperties": { "type": "string", "example": "Description" }
-                  }
+                  "note": { "type": "string", "example": "This is a note about the transaction." }
                 }
               }
             }
@@ -572,38 +537,38 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "reference": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "123e4567-e89b-12d3-a456-426614174001"
+                        },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                          "default": "PENDING",
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                          "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
-                        "description": {
-                          "type": "object",
-                          "additionalProperties": { "type": "string", "example": "Description" }
-                        },
+                        "note": { "type": "string", "example": "This is a note about the transaction." },
+                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
                         "reference",
-                        "transactedAt",
                         "partnerId",
                         "memberId",
-                        "status",
-                        "type",
                         "amount",
+                        "transactedAt",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -691,38 +656,38 @@
                         "type": "object",
                         "properties": {
                           "id": { "type": "number", "example": 1 },
-                          "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                          "reference": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "123e4567-e89b-12d3-a456-426614174001"
+                          },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                            "default": "PENDING",
                             "example": "PENDING"
                           },
                           "type": {
                             "type": "string",
-                            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                            "default": "PAYMENT",
                             "example": "PAYMENT"
                           },
                           "amount": { "type": "number", "example": 100 },
-                          "description": {
-                            "type": "object",
-                            "additionalProperties": { "type": "string", "example": "Description" }
-                          },
+                          "note": { "type": "string", "example": "This is a note about the transaction." },
+                          "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
                         "required": [
                           "id",
                           "reference",
-                          "transactedAt",
                           "partnerId",
                           "memberId",
-                          "status",
-                          "type",
                           "amount",
+                          "transactedAt",
                           "createdAt",
                           "updatedAt"
                         ]
@@ -761,25 +726,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                  "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                  "status": {
-                    "type": "string",
-                    "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
-                    "example": "PENDING"
-                  },
                   "type": {
                     "type": "string",
-                    "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                    "default": "PAYMENT",
                     "example": "PAYMENT"
                   },
                   "amount": { "type": "number", "example": 100 },
-                  "description": {
-                    "type": "object",
-                    "additionalProperties": { "type": "string", "example": "Description" }
-                  }
+                  "note": { "type": "string", "example": "This is a note about the transaction." }
                 },
-                "required": ["reference", "status", "type", "amount"]
+                "required": ["amount"]
               }
             }
           }
@@ -796,44 +752,374 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "reference": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "123e4567-e89b-12d3-a456-426614174001"
+                        },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                          "default": "PENDING",
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "INTERNAL"],
+                          "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
-                        "description": {
-                          "type": "object",
-                          "additionalProperties": { "type": "string", "example": "Description" }
-                        },
+                        "note": { "type": "string", "example": "This is a note about the transaction." },
+                        "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
                         "reference",
-                        "transactedAt",
                         "partnerId",
                         "memberId",
-                        "status",
-                        "type",
                         "amount",
+                        "transactedAt",
                         "createdAt",
                         "updatedAt"
                       ]
                     }
                   },
                   "required": ["transaction"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/members/{memberId}": {
+      "get": {
+        "tags": ["Member Operations"],
+        "description": "Get a specific member.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number", "example": 1 },
+                        "partnerId": { "type": "number", "example": 1 },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                        "balance": { "type": "number", "example": 1000 },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                          "default": "PENDING",
+                          "example": "PENDING"
+                        },
+                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
+                      },
+                      "required": [
+                        "id",
+                        "partnerId",
+                        "name",
+                        "address",
+                        "phone",
+                        "email",
+                        "balance",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["member"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "patch": {
+        "tags": ["Member Operations"],
+        "description": "Update a specific member.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "John Doe" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
+                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                  "balance": { "type": "number", "example": 1000 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number", "example": 1 },
+                        "partnerId": { "type": "number", "example": 1 },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                        "balance": { "type": "number", "example": 1000 },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                          "default": "PENDING",
+                          "example": "PENDING"
+                        },
+                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
+                      },
+                      "required": [
+                        "id",
+                        "partnerId",
+                        "name",
+                        "address",
+                        "phone",
+                        "email",
+                        "balance",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["member"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "delete": {
+        "tags": ["Member Operations"],
+        "description": "Delete a specific member.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "count": { "type": "integer", "example": 1 } },
+                  "required": ["count"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/loyalty/members": {
+      "get": {
+        "tags": ["Member Operations"],
+        "description": "Get all members.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "number", "example": 1 },
+                          "partnerId": { "type": "number", "example": 1 },
+                          "name": { "type": "string", "example": "John Doe" },
+                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                          "phone": { "type": "string", "example": "4161234567" },
+                          "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                          "balance": { "type": "number", "example": 1000 },
+                          "status": {
+                            "type": "string",
+                            "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                            "default": "PENDING",
+                            "example": "PENDING"
+                          },
+                          "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                          "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
+                        },
+                        "required": [
+                          "id",
+                          "partnerId",
+                          "name",
+                          "address",
+                          "phone",
+                          "email",
+                          "balance",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["members"]
+                }
+              }
+            }
+          },
+          "204": { "description": "No Content" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "post": {
+        "tags": ["Member Operations"],
+        "description": "Create a new member.",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "John Doe" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
+                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                  "balance": { "type": "number", "example": 1000 }
+                },
+                "required": ["name", "address", "phone", "email", "balance"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number", "example": 1 },
+                        "partnerId": { "type": "number", "example": 1 },
+                        "name": { "type": "string", "example": "John Doe" },
+                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                        "phone": { "type": "string", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
+                        "balance": { "type": "number", "example": 1000 },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                          "default": "PENDING",
+                          "example": "PENDING"
+                        },
+                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
+                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
+                      },
+                      "required": [
+                        "id",
+                        "partnerId",
+                        "name",
+                        "address",
+                        "phone",
+                        "email",
+                        "balance",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["member"]
                 }
               }
             }
@@ -875,7 +1161,8 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                          "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -886,22 +1173,21 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
-                          "example": "READ"
+                          "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+                          "default": "WRITE",
+                          "example": "WRITE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "status",
                         "name",
                         "description",
                         "address",
                         "phone",
                         "email",
                         "password",
-                        "permission",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -939,18 +1225,12 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
-                    "example": "ACTIVE"
-                  },
                   "name": { "type": "string", "example": "Partner Name" },
                   "description": { "type": "string", "example": "Partner Description" },
                   "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                  "password": { "type": "string", "example": "*********" },
-                  "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" }
+                  "password": { "type": "string", "example": "*********" }
                 }
               }
             }
@@ -970,7 +1250,8 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                          "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -981,22 +1262,21 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
-                          "example": "READ"
+                          "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+                          "default": "WRITE",
+                          "example": "WRITE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "status",
                         "name",
                         "description",
                         "address",
                         "phone",
                         "email",
                         "password",
-                        "permission",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -1080,7 +1360,8 @@
                           "id": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                            "default": "ACTIVE",
                             "example": "ACTIVE"
                           },
                           "name": { "type": "string", "example": "Partner Name" },
@@ -1091,22 +1372,21 @@
                           "password": { "type": "string", "example": "*********" },
                           "permission": {
                             "type": "string",
-                            "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
-                            "example": "READ"
+                            "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+                            "default": "WRITE",
+                            "example": "WRITE"
                           },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
                         "required": [
                           "id",
-                          "status",
                           "name",
                           "description",
                           "address",
                           "phone",
                           "email",
                           "password",
-                          "permission",
                           "createdAt",
                           "updatedAt"
                         ]
@@ -1137,20 +1417,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
-                    "example": "ACTIVE"
-                  },
                   "name": { "type": "string", "example": "Partner Name" },
                   "description": { "type": "string", "example": "Partner Description" },
                   "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                  "password": { "type": "string", "example": "*********" },
-                  "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" }
+                  "password": { "type": "string", "example": "*********" }
                 },
-                "required": ["status", "name", "description", "address", "phone", "email", "password", "permission"]
+                "required": ["name", "description", "address", "phone", "email", "password"]
               }
             }
           }
@@ -1169,7 +1443,8 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                          "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -1180,370 +1455,27 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
-                          "example": "READ"
+                          "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+                          "default": "WRITE",
+                          "example": "WRITE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "status",
                         "name",
                         "description",
                         "address",
                         "phone",
                         "email",
                         "password",
-                        "permission",
                         "createdAt",
                         "updatedAt"
                       ]
                     }
                   },
                   "required": ["partner"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      }
-    },
-    "/api/v1/loyalty/members/{memberId}": {
-      "get": {
-        "tags": ["Member Operations (Admin)"],
-        "description": "Get a specific member.",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
-            "required": true,
-            "name": "memberId",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "member": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
-                        "status": {
-                          "type": "string",
-                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                          "example": "ACTIVE"
-                        },
-                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
-                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
-                      },
-                      "required": [
-                        "id",
-                        "partnerId",
-                        "name",
-                        "address",
-                        "phone",
-                        "email",
-                        "balance",
-                        "status",
-                        "createdAt",
-                        "updatedAt"
-                      ]
-                    }
-                  },
-                  "required": ["member"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
-      "patch": {
-        "tags": ["Member Operations (Admin)"],
-        "description": "Update a specific member.",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
-            "required": true,
-            "name": "memberId",
-            "in": "path"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "partnerId": { "type": "number", "example": 1 },
-                  "name": { "type": "string", "example": "John Doe" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
-                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "number", "example": 1000 },
-                  "status": {
-                    "type": "string",
-                    "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                    "example": "ACTIVE"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "member": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
-                        "status": {
-                          "type": "string",
-                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                          "example": "ACTIVE"
-                        },
-                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
-                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
-                      },
-                      "required": [
-                        "id",
-                        "partnerId",
-                        "name",
-                        "address",
-                        "phone",
-                        "email",
-                        "balance",
-                        "status",
-                        "createdAt",
-                        "updatedAt"
-                      ]
-                    }
-                  },
-                  "required": ["member"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
-      "delete": {
-        "tags": ["Member Operations (Admin)"],
-        "description": "Delete a specific member.",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
-            "required": true,
-            "name": "memberId",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": { "count": { "type": "integer", "example": 1 } },
-                  "required": ["count"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      }
-    },
-    "/api/v1/loyalty/members": {
-      "get": {
-        "tags": ["Member Operations (Admin)"],
-        "description": "Get all members.",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
-            "required": true,
-            "name": "memberId",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "members": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "number", "example": 1 },
-                          "partnerId": { "type": "number", "example": 1 },
-                          "name": { "type": "string", "example": "John Doe" },
-                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                          "phone": { "type": "string", "example": "4161234567" },
-                          "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                          "balance": { "type": "number", "example": 1000 },
-                          "status": {
-                            "type": "string",
-                            "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                            "example": "ACTIVE"
-                          },
-                          "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
-                          "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
-                        },
-                        "required": [
-                          "id",
-                          "partnerId",
-                          "name",
-                          "address",
-                          "phone",
-                          "email",
-                          "balance",
-                          "status",
-                          "createdAt",
-                          "updatedAt"
-                        ]
-                      }
-                    }
-                  },
-                  "required": ["members"]
-                }
-              }
-            }
-          },
-          "204": { "description": "No Content" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" },
-          "503": { "description": "Service Unavailable" }
-        }
-      },
-      "post": {
-        "tags": ["Member Operations (Admin)"],
-        "description": "Create a new member.",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "partnerId": { "type": "number", "example": 1 },
-                  "name": { "type": "string", "example": "John Doe" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
-                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "number", "example": 1000 },
-                  "status": {
-                    "type": "string",
-                    "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                    "example": "ACTIVE"
-                  }
-                },
-                "required": ["partnerId", "name", "address", "phone", "email", "balance", "status"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "member": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
-                        "status": {
-                          "type": "string",
-                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
-                          "example": "ACTIVE"
-                        },
-                        "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
-                        "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
-                      },
-                      "required": [
-                        "id",
-                        "partnerId",
-                        "name",
-                        "address",
-                        "phone",
-                        "email",
-                        "balance",
-                        "status",
-                        "createdAt",
-                        "updatedAt"
-                      ]
-                    }
-                  },
-                  "required": ["member"]
                 }
               }
             }

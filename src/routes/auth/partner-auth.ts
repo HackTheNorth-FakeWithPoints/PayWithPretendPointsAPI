@@ -2,9 +2,10 @@ import bcrypt from 'bcryptjs'
 import express, { type Request, type Response } from 'express'
 import jwt from 'jsonwebtoken'
 
+import { Partner } from '@/db/models/index.ts'
 import { findPartner } from '@/db/providers/partners.ts'
 import { ForbiddenError, NotFoundError, handleError } from '@/utils/errors.ts'
-import { zodCredentials } from '@/utils/zod-common.ts'
+import { zodCredentials } from '@/utils/zod.ts'
 
 const router = express.Router()
 
@@ -24,8 +25,12 @@ router.post('/auth', async (req: Request, res: Response) => {
       throw new ForbiddenError(`Incorrect credentials!`)
     }
 
-    const accessToken = jwt.sign(partner, process.env.JWT_SECRET as string, {
-      expiresIn: '2h'
+    const sanitizedPartner = partner as Partial<Partner>
+
+    delete sanitizedPartner.password
+
+    const accessToken = jwt.sign(sanitizedPartner, process.env.JWT_SECRET as string, {
+      expiresIn: '30m'
     })
 
     return res.status(200).json({ accessToken })

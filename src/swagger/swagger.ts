@@ -47,16 +47,16 @@ const generateSwaggerDocument = () => {
     postMemberTransactionSwagger,
     patchMemberTransactionSwagger,
     deleteMemberTransactionSwagger,
-    getPartnerSwagger,
-    getPartnersSwagger,
-    postPartnerSwagger,
-    patchPartnerSwagger,
-    deletePartnerSwagger,
     getMemberSwagger,
     getMembersSwagger,
     postMemberSwagger,
     patchMemberSwagger,
-    deleteMemberSwagger
+    deleteMemberSwagger,
+    getPartnerSwagger,
+    getPartnersSwagger,
+    postPartnerSwagger,
+    patchPartnerSwagger,
+    deletePartnerSwagger
   ]
 
   const registry = new OpenAPIRegistry()
@@ -82,7 +82,7 @@ const generateSwaggerDocument = () => {
 
   const swaggerDocument = generator.generateDocument({
     openapi: '3.0.0',
-    servers: [{ url: 'https://paywithpretendpointsapi.onrender.com', description: 'Production' }],
+    servers: [{ url: 'https://paywithpretendpointsapi.onrender.com' }],
     info: {
       version: process.env.npm_package_version as string,
       title: 'Pay With Pretend Points API',

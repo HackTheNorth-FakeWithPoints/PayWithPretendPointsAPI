@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { TransactionZod } from '@/db/models/transaction.ts'
-import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod-common.ts'
+import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod.ts'
 
 extendZodWithOpenApi(z)
 
@@ -22,7 +22,9 @@ const postTransaction = TransactionZod.omit({
   partnerId: true,
   createdAt: true,
   updatedAt: true,
-  transactedAt: true
+  transactedAt: true,
+  status: true,
+  reference: true
 })
 
 const patchTransaction = postTransaction.partial()

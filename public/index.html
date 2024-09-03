@@ -27,19 +27,26 @@
     <title>Pay With Pretend Points API</title>
   </head>
   <body>
-    <header class="custom-header scalar-app">
-      <b>Pay With Pretend Points API</b>
-      <nav>
-        <a href="https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI">GitHub Repo</a>
-      </nav>
-    </header>
     <script defer id="api-reference" data-url="docs/openapi/openAPI.yml"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
     <script defer>
-      setTimeout(function () {
-        document.getElementsByClassName('darklight-reference-promo')[0].remove()
-        document.getElementsByClassName('darklight')[0].style = 'padding: 20px'
-      }, 1000)
+      document.getElementById('api-reference').dataset.configuration = JSON.stringify({
+        theme: 'purple',
+        layout: 'classic',
+        proxy: 'https://proxy.scalar.com'
+      })
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <footer class="custom-footer scalar-app">
+      <div class="container">
+        <nav>
+          <a
+            href="https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Checkout the GitHub Repo here. 🚀</a
+          >
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,7 +1,13 @@
 import express, { type Request, type Response } from 'express'
 
 import { createMemberTransaction, updateMemberBalance } from '@/controllers/index.ts'
-import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
+import {
+  countTransactions,
+  findTransaction,
+  findTransactions,
+  modifyTransaction,
+  removeTransaction
+} from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
 import {
   memberIdSchema,
@@ -55,6 +61,13 @@ router.get(
 router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { memberId } = memberIdSchema.parse(req.params)
+
+    const transactionCount = await countTransactions({ memberId, partnerId: req.partnerId as number })
+
+    if (transactionCount > parseInt(process.env.MAX_TRANSACTIONS_PER_MEMBER as string)) {
+      throw new InternalServerError(`Maximum number of transactions reached for this member!`)
+    }
+
     const transactionPayload = postTransaction.parse(req.body)
 
     const transaction = await createMemberTransaction({

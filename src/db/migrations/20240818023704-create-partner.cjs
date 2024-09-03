@@ -19,10 +19,10 @@ module.exports = {
         field: 'id'
       },
       status: {
-        type: Sequelize.ENUM('ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'),
+        type: Sequelize.ENUM('ACTIVE', 'TERMINATED', 'UNAVAILABLE'),
         allowNull: false,
         defaultValue: 'ACTIVE',
-        values: ['ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'],
+        values: ['ACTIVE', 'TERMINATED', 'UNAVAILABLE'],
         validate: {
           is: /^[\w\s]+$/gi
         },

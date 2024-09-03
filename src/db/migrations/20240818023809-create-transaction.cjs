@@ -19,21 +19,13 @@ module.exports = {
         field: 'id'
       },
       reference: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         allowNull: false,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
         validate: {
-          is: /^[\w\s.()-]+$/gi,
-          len: [2, 25]
+          isUUID: 4
         },
         field: 'reference'
-      },
-      partnerRefId: {
-        type: Sequelize.STRING,
-        validate: {
-          is: /^[\w\s.()-]+$/gi,
-          len: [2, 25]
-        },
-        field: 'partner_ref_id'
       },
       transactedAt: {
         type: Sequelize.DATE,
@@ -71,20 +63,20 @@ module.exports = {
         field: 'member_id'
       },
       status: {
-        type: Sequelize.ENUM('PENDING', 'COMPLETED', 'REVERSED', 'INVALIDATED'),
+        type: Sequelize.ENUM('PENDING', 'COMPLETED', 'VOIDED'),
         allowNull: false,
         defaultValue: 'PENDING',
-        values: ['PENDING', 'COMPLETED', 'REVERSED', 'INVALIDATED'],
+        values: ['PENDING', 'COMPLETED', 'VOIDED'],
         validate: {
           is: /^[\w\s]+$/gi
         },
         field: 'status'
       },
       type: {
-        type: Sequelize.ENUM('PAYMENT', 'REFUND', 'ADJUSTMENT', 'CREDIT', 'PENALTY', 'INTERNAL'),
+        type: Sequelize.ENUM('PAYMENT', 'REFUND', 'INTERNAL'),
         allowNull: false,
         defaultValue: 'PAYMENT',
-        values: ['PAYMENT', 'REFUND', 'ADJUSTMENT', 'CREDIT', 'PENALTY', 'INTERNAL'],
+        values: ['PAYMENT', 'REFUND', 'INTERNAL'],
         validate: {
           is: /^[\w\s]+$/gi
         },
@@ -98,13 +90,13 @@ module.exports = {
         },
         field: 'amount'
       },
-      description: {
-        type: Sequelize.JSONB,
+      note: {
+        type: Sequelize.TEXT,
         validate: {
           is: /^[\w\s.,!?'"()-]+$/gi,
           len: [2, 500]
         },
-        field: 'description'
+        field: 'note'
       },
       createdAt: {
         type: Sequelize.DATE,
