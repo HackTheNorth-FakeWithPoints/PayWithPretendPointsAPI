@@ -15,7 +15,8 @@ module.exports = {
         primaryKey: true,
         validate: {
           isInt: true
-        }
+        },
+        field: 'id'
       },
       reference: {
         type: Sequelize.STRING,
@@ -23,14 +24,16 @@ module.exports = {
         validate: {
           is: /^[\w\s.()-]+$/gi,
           len: [2, 25]
-        }
+        },
+        field: 'reference'
       },
       partnerRefId: {
         type: Sequelize.STRING,
         validate: {
           is: /^[\w\s.()-]+$/gi,
           len: [2, 25]
-        }
+        },
+        field: 'partner_ref_id'
       },
       transactedAt: {
         type: Sequelize.DATE,
@@ -38,7 +41,8 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         validate: {
           isDate: true
-        }
+        },
+        field: 'transacted_at'
       },
       partnerId: {
         type: Sequelize.INTEGER,
@@ -50,7 +54,8 @@ module.exports = {
         onDelete: 'CASCADE',
         validate: {
           isInt: true
-        }
+        },
+        field: 'partner_id'
       },
       memberId: {
         type: Sequelize.INTEGER,
@@ -62,51 +67,62 @@ module.exports = {
         onDelete: 'CASCADE',
         validate: {
           isInt: true
-        }
+        },
+        field: 'member_id'
       },
       status: {
-        type: Sequelize.ENUM('delete', 'reverse'),
+        type: Sequelize.ENUM('PENDING', 'COMPLETED', 'REVERSED', 'INVALIDATED'),
         allowNull: false,
+        defaultValue: 'PENDING',
+        values: ['PENDING', 'COMPLETED', 'REVERSED', 'INVALIDATED'],
         validate: {
           is: /^[\w\s]+$/gi
-        }
+        },
+        field: 'status'
       },
       type: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('PAYMENT', 'REFUND', 'ADJUSTMENT', 'CREDIT', 'PENALTY', 'INTERNAL'),
         allowNull: false,
+        defaultValue: 'PAYMENT',
+        values: ['PAYMENT', 'REFUND', 'ADJUSTMENT', 'CREDIT', 'PENALTY', 'INTERNAL'],
         validate: {
           is: /^[\w\s]+$/gi
-        }
+        },
+        field: 'type'
       },
       amount: {
         type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
           isInt: true
-        }
+        },
+        field: 'amount'
       },
       description: {
         type: Sequelize.JSONB,
         validate: {
           is: /^[\w\s.,!?'"()-]+$/gi,
           len: [2, 500]
-        }
+        },
+        field: 'description'
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         validate: {
           isDate: true
-        }
+        },
+        field: 'created_at'
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         validate: {
           isDate: true
-        }
+        },
+        field: 'updated_at'
       }
     })
   },

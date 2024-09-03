@@ -17,7 +17,11 @@ const partnerAuthMiddleware = async (req: Request, res: Response, next: NextFunc
       throw new ForbiddenError('Invalid token!')
     }
 
-    req.partnerId = decoded.id.toString()
+    req.partnerId = decoded.id as number
+
+    if (!req.partnerId) {
+      throw new ForbiddenError('Invalid partner!')
+    }
 
     next()
   } catch (error) {

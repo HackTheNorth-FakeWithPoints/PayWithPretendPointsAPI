@@ -1,4 +1,6 @@
 export {
+  partnerIdSchema,
+  partnerIdTransactionIdSchema,
   getPartnerTransactionsSwagger,
   getPartnerTransactionSwagger
 } from '@/routes/partner-transactions/partner-transactions.schemas.ts'

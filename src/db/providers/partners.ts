@@ -15,12 +15,14 @@ const findPartnerById = (id: number) => {
 }
 
 const addPartner = (partner: PartnerCreationAttributes) => {
-  return Partner.create(partner, { raw: true }).then((partner) => partner.get({ plain: true }))
+  return Partner.create(partner, { raw: true }).then((partner) => {
+    return partner.get({ plain: true })
+  })
 }
 
 const modifyPartner = (id: number, partner: Partial<Partner>) => {
   return Partner.update(partner, { where: { id }, returning: true }).then(([, partners]) => {
-    return partners?.[0]?.get({ plain: true }) as Partner
+    return partners?.[0]?.get({ plain: true })
   })
 }
 

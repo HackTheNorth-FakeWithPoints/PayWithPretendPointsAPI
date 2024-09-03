@@ -3,17 +3,17 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { TransactionZod } from '@/db/models/transaction.ts'
-import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
 
-const partnerId = z.object({
-  partnerId: z.string()
+const partnerIdSchema = z.object({
+  partnerId: zodIdSchema
 })
 
-const partnerIdTransactionId = z.object({
-  partnerId: z.string(),
-  transactionId: z.string()
+const partnerIdTransactionIdSchema = z.object({
+  partnerId: zodIdSchema,
+  transactionId: zodIdSchema
 })
 
 const getPartnerTransactionsSwagger: RouteConfig = {
@@ -22,7 +22,7 @@ const getPartnerTransactionsSwagger: RouteConfig = {
   tags: ['Partner Transactions'],
   description: 'Get transactions for a partner.',
   request: {
-    params: partnerId
+    params: partnerIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ transactions: z.array(TransactionZod) }))
 }
@@ -33,9 +33,9 @@ const getPartnerTransactionSwagger: RouteConfig = {
   tags: ['Partner Transactions'],
   description: 'Get a specific transaction for a partner.',
   request: {
-    params: partnerIdTransactionId
+    params: partnerIdTransactionIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ transaction: TransactionZod }))
 }
 
-export { getPartnerTransactionsSwagger, getPartnerTransactionSwagger }
+export { partnerIdSchema, partnerIdTransactionIdSchema, getPartnerTransactionsSwagger, getPartnerTransactionSwagger }

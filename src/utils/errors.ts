@@ -4,7 +4,7 @@ export class AppError extends Error {
   public statusCode: number
   public isOperational: boolean
 
-  constructor(message: string, statusCode: number, isOperational = true, stack = '') {
+  constructor(message: string, statusCode: number, isOperational: boolean = true, stack: string = '') {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
     this.statusCode = statusCode
@@ -55,6 +55,6 @@ export function handleError(error: Error, res: Response) {
   }
 
   return res.status(500).json({
-    error: (error as Error)?.message || 'An unexpected error occurred!'
+    error: error?.message || 'An unexpected error occurred!'
   })
 }

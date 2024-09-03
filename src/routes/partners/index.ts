@@ -1,4 +1,5 @@
 export {
+  partnerIdSchema,
   postPartner,
   patchPartner,
   postPartnerSwagger,

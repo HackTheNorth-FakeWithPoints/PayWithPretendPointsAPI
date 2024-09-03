@@ -1,8 +1,9 @@
 import express, { type Request, type Response } from 'express'
 
+import { Partner } from '@/db/models/index.ts'
 import { addPartner, findPartnerById, findPartners, modifyPartner, removePartner } from '@/db/providers/index.ts'
 import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
-import { patchPartner, postPartner } from '@/routes/partners/index.ts'
+import { partnerIdSchema, patchPartner, postPartner } from '@/routes/partners/index.ts'
 import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
@@ -19,10 +20,12 @@ router.get('/loyalty/partners', adminAuthMiddleware, async (_: Request, res: Res
 
 router.get('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const partner = await findPartnerById(parseInt(req.params.partnerId))
+    const { partnerId } = partnerIdSchema.parse(req.params)
+
+    const partner = await findPartnerById(partnerId)
 
     if (!partner) {
-      throw new NotFoundError(`Partner with id of ${req.params.partnerId} was not found!`)
+      throw new NotFoundError(`Partner with id of ${partnerId} was not found!`)
     }
 
     return res.status(200).json({ partner })
@@ -35,13 +38,15 @@ router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: 
   try {
     const partnerPayload = postPartner.parse(req.body)
 
-    const partner = await addPartner(partnerPayload)
+    const partner = (await addPartner(partnerPayload)) as Partial<Partner>
 
     if (!partner) {
       throw new InternalServerError(`Partner could not be created!`)
     }
 
-    return res.status(200).json({ partner, password: null })
+    delete partner.password
+
+    return res.status(200).json({ partner })
   } catch (error) {
     handleError(error as Error, res)
   }
@@ -49,15 +54,18 @@ router.post('/loyalty/partners', adminAuthMiddleware, async (req: Request, res: 
 
 router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const { partnerId } = partnerIdSchema.parse(req.params)
     const partnerPayload = patchPartner.parse(req.body)
 
-    const partner = await modifyPartner(parseInt(req.params.partnerId), partnerPayload)
+    const partner = (await modifyPartner(partnerId, partnerPayload)) as Partial<Partner>
 
     if (!partner) {
-      throw new InternalServerError(`Partner with id of ${req.params.partnerId} could not be updated!`)
+      throw new InternalServerError(`Partner with id of ${partnerId} could not be updated!`)
     }
 
-    return res.status(200).json({ partner, password: null })
+    delete partner.password
+
+    return res.status(200).json({ partner })
   } catch (error) {
     handleError(error as Error, res)
   }
@@ -65,10 +73,11 @@ router.patch('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Re
 
 router.delete('/loyalty/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const count = await removePartner(parseInt(req.params.partnerId))
+    const { partnerId } = partnerIdSchema.parse(req.params)
+    const count = await removePartner(partnerId)
 
     if (count === 0) {
-      throw new InternalServerError(`No partner with id of ${req.params.partnerId} was deleted!`)
+      throw new InternalServerError(`No partner with id of ${partnerId} was deleted!`)
     }
 
     return res.status(200).json({ count })

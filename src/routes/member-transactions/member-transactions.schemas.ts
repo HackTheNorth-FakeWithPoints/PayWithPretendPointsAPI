@@ -1,34 +1,28 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { TransactionZod } from '@/db/models/transaction.ts'
-import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
 
-const memberId = z.object({
-  memberId: z.string().openapi({ example: '1' })
+const memberIdSchema = z.object({
+  memberId: zodIdSchema
 })
 
-const memberIdTransactionId = z.object({
-  memberId: z.string().openapi({ example: '1' }),
-  transactionId: z.string().openapi({ example: '1' })
+const memberIdTransactionIdSchema = z.object({
+  memberId: zodIdSchema,
+  transactionId: zodIdSchema
 })
 
-const postTransaction = z.object({
-  status: z.enum(['reverse', 'delete']).openapi({ example: 'reverse' }),
-  partnerRefId: z.string().optional().openapi({ example: '0000-AAAA-BBBB' }),
-  reference: z.string().openapi({ example: '0000-AAAA-BBBB' }),
-  type: z.string().openapi({ example: 'Type' }),
-  amount: z.number().openapi({ example: 100 }),
-  description: z
-    .object({
-      description1: z.string().optional().openapi({ example: 'Description' }),
-      description2: z.string().optional().openapi({ example: 'Description' }),
-      description3: z.string().optional().openapi({ example: 'Description' })
-    })
-    .optional()
+const postTransaction = TransactionZod.omit({
+  id: true,
+  memberId: true,
+  partnerId: true,
+  createdAt: true,
+  updatedAt: true,
+  transactedAt: true
 })
 
 const patchTransaction = postTransaction.partial()
@@ -39,7 +33,7 @@ const getMemberTransactionsSwagger: RouteConfig = {
   tags: ['Member Transactions'],
   description: 'Get all transactions of a member.',
   request: {
-    params: memberId
+    params: memberIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ transactions: z.array(TransactionZod) }))
 }
@@ -50,7 +44,7 @@ const getMemberTransactionSwagger: RouteConfig = {
   tags: ['Member Transactions'],
   description: 'Get a specific transaction for a member.',
   request: {
-    params: memberIdTransactionId
+    params: memberIdTransactionIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ transaction: TransactionZod }))
 }
@@ -61,7 +55,7 @@ const postMemberTransactionSwagger: RouteConfig = {
   tags: ['Member Transactions'],
   description: 'Create a new transaction for a member.',
   request: {
-    params: memberId,
+    params: memberIdSchema,
     body: { content: { 'application/json': { schema: postTransaction } } }
   },
   responses: zodHTTPCodeResponses(z.object({ transaction: TransactionZod }))
@@ -73,7 +67,7 @@ const patchMemberTransactionSwagger: RouteConfig = {
   tags: ['Member Transactions'],
   description: 'Update a specific transaction for a member.',
   request: {
-    params: memberIdTransactionId,
+    params: memberIdTransactionIdSchema,
     body: { content: { 'application/json': { schema: patchTransaction } } }
   },
   responses: zodHTTPCodeResponses(z.object({ transaction: TransactionZod }))
@@ -85,12 +79,14 @@ const deleteMemberTransactionSwagger: RouteConfig = {
   tags: ['Member Transactions'],
   description: 'Reverses a transaction for a member.',
   request: {
-    params: memberIdTransactionId
+    params: memberIdTransactionIdSchema
   },
-  responses: zodHTTPCodeResponses(z.object({ count: z.number().int().openapi({ example: 1 }) }))
+  responses: zodHTTPCodeResponses(zodDeletedCountResponse)
 }
 
 export {
+  memberIdSchema,
+  memberIdTransactionIdSchema,
   postTransaction,
   patchTransaction,
   getMemberTransactionsSwagger,

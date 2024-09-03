@@ -2,18 +2,9 @@ import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openap
 import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
-import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { zodAccessToken, zodCredentials, zodHTTPCodeResponses } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
-
-const postAdminAuth = z.object({
-  email: z.string().email().openapi({ example: 'example@email.com' }),
-  password: z.string().openapi({ example: '*********' })
-})
-
-const postAdminAuthResponse = z.object({
-  accessToken: z.string().openapi({ example: 'JWT Token' })
-})
 
 const postAdminAuthSwagger: RouteConfig = {
   method: 'post',
@@ -25,12 +16,12 @@ const postAdminAuthSwagger: RouteConfig = {
       required: true,
       content: {
         'application/json': {
-          schema: postAdminAuth
+          schema: zodCredentials
         }
       }
     }
   },
-  responses: zodHTTPCodeResponses(postAdminAuthResponse)
+  responses: zodHTTPCodeResponses(zodAccessToken)
 }
 
-export { postAdminAuth, postAdminAuthResponse, postAdminAuthSwagger }
+export { postAdminAuthSwagger }

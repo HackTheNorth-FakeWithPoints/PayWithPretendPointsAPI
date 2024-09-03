@@ -15,14 +15,18 @@ module.exports = {
         primaryKey: true,
         validate: {
           isInt: true
-        }
+        },
+        field: 'id'
       },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'),
         allowNull: false,
+        defaultValue: 'ACTIVE',
+        values: ['ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'],
         validate: {
           is: /^[\w\s]+$/gi
-        }
+        },
+        field: 'status'
       },
       name: {
         type: Sequelize.STRING,
@@ -30,7 +34,8 @@ module.exports = {
         validate: {
           is: /^[\w\s]+$/gi,
           len: [2, 50]
-        }
+        },
+        field: 'name'
       },
       description: {
         type: Sequelize.TEXT,
@@ -38,15 +43,17 @@ module.exports = {
         validate: {
           is: /^[\w\s.,!?'"()-]+$/gi,
           len: [2, 500]
-        }
+        },
+        field: 'description'
       },
       address: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          is: /^[\w\s.-]+$/gi,
+          is: /^[\w\s.,-]+$/gi,
           len: [2, 255]
-        }
+        },
+        field: 'address'
       },
       phone: {
         type: Sequelize.STRING,
@@ -54,7 +61,8 @@ module.exports = {
         validate: {
           is: /^[\w\s.()-]+$/gi,
           len: [2, 25]
-        }
+        },
+        field: 'phone'
       },
       email: {
         type: Sequelize.STRING,
@@ -62,38 +70,44 @@ module.exports = {
         unique: true,
         validate: {
           isEmail: true
-        }
+        },
+        field: 'email'
       },
       permission: {
-        type: Sequelize.ENUM('Read', 'Write', 'Balance_Inquiry'),
+        type: Sequelize.ENUM('READ', 'WRITE', 'BALANCE_INQUIRY'),
         allowNull: false,
-        defaultValue: 'Read',
+        defaultValue: 'READ',
+        values: ['READ', 'WRITE', 'BALANCE_INQUIRY'],
         validate: {
           is: /^[\w\s]+$/gi
-        }
+        },
+        field: 'permission'
       },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
           is: /\$2[ayb]\$.{56}/gi
-        }
+        },
+        field: 'password'
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         validate: {
           isDate: true
-        }
+        },
+        field: 'created_at'
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         validate: {
           isDate: true
-        }
+        },
+        field: 'updated_at'
       }
     })
   },

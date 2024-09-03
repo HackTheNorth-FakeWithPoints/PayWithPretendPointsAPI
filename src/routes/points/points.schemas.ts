@@ -1,13 +1,13 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
-import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { ROUTE_PREFIX } from '@/constants/routes.ts'
+import { zodHTTPCodeResponses, zodIdSchema } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
 
-const memberId = z.object({
-  memberId: z.string().openapi({ example: '1' })
+const memberIdSchema = z.object({
+  memberId: zodIdSchema
 })
 
 const balance = z.object({
@@ -20,9 +20,9 @@ const getPointsSwagger: RouteConfig = {
   tags: ['Points'],
   description: 'Get the points balance for a specific member.',
   request: {
-    params: memberId
+    params: memberIdSchema
   },
   responses: zodHTTPCodeResponses(balance)
 }
 
-export { getPointsSwagger }
+export { memberIdSchema, getPointsSwagger }

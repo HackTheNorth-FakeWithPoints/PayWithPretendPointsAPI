@@ -2,6 +2,7 @@ import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
+import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
 
@@ -14,7 +15,7 @@ interface TransactionAttributes {
   transactedAt: Date
   partnerId: number
   memberId: number
-  status: 'delete' | 'reverse'
+  status: keyof typeof TRANSACTION_STATUS
   type: string
   amount: number
   description?: { [key: string]: string }
@@ -31,7 +32,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
   declare transactedAt: Date
   declare partnerId: number
   declare memberId: number
-  declare status: 'delete' | 'reverse'
+  declare status: keyof typeof TRANSACTION_STATUS
   declare type: string
   declare amount: number
   declare description?: { [key: string]: string }
@@ -60,7 +61,8 @@ Transaction.init(
       primaryKey: true,
       validate: {
         isInt: true
-      }
+      },
+      field: 'id'
     },
     reference: {
       type: DataTypes.STRING,
@@ -68,14 +70,16 @@ Transaction.init(
       validate: {
         is: /^[\w\s.()-]+$/gi,
         len: [2, 25]
-      }
+      },
+      field: 'reference'
     },
     partnerRefId: {
       type: DataTypes.STRING,
       validate: {
         is: /^[\w\s.()-]+$/gi,
         len: [2, 25]
-      }
+      },
+      field: 'partner_ref_id'
     },
     transactedAt: {
       type: DataTypes.DATE,
@@ -83,7 +87,8 @@ Transaction.init(
       defaultValue: DataTypes.NOW,
       validate: {
         isDate: true
-      }
+      },
+      field: 'transacted_at'
     },
     partnerId: {
       type: DataTypes.INTEGER,
@@ -95,7 +100,8 @@ Transaction.init(
       onDelete: 'CASCADE',
       validate: {
         isInt: true
-      }
+      },
+      field: 'partner_id'
     },
     memberId: {
       type: DataTypes.INTEGER,
@@ -107,51 +113,62 @@ Transaction.init(
       onDelete: 'CASCADE',
       validate: {
         isInt: true
-      }
+      },
+      field: 'member_id'
     },
     status: {
-      type: DataTypes.ENUM('delete', 'reverse'),
+      type: DataTypes.ENUM(...Object.values(TRANSACTION_STATUS)),
       allowNull: false,
+      defaultValue: TRANSACTION_STATUS.PENDING,
+      values: Object.values(TRANSACTION_STATUS),
       validate: {
         is: /^[\w\s]+$/gi
-      }
+      },
+      field: 'status'
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...Object.values(TRANSACTION_TYPE)),
       allowNull: false,
+      defaultValue: TRANSACTION_TYPE.PAYMENT,
+      values: Object.values(TRANSACTION_TYPE),
       validate: {
         is: /^[\w\s]+$/gi
-      }
+      },
+      field: 'type'
     },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         isInt: true
-      }
+      },
+      field: 'amount'
     },
     description: {
       type: DataTypes.JSONB,
       validate: {
         is: /^[\w\s.,!?'"()-]+$/gi,
         len: [2, 500]
-      }
+      },
+      field: 'description'
     },
     createdAt: {
-      allowNull: false,
       type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
       validate: {
         isDate: true
-      }
+      },
+      field: 'created_at'
     },
     updatedAt: {
-      allowNull: false,
       type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
       validate: {
         isDate: true
-      }
+      },
+      field: 'updated_at'
     }
   },
   {
@@ -165,12 +182,16 @@ Transaction.init(
 const TransactionZod = z.object({
   id: z.number().openapi({ example: 1 }),
   reference: z.string().openapi({ example: 'AAAA-0000-BBBB' }),
-  partnerRefId: z.number().optional().openapi({ example: 1 }),
+  partnerRefId: z.string().optional().openapi({ example: 'AAAA-0000-BBBB' }),
   transactedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   partnerId: z.number().openapi({ example: 1 }),
   memberId: z.number().openapi({ example: 1 }),
-  status: z.enum(['delete', 'reverse']).openapi({ example: 'reverse' }),
-  type: z.string().openapi({ example: 'Purchase' }),
+  status: z
+    .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS)])
+    .openapi({ example: TRANSACTION_STATUS.PENDING }),
+  type: z
+    .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE)])
+    .openapi({ example: TRANSACTION_TYPE.PAYMENT }),
   amount: z.number().openapi({ example: 100 }),
   description: z.record(z.string().openapi({ example: 'Description' })).optional(),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
