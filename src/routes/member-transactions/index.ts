@@ -1,4 +1,6 @@
 export {
+  memberIdSchema,
+  memberIdTransactionIdSchema,
   postTransaction,
   patchTransaction,
   getMemberTransactionsSwagger,

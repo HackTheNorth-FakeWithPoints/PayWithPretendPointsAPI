@@ -1,5 +1,18 @@
 import { ResponseConfig } from '@asteasolutions/zod-to-openapi'
-import { ZodType, ZodTypeDef } from 'zod'
+import { ZodType, ZodTypeDef, z } from 'zod'
+
+const zodIdSchema = z.number({ coerce: true }).int().positive().openapi({ example: 1 })
+
+const zodDeletedCountResponse = z.object({ count: z.number().int().openapi({ example: 1 }) })
+
+const zodCredentials = z.object({
+  email: z.string().email().openapi({ example: 'example@email.com' }),
+  password: z.string().openapi({ example: '*********' })
+})
+
+const zodAccessToken = z.object({
+  accessToken: z.string().openapi({ example: 'JWT Token' })
+})
 
 const zodHTTPCodeResponses = (schema: ZodType<unknown, ZodTypeDef, unknown>) => {
   return {
@@ -14,4 +27,4 @@ const zodHTTPCodeResponses = (schema: ZodType<unknown, ZodTypeDef, unknown>) => 
   } satisfies { [statusCode: string]: ResponseConfig }
 }
 
-export { zodHTTPCodeResponses }
+export { zodIdSchema, zodCredentials, zodAccessToken, zodDeletedCountResponse, zodHTTPCodeResponses }

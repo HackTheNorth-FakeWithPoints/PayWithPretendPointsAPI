@@ -4,7 +4,7 @@ import express from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
 
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { rateLimiter } from '@/middleware/rate-limit.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'

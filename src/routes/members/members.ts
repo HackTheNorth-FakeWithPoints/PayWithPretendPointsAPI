@@ -2,7 +2,7 @@ import express, { type Request, type Response } from 'express'
 
 import { addMember, findMemberById, findMembers, modifyMember, removeMember } from '@/db/providers/index.ts'
 import { adminAuthMiddleware } from '@/middleware/admin-auth.ts'
-import { patchMember, postMember } from '@/routes/members/index.ts'
+import { memberIdSchema, patchMember, postMember } from '@/routes/members/index.ts'
 import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
@@ -19,10 +19,12 @@ router.get('/loyalty/members', adminAuthMiddleware, async (_: Request, res: Resp
 
 router.get('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const member = await findMemberById(parseInt(req.params.memberId))
+    const { memberId } = memberIdSchema.parse(req.params)
+
+    const member = await findMemberById(memberId)
 
     if (!member) {
-      throw new NotFoundError(`Member with id of ${req.params.memberId} was not found!`)
+      throw new NotFoundError(`Member with id of ${memberId} was not found!`)
     }
 
     return res.status(200).json({ member })
@@ -49,12 +51,13 @@ router.post('/loyalty/members', adminAuthMiddleware, async (req: Request, res: R
 
 router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const { memberId } = memberIdSchema.parse(req.params)
     const memberPayload = patchMember.parse(req.body)
 
-    const member = await modifyMember(parseInt(req.params.memberId), memberPayload)
+    const member = await modifyMember(memberId, memberPayload)
 
     if (member) {
-      throw new InternalServerError(`Member with id of ${req.params.memberId} could not be updated!`)
+      throw new InternalServerError(`Member with id of ${memberId} could not be updated!`)
     }
 
     return res.status(200).json({ member })
@@ -65,10 +68,12 @@ router.patch('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Requ
 
 router.delete('/loyalty/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const count = await removeMember(parseInt(req.params.memberId))
+    const { memberId } = memberIdSchema.parse(req.params)
+
+    const count = await removeMember(memberId)
 
     if (count === 0) {
-      throw new InternalServerError(`No member with id of ${req.params.memberId} was deleted!`)
+      throw new InternalServerError(`No member with id of ${memberId} was deleted!`)
     }
 
     return res.status(200).json({ count })

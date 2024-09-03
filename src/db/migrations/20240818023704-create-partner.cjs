@@ -1,56 +1,120 @@
 'use strict'
 
 module.exports = {
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @param {import('sequelize').Sequelize & import('sequelize').DataTypes} Sequelize
+   * @returns {Promise<void>}
+   */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('partners', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+          isInt: true
+        },
+        field: 'id'
       },
       status: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.ENUM('ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'),
+        allowNull: false,
+        defaultValue: 'ACTIVE',
+        values: ['ACTIVE', 'TERMINATED', 'UNAVAILABLE', 'PENDING', 'LIMITED_SERVICE'],
+        validate: {
+          is: /^[\w\s]+$/gi
+        },
+        field: 'status'
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi,
+          len: [2, 50]
+        },
+        field: 'name'
       },
       description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.,!?'"()-]+$/gi,
+          len: [2, 500]
+        },
+        field: 'description'
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.,-]+$/gi,
+          len: [2, 255]
+        },
+        field: 'address'
       },
       phone: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.()-]+$/gi,
+          len: [2, 25]
+        },
+        field: 'phone'
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+          isEmail: true
+        },
+        field: 'email'
       },
       permission: {
-        type: Sequelize.ENUM('Read', 'Write', 'Balance Inquiry'),
-        allowNull: false
+        type: Sequelize.ENUM('READ', 'WRITE', 'BALANCE_INQUIRY'),
+        allowNull: false,
+        defaultValue: 'READ',
+        values: ['READ', 'WRITE', 'BALANCE_INQUIRY'],
+        validate: {
+          is: /^[\w\s]+$/gi
+        },
+        field: 'permission'
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /\$2[ayb]\$.{56}/gi
+        },
+        field: 'password'
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        },
+        field: 'created_at'
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        },
+        field: 'updated_at'
       }
     })
   },
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @returns {Promise<void>}
+   */
   down: async (queryInterface) => {
     await queryInterface.dropTable('partners')
   }

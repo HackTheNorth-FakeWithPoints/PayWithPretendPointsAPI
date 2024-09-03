@@ -2,14 +2,14 @@ import bcrypt from 'bcryptjs'
 import express, { type Request, type Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import { postAdminAuth } from '@/routes/auth/index.ts'
 import { ForbiddenError, NotFoundError, handleError } from '@/utils/errors.ts'
+import { zodCredentials } from '@/utils/zod-common.ts'
 
 const router = express.Router()
 
 router.post('/admin-auth', async (req: Request, res: Response) => {
   try {
-    const { email, password } = postAdminAuth.parse(req.body)
+    const { email, password } = zodCredentials.parse(req.body)
 
     if (email !== (process.env.JWT_ADMIN_EMAIL as string)) {
       throw new NotFoundError(`Admin with email of ${email} does not exist!`)

@@ -1,29 +1,18 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { PARTNER_PERMISSIONS } from '@/constants/index.ts'
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { PartnerZod } from '@/db/models/partner.ts'
 import { zodHTTPCodeResponses } from '@/utils/index.ts'
+import { zodDeletedCountResponse, zodIdSchema } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
 
-const partnerId = z.object({
-  partnerId: z.string().openapi({ example: '1' })
+const partnerIdSchema = z.object({
+  partnerId: zodIdSchema
 })
 
-const postPartner = z.object({
-  status: z.string().openapi({ example: 'ACTIVE' }),
-  name: z.string().openapi({ example: 'Partner Name' }),
-  description: z.string().openapi({ example: 'Partner Description' }),
-  permission: z
-    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS)])
-    .openapi({ example: PARTNER_PERMISSIONS.READ }),
-  email: z.string().openapi({ example: 'partner@example.com' }),
-  password: z.string().openapi({ example: '******************' }),
-  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
-  phone: z.string().openapi({ example: '4161234567' })
-})
+const postPartner = PartnerZod.omit({ id: true, createdAt: true, updatedAt: true })
 
 const patchPartner = postPartner.partial()
 
@@ -33,7 +22,7 @@ const getPartnersSwagger: RouteConfig = {
   tags: ['Partner Operations (Admin)'],
   description: 'Get all partners.',
   request: {
-    params: partnerId
+    params: partnerIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ partners: z.array(PartnerZod) }))
 }
@@ -44,7 +33,7 @@ const getPartnerSwagger: RouteConfig = {
   tags: ['Partner Operations (Admin)'],
   description: 'Get a specific partner.',
   request: {
-    params: partnerId
+    params: partnerIdSchema
   },
   responses: zodHTTPCodeResponses(z.object({ partner: PartnerZod }))
 }
@@ -66,7 +55,7 @@ const patchPartnerSwagger: RouteConfig = {
   tags: ['Partner Operations (Admin)'],
   description: 'Update a specific partner.',
   request: {
-    params: partnerId,
+    params: partnerIdSchema,
     body: { content: { 'application/json': { schema: patchPartner } } }
   },
   responses: zodHTTPCodeResponses(z.object({ partner: PartnerZod }))
@@ -78,12 +67,13 @@ const deletePartnerSwagger: RouteConfig = {
   tags: ['Partner Operations (Admin)'],
   description: 'Delete a specific partner.',
   request: {
-    params: partnerId
+    params: partnerIdSchema
   },
-  responses: zodHTTPCodeResponses(z.object({ count: z.number().int().openapi({ example: 1 }) }))
+  responses: zodHTTPCodeResponses(zodDeletedCountResponse)
 }
 
 export {
+  partnerIdSchema,
   postPartner,
   patchPartner,
   postPartnerSwagger,

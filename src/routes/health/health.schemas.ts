@@ -1,7 +1,7 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { ROUTE_PREFIX } from '@/constants/route-prefix.ts'
+import { ROUTE_PREFIX } from '@/constants/routes.ts'
 import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
@@ -12,7 +12,7 @@ const getHealthResponse = z.object({
   error: z
     .null()
     .or(z.object({}))
-    .or(z.any())
+    .or(z.string())
     .openapi({ examples: [null, {}] })
 })
 

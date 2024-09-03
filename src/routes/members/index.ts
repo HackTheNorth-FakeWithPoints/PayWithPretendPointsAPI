@@ -1,4 +1,5 @@
 export {
+  memberIdSchema,
   postMember,
   patchMember,
   postMemberSwagger,

@@ -2,18 +2,9 @@ import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openap
 import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
-import { zodHTTPCodeResponses } from '@/utils/zod-common.ts'
+import { zodAccessToken, zodCredentials, zodHTTPCodeResponses } from '@/utils/zod-common.ts'
 
 extendZodWithOpenApi(z)
-
-const postPartnerAuth = z.object({
-  email: z.string().email().openapi({ example: 'example@email.com' }),
-  password: z.string().openapi({ example: '*********' })
-})
-
-const postPartnerAuthResponse = z.object({
-  accessToken: z.string().openapi({ example: 'JWT Token' })
-})
 
 const postPartnerAuthSwagger: RouteConfig = {
   method: 'post',
@@ -25,12 +16,12 @@ const postPartnerAuthSwagger: RouteConfig = {
       required: true,
       content: {
         'application/json': {
-          schema: postPartnerAuth
+          schema: zodCredentials
         }
       }
     }
   },
-  responses: zodHTTPCodeResponses(postPartnerAuthResponse)
+  responses: zodHTTPCodeResponses(zodAccessToken)
 }
 
-export { postPartnerAuth, postPartnerAuthResponse, postPartnerAuthSwagger }
+export { postPartnerAuthSwagger }

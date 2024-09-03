@@ -8,9 +8,10 @@ async function updateMemberBalance(transaction: TransactionCreationAttributes) {
   if (!member) {
     throw new InternalServerError('Member not found')
   }
+
   return modifyMember(transaction.memberId, {
     ...member,
-    balance: transaction.amount + member?.balance
+    balance: transaction.amount + member.balance
   })
 }
 export { updateMemberBalance }

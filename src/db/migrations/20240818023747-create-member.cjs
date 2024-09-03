@@ -1,55 +1,115 @@
 'use strict'
 
 module.exports = {
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @param {import('sequelize').Sequelize & import('sequelize').DataTypes} Sequelize
+   * @returns {Promise<void>}
+   */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('members', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+          isInt: true
+        },
+        field: 'id'
       },
       partnerId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'partners',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        validate: {
+          isInt: true
+        },
+        field: 'partner_id'
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          is: /^[\w\s]+$/gi,
+          len: [2, 50]
+        },
+        field: 'name'
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.,-]+$/gi,
+          len: [2, 255]
+        },
+        field: 'address'
       },
       phone: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          is: /^[\w\s.()-]+$/gi,
+          len: [2, 25]
+        },
+        field: 'phone'
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true
+        },
+        field: 'email'
       },
       balance: {
         type: Sequelize.INTEGER,
-        defaultValue: 0
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          isInt: true
+        },
+        field: 'balance'
       },
       status: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.ENUM('ACTIVE', 'PENDING', 'DEACTIVATED', 'PROBATION', 'BLACKLISTED'),
+        allowNull: false,
+        defaultValue: 'ACTIVE',
+        values: ['ACTIVE', 'PENDING', 'DEACTIVATED', 'PROBATION', 'BLACKLISTED'],
+        validate: {
+          is: /^[\w\s]+$/gi
+        },
+        field: 'status'
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        },
+        field: 'created_at'
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        validate: {
+          isDate: true
+        },
+        field: 'updated_at'
       }
     })
   },
+  /**
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @returns {Promise<void>}
+   */
   down: async (queryInterface) => {
     await queryInterface.dropTable('members')
   }

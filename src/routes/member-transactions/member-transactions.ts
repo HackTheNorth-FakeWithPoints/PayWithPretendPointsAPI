@@ -3,15 +3,22 @@ import express, { type Request, type Response } from 'express'
 import { createMemberTransaction, updateMemberBalance } from '@/controllers/index.ts'
 import { findTransaction, findTransactions, modifyTransaction, removeTransaction } from '@/db/providers/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
-import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
+import {
+  memberIdSchema,
+  memberIdTransactionIdSchema,
+  patchTransaction,
+  postTransaction
+} from '@/routes/member-transactions/index.ts'
 import { InternalServerError, NotFoundError, handleError } from '@/utils/errors.ts'
 
 const router = express.Router()
 
 router.get('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const { memberId } = memberIdSchema.parse(req.params)
+
     const transactions = await findTransactions({
-      memberId: parseInt(req.params.memberId),
+      memberId,
       partnerId: req.partnerId as number
     })
 
@@ -26,9 +33,11 @@ router.get(
   partnerAuthMiddleware,
   async (req: Request, res: Response) => {
     try {
+      const { memberId, transactionId } = memberIdTransactionIdSchema.parse(req.params)
+
       const transaction = await findTransaction({
-        id: parseInt(req.params.transactionId),
-        memberId: parseInt(req.params.memberId),
+        id: transactionId,
+        memberId,
         partnerId: req.partnerId as number
       })
 
@@ -45,12 +54,14 @@ router.get(
 
 router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const { memberId } = memberIdSchema.parse(req.params)
     const transactionPayload = postTransaction.parse(req.body)
 
-    const memberId = parseInt(req.params.memberId)
-    const partnerId = req.partnerId as number
-
-    const transaction = await createMemberTransaction({ ...transactionPayload, memberId, partnerId })
+    const transaction = await createMemberTransaction({
+      ...transactionPayload,
+      memberId,
+      partnerId: req.partnerId as number
+    })
 
     if (!transaction) {
       throw new InternalServerError('Transaction could not be created!')
@@ -69,16 +80,12 @@ router.patch(
   partnerAuthMiddleware,
   async (req: Request, res: Response) => {
     try {
+      const { memberId, transactionId } = memberIdTransactionIdSchema.parse(req.params)
       const transactionPayload = patchTransaction.parse(req.body)
 
-      const transaction = await modifyTransaction(
-        parseInt(req.params.transactionId),
-        req.partnerId as number,
-        parseInt(req.params.memberId),
-        {
-          ...transactionPayload
-        }
-      )
+      const transaction = await modifyTransaction(transactionId, req.partnerId as number, memberId, {
+        ...transactionPayload
+      })
 
       if (transaction) {
         return res
@@ -98,11 +105,9 @@ router.delete(
   partnerAuthMiddleware,
   async (req: Request, res: Response) => {
     try {
-      const count = await removeTransaction(
-        parseInt(req.params.transactionId),
-        req.partnerId as number,
-        parseInt(req.params.memberId)
-      )
+      const { memberId, transactionId } = memberIdTransactionIdSchema.parse(req.params)
+
+      const count = await removeTransaction(transactionId, req.partnerId as number, memberId)
 
       if (count === 0) {
         throw new InternalServerError(`No transaction with id of ${req.params.transactionId} was deleted!`)

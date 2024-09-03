@@ -9,13 +9,18 @@
         "type": "object",
         "properties": {
           "id": { "type": "number", "example": 1 },
-          "status": { "type": "string", "example": "ACTIVE" },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+            "example": "ACTIVE"
+          },
           "name": { "type": "string", "example": "Partner Name" },
           "description": { "type": "string", "example": "Partner Description" },
           "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
           "phone": { "type": "string", "example": "4161234567" },
-          "email": { "type": "string", "example": "partner@example.com" },
-          "permission": { "type": "string", "example": "Read" },
+          "email": { "type": "string", "format": "email", "example": "example@email.com" },
+          "password": { "type": "string", "example": "*********" },
+          "permission": { "type": "string", "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
@@ -27,6 +32,7 @@
           "address",
           "phone",
           "email",
+          "password",
           "permission",
           "createdAt",
           "updatedAt"
@@ -42,7 +48,11 @@
           "phone": { "type": "string", "example": "4161234567" },
           "email": { "type": "string", "format": "email", "example": "member@example.com" },
           "balance": { "type": "number", "example": 1000 },
-          "status": { "type": "string", "example": "ACTIVE" },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+            "example": "ACTIVE"
+          },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
@@ -64,12 +74,20 @@
         "properties": {
           "id": { "type": "number", "example": 1 },
           "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-          "partnerRefId": { "type": "number", "example": 1 },
+          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "partnerId": { "type": "number", "example": 1 },
           "memberId": { "type": "number", "example": 1 },
-          "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-          "type": { "type": "string", "example": "Purchase" },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+            "example": "PENDING"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+            "example": "PAYMENT"
+          },
           "amount": { "type": "number", "example": 100 },
           "description": { "type": "object", "additionalProperties": { "type": "string", "example": "Description" } },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -110,13 +128,13 @@
                       "anyOf": [
                         { "nullable": true },
                         { "type": "object", "properties": {} },
-                        { "nullable": true },
+                        { "type": "string" },
                         { "nullable": true }
                       ],
                       "examples": [null, {}]
                     }
                   },
-                  "required": ["status", "message"]
+                  "required": ["status", "message", "error"]
                 }
               }
             }
@@ -221,7 +239,12 @@
         "description": "Get the points balance for a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -252,8 +275,18 @@
         "description": "Get a specific transaction for a partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" },
-          { "schema": { "type": "string" }, "required": true, "name": "transactionId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          },
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "transactionId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -268,12 +301,20 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                        "type": { "type": "string", "example": "Purchase" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "example": "PENDING"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "example": "PAYMENT"
+                        },
                         "amount": { "type": "number", "example": 100 },
                         "description": {
                           "type": "object",
@@ -316,7 +357,14 @@
         "tags": ["Partner Transactions"],
         "description": "Get transactions for a partner.",
         "security": [{ "bearerAuth": [] }],
-        "parameters": [{ "schema": { "type": "string" }, "required": true, "name": "partnerId", "in": "path" }],
+        "parameters": [
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -332,12 +380,20 @@
                         "properties": {
                           "id": { "type": "number", "example": 1 },
                           "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "partnerRefId": { "type": "number", "example": 1 },
+                          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
-                          "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                          "type": { "type": "string", "example": "Purchase" },
+                          "status": {
+                            "type": "string",
+                            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "example": "PENDING"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "example": "PAYMENT"
+                          },
                           "amount": { "type": "number", "example": 100 },
                           "description": {
                             "type": "object",
@@ -382,8 +438,18 @@
         "description": "Get a specific transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          },
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "transactionId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -398,12 +464,20 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                        "type": { "type": "string", "example": "Purchase" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "example": "PENDING"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "example": "PAYMENT"
+                        },
                         "amount": { "type": "number", "example": 100 },
                         "description": {
                           "type": "object",
@@ -445,8 +519,18 @@
         "description": "Update a specific transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          },
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "transactionId",
+            "in": "path"
+          }
         ],
         "requestBody": {
           "content": {
@@ -454,18 +538,22 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                  "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                  "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                  "type": { "type": "string", "example": "Type" },
+                  "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
+                  "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                    "example": "PENDING"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "example": "PAYMENT"
+                  },
                   "amount": { "type": "number", "example": 100 },
                   "description": {
                     "type": "object",
-                    "properties": {
-                      "description1": { "type": "string", "example": "Description" },
-                      "description2": { "type": "string", "example": "Description" },
-                      "description3": { "type": "string", "example": "Description" }
-                    }
+                    "additionalProperties": { "type": "string", "example": "Description" }
                   }
                 }
               }
@@ -485,12 +573,20 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                        "type": { "type": "string", "example": "Purchase" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "example": "PENDING"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "example": "PAYMENT"
+                        },
                         "amount": { "type": "number", "example": 100 },
                         "description": {
                           "type": "object",
@@ -532,8 +628,18 @@
         "description": "Reverses a transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" },
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "transactionId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          },
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "transactionId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -564,7 +670,12 @@
         "description": "Get all transactions of a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -581,12 +692,20 @@
                         "properties": {
                           "id": { "type": "number", "example": 1 },
                           "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                          "partnerRefId": { "type": "number", "example": 1 },
+                          "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
-                          "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                          "type": { "type": "string", "example": "Purchase" },
+                          "status": {
+                            "type": "string",
+                            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "example": "PENDING"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "example": "PAYMENT"
+                          },
                           "amount": { "type": "number", "example": 100 },
                           "description": {
                             "type": "object",
@@ -629,7 +748,12 @@
         "description": "Create a new transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "requestBody": {
           "content": {
@@ -637,21 +761,25 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "enum": ["reverse", "delete"], "example": "reverse" },
-                  "partnerRefId": { "type": "string", "example": "0000-AAAA-BBBB" },
-                  "reference": { "type": "string", "example": "0000-AAAA-BBBB" },
-                  "type": { "type": "string", "example": "Type" },
+                  "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
+                  "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                    "example": "PENDING"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "example": "PAYMENT"
+                  },
                   "amount": { "type": "number", "example": 100 },
                   "description": {
                     "type": "object",
-                    "properties": {
-                      "description1": { "type": "string", "example": "Description" },
-                      "description2": { "type": "string", "example": "Description" },
-                      "description3": { "type": "string", "example": "Description" }
-                    }
+                    "additionalProperties": { "type": "string", "example": "Description" }
                   }
                 },
-                "required": ["status", "reference", "type", "amount"]
+                "required": ["reference", "status", "type", "amount"]
               }
             }
           }
@@ -669,12 +797,20 @@
                       "properties": {
                         "id": { "type": "number", "example": 1 },
                         "reference": { "type": "string", "example": "AAAA-0000-BBBB" },
-                        "partnerRefId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "enum": ["delete", "reverse"], "example": "reverse" },
-                        "type": { "type": "string", "example": "Purchase" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "example": "PENDING"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "example": "PAYMENT"
+                        },
                         "amount": { "type": "number", "example": 100 },
                         "description": {
                           "type": "object",
@@ -718,7 +854,12 @@
         "description": "Get a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -732,13 +873,22 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "example": "ACTIVE"
+                        },
                         "name": { "type": "string", "example": "Partner Name" },
                         "description": { "type": "string", "example": "Partner Description" },
                         "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                         "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "example": "partner@example.com" },
-                        "permission": { "type": "string", "example": "Read" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
+                        "permission": {
+                          "type": "string",
+                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "example": "READ"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
@@ -750,6 +900,7 @@
                         "address",
                         "phone",
                         "email",
+                        "password",
                         "permission",
                         "createdAt",
                         "updatedAt"
@@ -775,7 +926,12 @@
         "description": "Update a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          }
         ],
         "requestBody": {
           "content": {
@@ -783,18 +939,22 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "example": "ACTIVE" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                    "example": "ACTIVE"
+                  },
                   "name": { "type": "string", "example": "Partner Name" },
                   "description": { "type": "string", "example": "Partner Description" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
+                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                  "password": { "type": "string", "example": "*********" },
                   "permission": {
                     "type": "string",
-                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                    "example": "Read"
-                  },
-                  "email": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" }
+                    "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                    "example": "READ"
+                  }
                 }
               }
             }
@@ -812,13 +972,22 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "example": "ACTIVE"
+                        },
                         "name": { "type": "string", "example": "Partner Name" },
                         "description": { "type": "string", "example": "Partner Description" },
                         "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                         "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "example": "partner@example.com" },
-                        "permission": { "type": "string", "example": "Read" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
+                        "permission": {
+                          "type": "string",
+                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "example": "READ"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
@@ -830,6 +999,7 @@
                         "address",
                         "phone",
                         "email",
+                        "password",
                         "permission",
                         "createdAt",
                         "updatedAt"
@@ -855,7 +1025,12 @@
         "description": "Delete a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -886,7 +1061,12 @@
         "description": "Get all partners.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "partnerId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "partnerId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -902,13 +1082,22 @@
                         "type": "object",
                         "properties": {
                           "id": { "type": "number", "example": 1 },
-                          "status": { "type": "string", "example": "ACTIVE" },
+                          "status": {
+                            "type": "string",
+                            "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                            "example": "ACTIVE"
+                          },
                           "name": { "type": "string", "example": "Partner Name" },
                           "description": { "type": "string", "example": "Partner Description" },
                           "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                           "phone": { "type": "string", "example": "4161234567" },
-                          "email": { "type": "string", "example": "partner@example.com" },
-                          "permission": { "type": "string", "example": "Read" },
+                          "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                          "password": { "type": "string", "example": "*********" },
+                          "permission": {
+                            "type": "string",
+                            "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                            "example": "READ"
+                          },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
@@ -920,6 +1109,7 @@
                           "address",
                           "phone",
                           "email",
+                          "password",
                           "permission",
                           "createdAt",
                           "updatedAt"
@@ -951,20 +1141,24 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "status": { "type": "string", "example": "ACTIVE" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                    "example": "ACTIVE"
+                  },
                   "name": { "type": "string", "example": "Partner Name" },
                   "description": { "type": "string", "example": "Partner Description" },
+                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "example": "4161234567" },
+                  "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                  "password": { "type": "string", "example": "*********" },
                   "permission": {
                     "type": "string",
-                    "enum": ["Read", "Read", "Write", "Balance Inquiry"],
-                    "example": "Read"
-                  },
-                  "email": { "type": "string", "example": "partner@example.com" },
-                  "password": { "type": "string", "example": "******************" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" }
+                    "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                    "example": "READ"
+                  }
                 },
-                "required": ["status", "name", "description", "permission", "email", "password", "address", "phone"]
+                "required": ["status", "name", "description", "address", "phone", "email", "password", "permission"]
               }
             }
           }
@@ -981,13 +1175,22 @@
                       "type": "object",
                       "properties": {
                         "id": { "type": "number", "example": 1 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "example": "ACTIVE"
+                        },
                         "name": { "type": "string", "example": "Partner Name" },
                         "description": { "type": "string", "example": "Partner Description" },
                         "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                         "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "example": "partner@example.com" },
-                        "permission": { "type": "string", "example": "Read" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
+                        "permission": {
+                          "type": "string",
+                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "example": "READ"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
@@ -999,6 +1202,7 @@
                         "address",
                         "phone",
                         "email",
+                        "password",
                         "permission",
                         "createdAt",
                         "updatedAt"
@@ -1026,7 +1230,12 @@
         "description": "Get a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -1046,7 +1255,11 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "example": "ACTIVE"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
@@ -1083,7 +1296,12 @@
         "description": "Update a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "requestBody": {
           "content": {
@@ -1091,12 +1309,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "partnerId": { "type": "number", "example": 1 },
                   "name": { "type": "string", "example": "John Doe" },
                   "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "number", "example": 1000 },
-                  "status": { "type": "string", "example": "ACTIVE" }
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                    "example": "ACTIVE"
+                  }
                 }
               }
             }
@@ -1120,7 +1343,11 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "example": "ACTIVE"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
@@ -1157,7 +1384,12 @@
         "description": "Delete a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -1188,7 +1420,12 @@
         "description": "Get all members.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
-          { "schema": { "type": "string", "example": "1" }, "required": true, "name": "memberId", "in": "path" }
+          {
+            "schema": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+            "required": true,
+            "name": "memberId",
+            "in": "path"
+          }
         ],
         "responses": {
           "200": {
@@ -1210,7 +1447,11 @@
                           "phone": { "type": "string", "example": "4161234567" },
                           "email": { "type": "string", "format": "email", "example": "member@example.com" },
                           "balance": { "type": "number", "example": 1000 },
-                          "status": { "type": "string", "example": "ACTIVE" },
+                          "status": {
+                            "type": "string",
+                            "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                            "example": "ACTIVE"
+                          },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
@@ -1253,14 +1494,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "partnerId": { "type": "number", "example": 1 },
                   "name": { "type": "string", "example": "John Doe" },
                   "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "number", "example": 1000 },
-                  "status": { "type": "string", "example": "ACTIVE" }
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                    "example": "ACTIVE"
+                  }
                 },
-                "required": ["name", "address", "phone", "email", "balance", "status"]
+                "required": ["partnerId", "name", "address", "phone", "email", "balance", "status"]
               }
             }
           }
@@ -1283,7 +1529,11 @@
                         "phone": { "type": "string", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
                         "balance": { "type": "number", "example": 1000 },
-                        "status": { "type": "string", "example": "ACTIVE" },
+                        "status": {
+                          "type": "string",
+                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "example": "ACTIVE"
+                        },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
