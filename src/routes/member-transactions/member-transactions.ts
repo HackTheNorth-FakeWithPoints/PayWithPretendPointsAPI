@@ -3,6 +3,7 @@ import express, { type Request, type Response } from 'express'
 import { createMemberTransaction, updateMemberBalance } from '@/controllers/index.ts'
 import {
   countTransactions,
+  findMember,
   findTransaction,
   findTransactions,
   modifyTransaction,
@@ -66,6 +67,12 @@ router.post('/loyalty/:memberId/transactions', partnerAuthMiddleware, async (req
 
     if (transactionCount > parseInt(process.env.MAX_TRANSACTIONS_PER_MEMBER as string)) {
       throw new InternalServerError(`Maximum number of transactions reached for this member!`)
+    }
+
+    const member = await findMember({ id: memberId }, req.partnerId as number)
+
+    if (!member) {
+      throw new NotFoundError(`Unable to create a transaction for member with id of ${memberId}!`)
     }
 
     const transactionPayload = postTransaction.parse(req.body)
