@@ -11,7 +11,7 @@
           "id": { "type": "number", "example": 1 },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
             "example": "ACTIVE"
           },
           "name": { "type": "string", "example": "Partner Name" },
@@ -20,7 +20,7 @@
           "phone": { "type": "string", "example": "4161234567" },
           "email": { "type": "string", "format": "email", "example": "example@email.com" },
           "password": { "type": "string", "example": "*********" },
-          "permission": { "type": "string", "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" },
+          "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
@@ -50,7 +50,7 @@
           "balance": { "type": "number", "example": 1000 },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+            "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
             "example": "ACTIVE"
           },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -80,12 +80,12 @@
           "memberId": { "type": "number", "example": 1 },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
             "example": "PENDING"
           },
           "type": {
             "type": "string",
-            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
             "example": "PAYMENT"
           },
           "amount": { "type": "number", "example": 100 },
@@ -307,12 +307,12 @@
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
@@ -386,12 +386,12 @@
                           "memberId": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                             "example": "PENDING"
                           },
                           "type": {
                             "type": "string",
-                            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                             "example": "PAYMENT"
                           },
                           "amount": { "type": "number", "example": 100 },
@@ -470,12 +470,12 @@
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
@@ -542,12 +542,12 @@
                   "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                   "status": {
                     "type": "string",
-                    "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                    "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                     "example": "PENDING"
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                     "example": "PAYMENT"
                   },
                   "amount": { "type": "number", "example": 100 },
@@ -579,12 +579,12 @@
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
@@ -698,12 +698,12 @@
                           "memberId": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                            "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                             "example": "PENDING"
                           },
                           "type": {
                             "type": "string",
-                            "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                            "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                             "example": "PAYMENT"
                           },
                           "amount": { "type": "number", "example": 100 },
@@ -765,12 +765,12 @@
                   "partnerRefId": { "type": "string", "example": "AAAA-0000-BBBB" },
                   "status": {
                     "type": "string",
-                    "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                    "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                     "example": "PENDING"
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                    "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                     "example": "PAYMENT"
                   },
                   "amount": { "type": "number", "example": 100 },
@@ -803,12 +803,12 @@
                         "memberId": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["PENDING", "PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
+                          "enum": ["PENDING", "COMPLETED", "REVERSED", "INVALIDATED"],
                           "example": "PENDING"
                         },
                         "type": {
                           "type": "string",
-                          "enum": ["PAYMENT", "PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
+                          "enum": ["PAYMENT", "REFUND", "ADJUSTMENT", "CREDIT", "PENALTY", "INTERNAL"],
                           "example": "PAYMENT"
                         },
                         "amount": { "type": "number", "example": 100 },
@@ -875,7 +875,7 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -886,7 +886,7 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
                           "example": "READ"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -941,7 +941,7 @@
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                     "example": "ACTIVE"
                   },
                   "name": { "type": "string", "example": "Partner Name" },
@@ -950,11 +950,7 @@
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
                   "password": { "type": "string", "example": "*********" },
-                  "permission": {
-                    "type": "string",
-                    "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
-                    "example": "READ"
-                  }
+                  "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" }
                 }
               }
             }
@@ -974,7 +970,7 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -985,7 +981,7 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
                           "example": "READ"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1084,7 +1080,7 @@
                           "id": { "type": "number", "example": 1 },
                           "status": {
                             "type": "string",
-                            "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                            "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                             "example": "ACTIVE"
                           },
                           "name": { "type": "string", "example": "Partner Name" },
@@ -1095,7 +1091,7 @@
                           "password": { "type": "string", "example": "*********" },
                           "permission": {
                             "type": "string",
-                            "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                            "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
                             "example": "READ"
                           },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1143,7 +1139,7 @@
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                     "example": "ACTIVE"
                   },
                   "name": { "type": "string", "example": "Partner Name" },
@@ -1152,11 +1148,7 @@
                   "phone": { "type": "string", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
                   "password": { "type": "string", "example": "*********" },
-                  "permission": {
-                    "type": "string",
-                    "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
-                    "example": "READ"
-                  }
+                  "permission": { "type": "string", "enum": ["READ", "WRITE", "BALANCE_INQUIRY"], "example": "READ" }
                 },
                 "required": ["status", "name", "description", "address", "phone", "email", "password", "permission"]
               }
@@ -1177,7 +1169,7 @@
                         "id": { "type": "number", "example": 1 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
+                          "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE", "PENDING", "LIMITED_SERVICE"],
                           "example": "ACTIVE"
                         },
                         "name": { "type": "string", "example": "Partner Name" },
@@ -1188,7 +1180,7 @@
                         "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
-                          "enum": ["READ", "READ", "WRITE", "BALANCE_INQUIRY"],
+                          "enum": ["READ", "WRITE", "BALANCE_INQUIRY"],
                           "example": "READ"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1257,7 +1249,7 @@
                         "balance": { "type": "number", "example": 1000 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                           "example": "ACTIVE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1317,7 +1309,7 @@
                   "balance": { "type": "number", "example": 1000 },
                   "status": {
                     "type": "string",
-                    "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                    "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                     "example": "ACTIVE"
                   }
                 }
@@ -1345,7 +1337,7 @@
                         "balance": { "type": "number", "example": 1000 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                           "example": "ACTIVE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1449,7 +1441,7 @@
                           "balance": { "type": "number", "example": 1000 },
                           "status": {
                             "type": "string",
-                            "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                            "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                             "example": "ACTIVE"
                           },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
@@ -1502,7 +1494,7 @@
                   "balance": { "type": "number", "example": 1000 },
                   "status": {
                     "type": "string",
-                    "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                    "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                     "example": "ACTIVE"
                   }
                 },
@@ -1531,7 +1523,7 @@
                         "balance": { "type": "number", "example": 1000 },
                         "status": {
                           "type": "string",
-                          "enum": ["ACTIVE", "ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
+                          "enum": ["ACTIVE", "PENDING", "DEACTIVATED", "PROBATION", "BLACKLISTED"],
                           "example": "ACTIVE"
                         },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },

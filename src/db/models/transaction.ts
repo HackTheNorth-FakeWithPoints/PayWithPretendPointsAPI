@@ -187,10 +187,10 @@ const TransactionZod = z.object({
   partnerId: z.number().openapi({ example: 1 }),
   memberId: z.number().openapi({ example: 1 }),
   status: z
-    .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS)])
+    .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS).slice(1)])
     .openapi({ example: TRANSACTION_STATUS.PENDING }),
   type: z
-    .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE)])
+    .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE).slice(1)])
     .openapi({ example: TRANSACTION_TYPE.PAYMENT }),
   amount: z.number().openapi({ example: 100 }),
   description: z.record(z.string().openapi({ example: 'Description' })).optional(),
