@@ -158,7 +158,9 @@ const MemberZod = z.object({
   phone: z.string().openapi({ example: '4161234567' }),
   email: z.string().email().openapi({ example: 'member@example.com' }),
   balance: z.number().openapi({ example: 1000 }),
-  status: z.enum([MEMBER_STATUS.ACTIVE, ...Object.values(MEMBER_STATUS)]).openapi({ example: MEMBER_STATUS.ACTIVE }),
+  status: z
+    .enum([MEMBER_STATUS.ACTIVE, ...Object.values(MEMBER_STATUS).slice(1)])
+    .openapi({ example: MEMBER_STATUS.ACTIVE }),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 })

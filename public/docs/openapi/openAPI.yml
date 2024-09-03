@@ -22,7 +22,6 @@ components:
           type: string
           enum: &a3
             - ACTIVE
-            - ACTIVE
             - TERMINATED
             - UNAVAILABLE
             - PENDING
@@ -50,7 +49,6 @@ components:
         permission:
           type: string
           enum: &a4
-            - READ
             - READ
             - WRITE
             - BALANCE_INQUIRY
@@ -102,7 +100,6 @@ components:
           type: string
           enum: &a5
             - ACTIVE
-            - ACTIVE
             - PENDING
             - DEACTIVATED
             - PROBATION
@@ -150,7 +147,6 @@ components:
           type: string
           enum: &a1
             - PENDING
-            - PENDING
             - COMPLETED
             - REVERSED
             - INVALIDATED
@@ -158,7 +154,6 @@ components:
         type:
           type: string
           enum: &a2
-            - PAYMENT
             - PAYMENT
             - REFUND
             - ADJUSTMENT

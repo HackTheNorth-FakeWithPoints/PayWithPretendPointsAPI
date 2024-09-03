@@ -151,7 +151,9 @@ Partner.init(
 
 const PartnerZod = z.object({
   id: z.number().openapi({ example: 1 }),
-  status: z.enum([PARTNER_STATUS.ACTIVE, ...Object.values(PARTNER_STATUS)]).openapi({ example: PARTNER_STATUS.ACTIVE }),
+  status: z
+    .enum([PARTNER_STATUS.ACTIVE, ...Object.values(PARTNER_STATUS).slice(1)])
+    .openapi({ example: PARTNER_STATUS.ACTIVE }),
   name: z.string().openapi({ example: 'Partner Name' }),
   description: z.string().openapi({ example: 'Partner Description' }),
   address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
@@ -159,7 +161,7 @@ const PartnerZod = z.object({
   email: z.string().email().openapi({ example: 'example@email.com' }),
   password: z.string().openapi({ example: '*********' }),
   permission: z
-    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS)])
+    .enum([PARTNER_PERMISSIONS.READ, ...Object.values(PARTNER_PERMISSIONS).slice(1)])
     .openapi({ example: PARTNER_PERMISSIONS.READ }),
   createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
   updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
