@@ -7,4 +7,5 @@
 # https://help.github.com/en/articles/about-code-owners
 #
 
-*      @HackTheNorth-FakeWithPoints @BryanPeart @GeoffreyPeart @JackyTea @Sachin-c @szboynono @tapiwakundi
+* @BryanPeart @GeoffreyPeart @JackyTea @Sachin-c @szboynono @tapiwakundi
+/.github/ @BryanPeart @GeoffreyPeart @JackyTea @Sachin-c @szboynono @tapiwakundi
