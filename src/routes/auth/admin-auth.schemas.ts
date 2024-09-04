@@ -10,7 +10,7 @@ const postAdminAuthSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/admin-auth`,
   tags: ['Authentication'],
-  description: 'Login as an administrator.',
+  summary: 'Login as an administrator.',
   request: {
     body: {
       required: true,

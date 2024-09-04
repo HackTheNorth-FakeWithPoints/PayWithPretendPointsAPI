@@ -18,7 +18,7 @@ const getPointsSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/points`,
   tags: ['Points'],
-  description: 'Get the points balance for a specific member.',
+  summary: 'Get the points balance for a specific member.',
   request: {
     params: memberIdSchema
   },

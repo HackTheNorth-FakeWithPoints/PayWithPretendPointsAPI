@@ -20,7 +20,7 @@ const getMembersSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/members`,
   tags: ['Member Operations'],
-  description: 'Get all members.',
+  summary: 'Get all members.',
   request: {
     params: memberIdSchema
   },
@@ -31,7 +31,7 @@ const getMemberSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
   tags: ['Member Operations'],
-  description: 'Get a specific member.',
+  summary: 'Get a specific member.',
   request: {
     params: memberIdSchema
   },
@@ -42,7 +42,7 @@ const postMemberSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/loyalty/members`,
   tags: ['Member Operations'],
-  description: 'Create a new member.',
+  summary: 'Create a new member.',
   request: {
     body: { content: { 'application/json': { schema: postMember } } }
   },
@@ -53,7 +53,7 @@ const patchMemberSwagger: RouteConfig = {
   method: 'patch',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
   tags: ['Member Operations'],
-  description: 'Update a specific member.',
+  summary: 'Update a specific member.',
   request: {
     params: memberIdSchema,
     body: { content: { 'application/json': { schema: patchMember } } }
@@ -65,7 +65,7 @@ const deleteMemberSwagger: RouteConfig = {
   method: 'delete',
   path: `${ROUTE_PREFIX}/loyalty/members/{memberId}`,
   tags: ['Member Operations'],
-  description: 'Delete a specific member.',
+  summary: 'Delete a specific member.',
   request: {
     params: memberIdSchema
   },

@@ -87,7 +87,7 @@
     "/api/v1/health": {
       "get": {
         "tags": ["Status"],
-        "description": "Returns the status of the database connection.",
+        "summary": "Check the health of the database.",
         "responses": {
           "200": {
             "description": "OK",
@@ -126,7 +126,7 @@
     "/api/v1/auth": {
       "post": {
         "tags": ["Authentication"],
-        "description": "Login to a partner.",
+        "summary": "Login as a partner.",
         "requestBody": {
           "required": true,
           "content": {
@@ -168,7 +168,7 @@
     "/api/v1/admin-auth": {
       "post": {
         "tags": ["Authentication"],
-        "description": "Login as an administrator.",
+        "summary": "Login as an administrator.",
         "requestBody": {
           "required": true,
           "content": {
@@ -210,7 +210,7 @@
     "/api/v1/loyalty/{memberId}/points": {
       "get": {
         "tags": ["Points"],
-        "description": "Get the points balance for a specific member.",
+        "summary": "Get the points balance for a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -246,7 +246,7 @@
     "/api/v1/loyalty/partners/{partnerId}/transactions/{transactionId}": {
       "get": {
         "tags": ["Partner Transactions"],
-        "description": "Get a specific transaction for a partner.",
+        "summary": "Get a specific transaction for a partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -329,7 +329,7 @@
     "/api/v1/loyalty/partners/{partnerId}/transactions": {
       "get": {
         "tags": ["Partner Transactions"],
-        "description": "Get transactions for a partner.",
+        "summary": "Get transactions for a partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -409,7 +409,7 @@
     "/api/v1/loyalty/{memberId}/transactions/{transactionId}": {
       "get": {
         "tags": ["Member Transactions"],
-        "description": "Get a specific transaction for a member.",
+        "summary": "Get a specific transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -490,7 +490,7 @@
       },
       "patch": {
         "tags": ["Member Transactions"],
-        "description": "Update a specific transaction for a member.",
+        "summary": "Update a specific transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -590,7 +590,7 @@
       },
       "delete": {
         "tags": ["Member Transactions"],
-        "description": "Reverses a transaction for a member.",
+        "summary": "Reverses a transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -632,7 +632,7 @@
     "/api/v1/loyalty/{memberId}/transactions": {
       "get": {
         "tags": ["Member Transactions"],
-        "description": "Get all transactions of a member.",
+        "summary": "Get all transactions for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -710,7 +710,7 @@
       },
       "post": {
         "tags": ["Member Transactions"],
-        "description": "Create a new transaction for a member.",
+        "summary": "Create a new transaction for a member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -807,7 +807,7 @@
     "/api/v1/loyalty/members/{memberId}": {
       "get": {
         "tags": ["Member Operations"],
-        "description": "Get a specific member.",
+        "summary": "Get a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -873,7 +873,7 @@
       },
       "patch": {
         "tags": ["Member Operations"],
-        "description": "Update a specific member.",
+        "summary": "Update a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -955,7 +955,7 @@
       },
       "delete": {
         "tags": ["Member Operations"],
-        "description": "Delete a specific member.",
+        "summary": "Delete a specific member.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -991,7 +991,7 @@
     "/api/v1/loyalty/members": {
       "get": {
         "tags": ["Member Operations"],
-        "description": "Get all members.",
+        "summary": "Get all members.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -1060,7 +1060,7 @@
       },
       "post": {
         "tags": ["Member Operations"],
-        "description": "Create a new member.",
+        "summary": "Create a new member.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
@@ -1137,7 +1137,7 @@
     "/api/v1/loyalty/partners/{partnerId}": {
       "get": {
         "tags": ["Partner Operations (Admin)"],
-        "description": "Get a specific partner.",
+        "summary": "Get a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -1209,7 +1209,7 @@
       },
       "patch": {
         "tags": ["Partner Operations (Admin)"],
-        "description": "Update a specific partner.",
+        "summary": "Update a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -1298,7 +1298,7 @@
       },
       "delete": {
         "tags": ["Partner Operations (Admin)"],
-        "description": "Delete a specific partner.",
+        "summary": "Delete a specific partner.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -1334,7 +1334,7 @@
     "/api/v1/loyalty/partners": {
       "get": {
         "tags": ["Partner Operations (Admin)"],
-        "description": "Get all partners.",
+        "summary": "Get all partners.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -1409,7 +1409,7 @@
       },
       "post": {
         "tags": ["Partner Operations (Admin)"],
-        "description": "Create a new partner.",
+        "summary": "Create a new partner.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {

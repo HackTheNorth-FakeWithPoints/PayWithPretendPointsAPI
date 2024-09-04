@@ -20,7 +20,7 @@ const getPartnerTransactionsSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}/transactions`,
   tags: ['Partner Transactions'],
-  description: 'Get transactions for a partner.',
+  summary: 'Get transactions for a partner.',
   request: {
     params: partnerIdSchema
   },
@@ -31,7 +31,7 @@ const getPartnerTransactionSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/partners/{partnerId}/transactions/{transactionId}`,
   tags: ['Partner Transactions'],
-  description: 'Get a specific transaction for a partner.',
+  summary: 'Get a specific transaction for a partner.',
   request: {
     params: partnerIdTransactionIdSchema
   },

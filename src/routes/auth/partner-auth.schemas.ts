@@ -10,7 +10,7 @@ const postPartnerAuthSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/auth`,
   tags: ['Authentication'],
-  description: 'Login to a partner.',
+  summary: 'Login as a partner.',
   request: {
     body: {
       required: true,

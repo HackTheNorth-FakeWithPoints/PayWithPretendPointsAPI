@@ -20,7 +20,7 @@ const getHealthSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/health`,
   tags: ['Status'],
-  description: 'Returns the status of the database connection.',
+  summary: 'Check the health of the database.',
   responses: zodHTTPCodeResponses(getHealthResponse)
 }
 

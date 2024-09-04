@@ -33,7 +33,7 @@ const getMemberTransactionsSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions`,
   tags: ['Member Transactions'],
-  description: 'Get all transactions of a member.',
+  summary: 'Get all transactions for a member.',
   request: {
     params: memberIdSchema
   },
@@ -44,7 +44,7 @@ const getMemberTransactionSwagger: RouteConfig = {
   method: 'get',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{transactionId}`,
   tags: ['Member Transactions'],
-  description: 'Get a specific transaction for a member.',
+  summary: 'Get a specific transaction for a member.',
   request: {
     params: memberIdTransactionIdSchema
   },
@@ -55,7 +55,7 @@ const postMemberTransactionSwagger: RouteConfig = {
   method: 'post',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions`,
   tags: ['Member Transactions'],
-  description: 'Create a new transaction for a member.',
+  summary: 'Create a new transaction for a member.',
   request: {
     params: memberIdSchema,
     body: { content: { 'application/json': { schema: postTransaction } } }
@@ -67,7 +67,7 @@ const patchMemberTransactionSwagger: RouteConfig = {
   method: 'patch',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{transactionId}`,
   tags: ['Member Transactions'],
-  description: 'Update a specific transaction for a member.',
+  summary: 'Update a specific transaction for a member.',
   request: {
     params: memberIdTransactionIdSchema,
     body: { content: { 'application/json': { schema: patchTransaction } } }
@@ -79,7 +79,7 @@ const deleteMemberTransactionSwagger: RouteConfig = {
   method: 'delete',
   path: `${ROUTE_PREFIX}/loyalty/{memberId}/transactions/{transactionId}`,
   tags: ['Member Transactions'],
-  description: 'Reverses a transaction for a member.',
+  summary: 'Reverses a transaction for a member.',
   request: {
     params: memberIdTransactionIdSchema
   },
