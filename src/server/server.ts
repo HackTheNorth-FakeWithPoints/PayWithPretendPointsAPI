@@ -1,4 +1,3 @@
-import { apiReference } from '@scalar/express-api-reference'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
@@ -37,7 +36,5 @@ app.use(`${ROUTE_PREFIX}`, memberRouter)
 app.use(`${ROUTE_PREFIX}`, pointsRouter)
 app.use(`${ROUTE_PREFIX}`, memberTransactionRouter)
 app.use(`${ROUTE_PREFIX}`, partnerTransactionsRouter)
-
-app.use(`/`, apiReference({}))
 
 export { app }

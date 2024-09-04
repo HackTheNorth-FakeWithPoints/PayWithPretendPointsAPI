@@ -29,6 +29,7 @@ export default [
       }
     },
     settings: {
+      'import/ignore': ['helmet'],
       'import/resolver': {
         typescript: {},
         node: {

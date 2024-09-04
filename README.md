@@ -132,9 +132,9 @@ npm outdated
 # update all outdated dependencies to latest minor and patch versions
 npm update
 
-# check for unused dependencies (devDependencies and imports may show up here, they can be ignored)
+# check for unused dependencies (devDependencies and imports can be ignored)
 npx depcheck
 
-# update all dependencies to latest major version (breaking changes may come with updating to a major version)
+# update all dependencies to latest major version (breaking changes may occur)
 npx npm-check-updates -u
 ```
