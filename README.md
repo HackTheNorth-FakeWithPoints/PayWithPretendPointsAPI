@@ -1,4 +1,4 @@
-# Pay With Pretend Points API
+# Pay With Pretend Points API ![Status](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI/actions/workflows/validate.yml/badge.svg)
 
 Manage and earn points in a loyalty and rewards system.
 
