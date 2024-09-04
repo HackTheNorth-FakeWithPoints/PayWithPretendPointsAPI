@@ -2,7 +2,7 @@
 
 Manage and earn points in a loyalty and rewards system.
 
-![card.png](./public/assets/images/card.png)
+![Pay With Points Banner Image](./public/assets/images/image.png)
 
 ## Getting Started
 
@@ -82,6 +82,12 @@ module.exports = {
 
 ```bash
 npm run migrate
+```
+
+**Run the `migrate:revert` command to revert database migrations:**
+
+```bash
+npm run migrate:revert
 ```
 
 **Run the `swagger` command to generate oas.yml:**
