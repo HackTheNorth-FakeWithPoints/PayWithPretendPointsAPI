@@ -2,7 +2,7 @@
 
 Manage and earn points in a loyalty and rewards system.
 
-![Pay With Points Banner Image](./public/assets/images/image.png)
+![Pay With Points Banner Image](./public/assets/images/card.png)
 
 ## Getting Started
 
