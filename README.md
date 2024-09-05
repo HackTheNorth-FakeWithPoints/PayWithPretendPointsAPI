@@ -6,14 +6,14 @@ Manage and earn points in a loyalty and rewards system.
 
 ## **Table of Contents** 📚
 
-- [**Requirements**](#requirements) 🖥️<br/>
-- [**Getting Started**](#getting-started) 🚀<br/>
-- [**Development**](#development) 🛠️<br/>
-- [**Commands**](#commands) 🤖<br/>
-- [**Architecture**](#architecture) 🏠<br/>
-- [**Contributors**](#contributors) ✨ <br/>
+- [**Requirements**](#requirements-🖥️) 🖥️<br/>
+- [**Getting Started**](#getting-started-🚀) 🚀<br/>
+- [**Development**](#development-🛠️) 🛠️<br/>
+- [**Commands**](#commands-🤖) 🤖<br/>
+- [**Architecture**](#architecture-🏠) 🏠<br/>
+- [**Contributors**](#contributors-✨) ✨<br/>
 
-## **Requirements** 🖥️
+## Requirements 🖥️
 
 - **You will need [`Node.JS`](https://nodejs.org/en/download/package-manager/current) version `22.7.0` installed if you're not running via Docker, this will also install the required [`npm`](https://www.npmjs.com/) version `10.8.2`:**
 
@@ -26,7 +26,7 @@ Manage and earn points in a loyalty and rewards system.
 
 - **Otherwise you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a container.**
 
-## **Getting Started** 🚀
+## Getting Started 🚀
 
 ### **Without Docker**
 
@@ -66,7 +66,7 @@ Manage and earn points in a loyalty and rewards system.
    docker compose -f docker-compose.local.yml up --build
    ```
 
-## **Development** 🛠️
+## Development 🛠️
 
 ### **Contributing**
 
@@ -114,7 +114,7 @@ module.exports = {
 }
 ```
 
-## **Commands** 🤖
+## Commands 🤖
 
 ### **Custom Commands**
 
@@ -189,7 +189,7 @@ docker system prune --force --all
 docker volume prune --filter all=1
 ```
 
-## **Architecture** 🏠
+## Architecture 🏠
 
 ### **System Diagram**
 
@@ -199,15 +199,9 @@ docker volume prune --filter all=1
 
 ![Database Schema](./docs/database/database.png)
 
-## **Contributors** ✨
+## Contributors ✨
 
 **Big thanks to the team for making this possible!**
-
-<style>
-    table {
-        width: 100%;
-    }
-</style>
 
 | Name                  | GitHub Handle                                      | Role                         |
 | --------------------- | -------------------------------------------------- | ---------------------------- |
