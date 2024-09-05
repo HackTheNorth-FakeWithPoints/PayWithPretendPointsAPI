@@ -18,3 +18,10 @@ params:path {
 patch {
   url: {{baseUrl}}/api/v1/loyalty/:memberId/transactions/:transactionId
 }
+
+body:json {
+  {
+    "type": "PAYMENT",
+    "amount": 100,
+  }
+}

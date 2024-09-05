@@ -133,6 +133,9 @@ components:
         memberId:
           type: number
           example: 1
+        partnerRefId:
+          type: string
+          example: INV-20234
         status:
           type: string
           enum: &a1
@@ -411,6 +414,9 @@ paths:
                       memberId:
                         type: number
                         example: 1
+                      partnerRefId:
+                        type: string
+                        example: INV-20234
                       status:
                         type: string
                         enum: *a1
@@ -503,6 +509,9 @@ paths:
                         memberId:
                           type: number
                           example: 1
+                        partnerRefId:
+                          type: string
+                          example: INV-20234
                         status:
                           type: string
                           enum: *a1
@@ -601,6 +610,9 @@ paths:
                       memberId:
                         type: number
                         example: 1
+                      partnerRefId:
+                        type: string
+                        example: INV-20234
                       status:
                         type: string
                         enum: *a1
@@ -680,6 +692,9 @@ paths:
             schema:
               type: object
               properties:
+                partnerRefId:
+                  type: string
+                  example: INV-20234
                 type:
                   type: string
                   enum: *a2
@@ -715,6 +730,9 @@ paths:
                       memberId:
                         type: number
                         example: 1
+                      partnerRefId:
+                        type: string
+                        example: INV-20234
                       status:
                         type: string
                         enum: *a1
@@ -857,6 +875,9 @@ paths:
                         memberId:
                           type: number
                           example: 1
+                        partnerRefId:
+                          type: string
+                          example: INV-20234
                         status:
                           type: string
                           enum: *a1
@@ -928,6 +949,9 @@ paths:
             schema:
               type: object
               properties:
+                partnerRefId:
+                  type: string
+                  example: INV-20234
                 type:
                   type: string
                   enum: *a2
@@ -965,6 +989,9 @@ paths:
                       memberId:
                         type: number
                         example: 1
+                      partnerRefId:
+                        type: string
+                        example: INV-20234
                       status:
                         type: string
                         enum: *a1

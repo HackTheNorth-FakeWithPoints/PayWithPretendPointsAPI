@@ -13,6 +13,7 @@ interface TransactionAttributes {
   reference: string
   partnerId: number
   memberId: number
+  partnerRefId?: string
   status: keyof typeof TRANSACTION_STATUS
   type: string
   amount: number
@@ -32,6 +33,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
   declare reference: string
   declare partnerId: number
   declare memberId: number
+  declare partnerRefId?: string
   declare status: keyof typeof TRANSACTION_STATUS
   declare type: string
   declare amount: number
@@ -109,6 +111,14 @@ Transaction.init(
       },
       field: 'member_id'
     },
+    partnerRefId: {
+      type: DataTypes.TEXT,
+      validate: {
+        is: /^[\w\s.,!?'"()-]+$/gi,
+        len: [2, 500]
+      },
+      field: 'partner_ref_id'
+    },
     status: {
       type: DataTypes.ENUM(...Object.values(TRANSACTION_STATUS)),
       allowNull: false,
@@ -177,6 +187,7 @@ const TransactionZod = z.object({
   reference: z.string().uuid().openapi({ example: '123e4567-e89b-12d3-a456-426614174001' }),
   partnerId: z.number().openapi({ example: 1 }),
   memberId: z.number().openapi({ example: 1 }),
+  partnerRefId: z.string().optional().openapi({ example: 'INV-20234' }),
   status: z
     .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS).slice(1)])
     .default(TRANSACTION_STATUS.PENDING)

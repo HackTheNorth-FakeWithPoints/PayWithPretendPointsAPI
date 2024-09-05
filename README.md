@@ -1,10 +1,34 @@
-# Pay With Pretend Points API ![Status](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI/actions/workflows/validate.yml/badge.svg)
+# [**Pay With Pretend Points API**](https://paywithpretendpointsapi.onrender.com/) 💸 ![Status](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI/actions/workflows/validate.yml/badge.svg)
 
 Manage and earn points in a loyalty and rewards system.
 
-![Pay With Points Banner Image](./public/assets/images/card.png)
+![Pay With Points Banner Image](./public/assets/images/banner.png)
 
-## Getting Started
+## **Table of Contents** 📚
+
+- [**Requirements**](#requirements) 🖥️<br/>
+- [**Getting Started**](#getting-started) 🚀<br/>
+- [**Development**](#development) 🛠️<br/>
+- [**Commands**](#commands) 🤖<br/>
+- [**Architecture**](#architecture) 🏠<br/>
+- [**Contributors**](#contributors) ✨ <br/>
+
+## **Requirements** 🖥️
+
+- **You will need [`Node.JS`](https://nodejs.org/en/download/package-manager/current) version `22.7.0` installed if you're not running via Docker, this will also install the required [`npm`](https://www.npmjs.com/) version `10.8.2`:**
+
+  ```json
+  "engines": {
+    "node": "22.7.0",
+    "npm": "10.8.2"
+  },
+  ```
+
+- **Otherwise you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a container.**
+
+## **Getting Started** 🚀
+
+### **Without Docker**
 
 1. **Clone the repository:**
 
@@ -26,15 +50,31 @@ Manage and earn points in a loyalty and rewards system.
    npm run dev
    ```
 
-## Development
+### **With Docker**
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI.git
+
+   cd PayWithPretendPointsAPI
+   ```
+
+2. **Build the image and start the containers:**
+
+   ```bash
+   docker compose -f docker-compose.local.yml up --build
+   ```
+
+## **Development** 🛠️
 
 ### **Contributing**
 
 **Commits must follow the format of:**
 
-```bash
-feat|fix|chore|docs|test|style|refactor|perf|build|ci|revert:(<scope>): "YOUR COMMIT MESSAGE"
+`feat|fix|chore|docs|test|style|refactor|perf|build|ci|revert:(<scope>): "Your commit message here."`
 
+```bash
 git commit -m "feat(app): initial commit"
 
 git commit -m "feat: initial commit"
@@ -42,14 +82,12 @@ git commit -m "feat: initial commit"
 
 ### **Database**
 
-**Spin up a local database instance:**
+**Install [Postgres](https://www.postgresql.org/download/) or spin up a local database instance via Docker:**
+
+`Note: this is only if you want a standalone database and you're running the API without docker.`
 
 ```bash
-# on first run or changes made
-docker compose -f docker-compose.local.yml up --build
-
-# if not changes made, this is faster
-docker compose up
+docker compose -f docker-compose.local.db.yml up --build
 ```
 
 **Sequelize migration template:**
@@ -64,19 +102,21 @@ module.exports = {
    * @returns {Promise<void>}
    */
   up: async (queryInterface, Sequelize) => {
-    // your up migration here...
+    // your migration creation here...
   },
   /**
    * @param {import('sequelize').QueryInterface} queryInterface
    * @returns {Promise<void>}
    */
   down: async (queryInterface) => {
-    // your down migration here...
+    // your migration revert here...
   }
 }
 ```
 
-### **Commands**
+## **Commands** 🤖
+
+### **Custom Commands**
 
 **Run the `migrate` command to apply database migrations:**
 
@@ -120,7 +160,7 @@ npm run build
 npm run start
 ```
 
-### **NPM Helpers**
+### **Utility Commands (NPM)**
 
 ```bash
 # install dependencies specified in package.json
@@ -138,3 +178,42 @@ npx depcheck
 # update all dependencies to latest major version (breaking changes may occur)
 npx npm-check-updates -u
 ```
+
+### **Utility Commands (Docker)**
+
+```bash
+# remove all containers
+docker system prune --force --all
+
+# remove all volumes
+docker volume prune --filter all=1
+```
+
+## **Architecture** 🏠
+
+### **System Diagram**
+
+![System Diagram](./docs/system/system.png)
+
+### **Database Schema**
+
+![Database Schema](./docs/database/database.png)
+
+## **Contributors** ✨
+
+**Big thanks to the team for making this possible!**
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>
+
+| Name                  | GitHub Handle                                      | Role                         |
+| --------------------- | -------------------------------------------------- | ---------------------------- |
+| **Geoffrey Peart**    | [@GeoffreyPeart](https://github.com/GeoffreyPeart) | Lead Organizer and Developer |
+| **Tony Liu**          | [@szboynono](https://github.com/szboynono)         | Lead Organizer and Developer |
+| **Bryan Peart**       | [@BryanPeart](https://github.com/BryanPeart)       | Developer                    |
+| **Sachin Chandwani**  | [@Sachin-c](https://github.com/Sachin-c)           | Developer                    |
+| **Tapiwa Kundishora** | [@tapiwakundi](https://github.com/tapiwakundi)     | Developer                    |
+| **Jacky Tea**         | [@jackytea](https://github.com/jackytea)           | Developer                    |

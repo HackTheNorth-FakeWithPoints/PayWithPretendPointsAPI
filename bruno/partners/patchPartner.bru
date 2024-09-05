@@ -17,3 +17,14 @@ params:path {
 patch {
   url: {{baseUrl}}/api/v1/loyalty/partners/:partnerId
 }
+
+body:json {
+  {
+    "name": "Partner Name",
+    "description": "Partner Description",
+    "address": "123 Main St, Toronto, ON",
+    "phone": "4161234567",
+    "email": "example@email.com",
+    "password": "*********"
+  }
+}

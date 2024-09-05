@@ -16,12 +16,12 @@
     <meta property="og:title" content="Pay With Pretend Points API" />
     <meta property="og:site_name" content="paywithpretendpointsapi.onrender.com" />
     <meta property="og:description" content="Hack The North 2024" />
-    <meta property="og:image" content="https://paywithpretendpointsapi.onrender.com/assets/images/card.png" />
+    <meta property="og:image" content="https://paywithpretendpointsapi.onrender.com/assets/images/banner.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://paywithpretendpointsapi.onrender.com" />
     <meta property="twitter:title" content="Pay With Pretend Points API" />
     <meta property="twitter:description" content="Hack The North 2024" />
-    <meta property="twitter:image" content="https://paywithpretendpointsapi.onrender.com/assets/images/card.png" />
+    <meta property="twitter:image" content="https://paywithpretendpointsapi.onrender.com/assets/images/banner.png" />
     <link rel="icon" type="image/x-icon" href="assets/icons/icon.svg" />
     <link href="styles/styles.css" type="text/css" rel="stylesheet" />
     <title>Pay With Pretend Points API</title>
@@ -36,6 +36,13 @@
       })
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script defer>
+      setTimeout(() => {
+        document
+          .getElementById(document.querySelector('[id^="headlessui-listbox-button-scalar-instance-id"]').id)
+          .classList.remove('pointer-events-none')
+      }, 1000)
+    </script>
     <footer class="custom-footer scalar-app">
       <div class="container">
         <nav>

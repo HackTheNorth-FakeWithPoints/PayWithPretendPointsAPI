@@ -17,3 +17,13 @@ params:path {
 patch {
   url: {{baseUrl}}/api/v1/loyalty/members/:memberId
 }
+
+body:json {
+  {
+    "name": "John Doe",
+    "address": "123 Main St, Toronto, ON",
+    "phone": "4161234567",
+    "email": "member@example.com",
+    "balance": 1000
+  }
+}

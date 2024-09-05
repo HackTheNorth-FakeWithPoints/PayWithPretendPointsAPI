@@ -60,6 +60,7 @@
           "reference": { "type": "string", "format": "uuid", "example": "123e4567-e89b-12d3-a456-426614174001" },
           "partnerId": { "type": "number", "example": 1 },
           "memberId": { "type": "number", "example": 1 },
+          "partnerRefId": { "type": "string", "example": "INV-20234" },
           "status": {
             "type": "string",
             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -281,6 +282,7 @@
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "INV-20234" },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -360,6 +362,7 @@
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
+                          "partnerRefId": { "type": "string", "example": "INV-20234" },
                           "status": {
                             "type": "string",
                             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -444,6 +447,7 @@
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "INV-20234" },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -512,6 +516,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "partnerRefId": { "type": "string", "example": "INV-20234" },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
@@ -544,6 +549,7 @@
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "INV-20234" },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -663,6 +669,7 @@
                           },
                           "partnerId": { "type": "number", "example": 1 },
                           "memberId": { "type": "number", "example": 1 },
+                          "partnerRefId": { "type": "string", "example": "INV-20234" },
                           "status": {
                             "type": "string",
                             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -726,6 +733,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "partnerRefId": { "type": "string", "example": "INV-20234" },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
@@ -759,6 +767,7 @@
                         },
                         "partnerId": { "type": "number", "example": 1 },
                         "memberId": { "type": "number", "example": 1 },
+                        "partnerRefId": { "type": "string", "example": "INV-20234" },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],

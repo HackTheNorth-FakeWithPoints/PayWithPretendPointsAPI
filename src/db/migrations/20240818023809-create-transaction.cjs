@@ -62,6 +62,14 @@ module.exports = {
         },
         field: 'member_id'
       },
+      partnerRefId: {
+        type: Sequelize.TEXT,
+        validate: {
+          is: /^[\w\s.,!?'"()-]+$/gi,
+          len: [2, 500]
+        },
+        field: 'partner_ref_id'
+      },
       status: {
         type: Sequelize.ENUM('PENDING', 'COMPLETED', 'VOIDED'),
         allowNull: false,
