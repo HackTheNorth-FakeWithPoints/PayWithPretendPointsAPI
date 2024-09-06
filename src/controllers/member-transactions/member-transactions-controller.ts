@@ -2,7 +2,7 @@ import { Transaction as SequelizeTransaction } from 'sequelize'
 
 import { TRANSACTION_STATUS } from '@/constants/index.ts'
 import { verifyMemberState, verifyPartnerState } from '@/controllers/utils/index.ts'
-import { TransactionAttributes, TransactionCreationAttributes } from '@/db/models/index.ts'
+import { TransactionCreationAttributes } from '@/db/models/index.ts'
 import {
   addTransaction,
   countTransactions,
@@ -15,7 +15,7 @@ import {
 import { InternalServerError, NotFoundError, ValidationError, runAsTransaction } from '@/utils/index.ts'
 
 const getMemberTransactionsController = async (partnerId: number, memberId: number) => {
-  return runAsTransaction<TransactionAttributes[]>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     await verifyMemberState(partnerId, memberId, sequelizeTransaction)
@@ -25,7 +25,7 @@ const getMemberTransactionsController = async (partnerId: number, memberId: numb
 }
 
 const getMemberTransactionController = async (partnerId: number, memberId: number, transactionId: number) => {
-  return runAsTransaction<TransactionAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     await verifyMemberState(partnerId, memberId, sequelizeTransaction)
@@ -45,7 +45,7 @@ const postMemberTransactionController = async (
   memberId: number,
   transactionPayload: TransactionCreationAttributes
 ) => {
-  return runAsTransaction<TransactionAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     const transactionsCount = await countTransactions({}, partnerId, memberId, sequelizeTransaction)
 
     if (transactionsCount >= parseInt(process.env.MAX_TRANSACTIONS_PER_MEMBER as string)) {
@@ -90,7 +90,7 @@ const patchMemberTransactionController = async (
   transactionId: number,
   transactionPayload: TransactionCreationAttributes
 ) => {
-  return runAsTransaction<TransactionAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const member = await verifyMemberState(partnerId, memberId, sequelizeTransaction)
@@ -136,7 +136,7 @@ const patchMemberTransactionController = async (
 }
 
 const deleteMemberTransactionController = async (partnerId: number, memberId: number, transactionId: number) => {
-  return runAsTransaction<number>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const count = await removeTransaction(partnerId, memberId, transactionId, sequelizeTransaction)

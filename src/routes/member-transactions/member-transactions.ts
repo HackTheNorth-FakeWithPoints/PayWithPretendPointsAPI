@@ -9,12 +9,8 @@ import {
 } from '@/controllers/member-transactions/index.ts'
 import { TransactionCreationAttributes } from '@/db/models/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/index.ts'
-import {
-  memberIdSchema,
-  memberIdTransactionIdSchema,
-  patchTransaction,
-  postTransaction
-} from '@/routes/member-transactions/index.ts'
+import { patchTransaction, postTransaction } from '@/routes/member-transactions/index.ts'
+import { memberIdSchema, memberIdTransactionIdSchema } from '@/routes/utils/index.ts'
 import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()

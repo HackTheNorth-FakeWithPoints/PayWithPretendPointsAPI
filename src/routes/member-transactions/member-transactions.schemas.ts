@@ -3,18 +3,10 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { TransactionZod } from '@/db/models/index.ts'
-import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/index.ts'
+import { memberIdSchema, memberIdTransactionIdSchema } from '@/routes/utils/index.ts'
+import { zodDeletedCountResponse, zodHTTPCodeResponses } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
-
-const memberIdSchema = z.object({
-  memberId: zodIdSchema
-})
-
-const memberIdTransactionIdSchema = z.object({
-  memberId: zodIdSchema,
-  transactionId: zodIdSchema
-})
 
 const postTransaction = TransactionZod.omit({
   id: true,
@@ -86,8 +78,6 @@ const deleteMemberTransactionSwagger: RouteConfig = {
 }
 
 export {
-  memberIdSchema,
-  memberIdTransactionIdSchema,
   postTransaction,
   patchTransaction,
   getMemberTransactionsSwagger,

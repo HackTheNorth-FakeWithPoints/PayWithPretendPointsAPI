@@ -2,7 +2,7 @@ import express, { type Request, type Response } from 'express'
 
 import { getPointsController } from '@/controllers/points/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/index.ts'
-import { memberIdSchema } from '@/routes/points/index.ts'
+import { memberIdSchema } from '@/routes/utils/index.ts'
 import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()

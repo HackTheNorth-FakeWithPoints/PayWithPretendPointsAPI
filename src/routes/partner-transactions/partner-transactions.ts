@@ -5,7 +5,7 @@ import {
   getPartnerTransactionsController
 } from '@/controllers/partner-transactions/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/index.ts'
-import { partnerIdSchema, partnerIdTransactionIdSchema } from '@/routes/partner-transactions/index.ts'
+import { partnerIdSchema, partnerIdTransactionIdSchema } from '@/routes/utils/index.ts'
 import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()

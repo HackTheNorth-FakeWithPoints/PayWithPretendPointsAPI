@@ -3,18 +3,10 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { TransactionZod } from '@/db/models/index.ts'
-import { zodHTTPCodeResponses, zodIdSchema } from '@/utils/index.ts'
+import { partnerIdSchema, partnerIdTransactionIdSchema } from '@/routes/utils/index.ts'
+import { zodHTTPCodeResponses } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
-
-const partnerIdSchema = z.object({
-  partnerId: zodIdSchema
-})
-
-const partnerIdTransactionIdSchema = z.object({
-  partnerId: zodIdSchema,
-  transactionId: zodIdSchema
-})
 
 const getPartnerTransactionsSwagger: RouteConfig = {
   method: 'get',

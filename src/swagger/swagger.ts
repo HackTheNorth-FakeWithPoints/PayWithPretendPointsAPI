@@ -32,7 +32,7 @@ import {
 } from '@/routes/partners/index.ts'
 import { getPointsSwagger } from '@/routes/points/index.ts'
 
-const generateSwaggerDocument = () => {
+;(() => {
   extendZodWithOpenApi(z)
 
   const registryPaths: RouteConfig[] = [
@@ -108,6 +108,4 @@ const generateSwaggerDocument = () => {
     logger.error(`Failed to write to the files: ${jsonSwaggerFileName} and ${yamlSwaggerFileName}!`)
     process.exit(process.exitCode ?? 1)
   }
-}
-
-generateSwaggerDocument()
+})()

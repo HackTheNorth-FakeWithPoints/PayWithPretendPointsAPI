@@ -4,7 +4,7 @@ import { verifyMemberState, verifyPartnerState } from '@/controllers/utils/index
 import { runAsTransaction } from '@/utils/index.ts'
 
 const getPointsController = (partnerId: number, memberId: number) => {
-  return runAsTransaction<number>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const member = await verifyMemberState(partnerId, memberId, sequelizeTransaction)

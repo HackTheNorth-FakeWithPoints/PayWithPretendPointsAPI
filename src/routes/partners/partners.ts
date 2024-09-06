@@ -9,7 +9,8 @@ import {
 } from '@/controllers/partners/index.ts'
 import { PartnerCreationAttributes } from '@/db/models/index.ts'
 import { adminAuthMiddleware } from '@/middleware/index.ts'
-import { partnerIdSchema, patchPartner, postPartner } from '@/routes/partners/index.ts'
+import { patchPartner, postPartner } from '@/routes/partners/index.ts'
+import { partnerIdSchema } from '@/routes/utils/index.ts'
 import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()

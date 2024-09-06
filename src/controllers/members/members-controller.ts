@@ -1,12 +1,12 @@
 import { Transaction as SequelizeTransaction } from 'sequelize'
 
 import { verifyPartnerState } from '@/controllers/utils/index.ts'
-import { MemberAttributes, MemberCreationAttributes } from '@/db/models/index.ts'
+import { MemberCreationAttributes } from '@/db/models/index.ts'
 import { addMember, countMembers, findMember, findMembers, modifyMember, removeMember } from '@/db/providers/index.ts'
 import { InternalServerError, NotFoundError, ValidationError, runAsTransaction } from '@/utils/index.ts'
 
 const getMembersController = async (partnerId: number) => {
-  return runAsTransaction<MemberAttributes[]>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     return findMembers({}, partnerId, sequelizeTransaction)
@@ -14,7 +14,7 @@ const getMembersController = async (partnerId: number) => {
 }
 
 const getMemberController = (partnerId: number, memberId: number) => {
-  return runAsTransaction<MemberAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const member = await findMember({}, partnerId, memberId, sequelizeTransaction)
@@ -28,7 +28,7 @@ const getMemberController = (partnerId: number, memberId: number) => {
 }
 
 const postMemberController = (partnerId: number, memberPayload: MemberCreationAttributes) => {
-  return runAsTransaction<MemberAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     const membersCount = await countMembers({}, partnerId, sequelizeTransaction)
 
     if (membersCount >= parseInt(process.env.MAX_MEMBERS_PER_PARTNER as string)) {
@@ -48,7 +48,7 @@ const postMemberController = (partnerId: number, memberPayload: MemberCreationAt
 }
 
 const patchMemberController = (partnerId: number, memberId: number, memberPayload: MemberCreationAttributes) => {
-  return runAsTransaction<MemberAttributes>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const member = await modifyMember(partnerId, memberId, memberPayload, sequelizeTransaction)
@@ -62,7 +62,7 @@ const patchMemberController = (partnerId: number, memberId: number, memberPayloa
 }
 
 const deleteMemberController = (partnerId: number, memberId: number) => {
-  return runAsTransaction<number>(async (sequelizeTransaction: SequelizeTransaction) => {
+  return runAsTransaction(async (sequelizeTransaction: SequelizeTransaction) => {
     await verifyPartnerState(partnerId, sequelizeTransaction)
 
     const count = await removeMember(partnerId, memberId, sequelizeTransaction)

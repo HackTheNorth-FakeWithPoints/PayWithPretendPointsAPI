@@ -3,13 +3,10 @@ import { z } from 'zod'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { PartnerZod } from '@/db/models/index.ts'
-import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/index.ts'
+import { partnerIdSchema } from '@/routes/utils/index.ts'
+import { zodDeletedCountResponse, zodHTTPCodeResponses } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
-
-const partnerIdSchema = z.object({
-  partnerId: zodIdSchema
-})
 
 const postPartner = PartnerZod.omit({ id: true, createdAt: true, updatedAt: true, permission: true })
 
