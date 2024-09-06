@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-export class AppError extends Error {
+class AppError extends Error {
   public statusCode: number
   public isOperational: boolean
 
@@ -17,37 +17,37 @@ export class AppError extends Error {
   }
 }
 
-export class ValidationError extends AppError {
+class ValidationError extends AppError {
   constructor(message: string) {
     super(message, 400)
   }
 }
 
-export class ForbiddenError extends AppError {
+class ForbiddenError extends AppError {
   constructor(message: string) {
     super(message, 403)
   }
 }
 
-export class NotFoundError extends AppError {
+class NotFoundError extends AppError {
   constructor(message: string) {
     super(message, 404)
   }
 }
 
-export class UnauthorizedError extends AppError {
+class UnauthorizedError extends AppError {
   constructor(message: string) {
     super(message, 401)
   }
 }
 
-export class InternalServerError extends AppError {
+class InternalServerError extends AppError {
   constructor(message: string) {
     super(message, 500)
   }
 }
 
-export function handleError(error: Error, res: Response) {
+function handleError(error: Error, res: Response) {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
       error: error.message
@@ -58,3 +58,5 @@ export function handleError(error: Error, res: Response) {
     error: error?.message || 'An unexpected error occurred!'
   })
 }
+
+export { AppError, ValidationError, ForbiddenError, NotFoundError, UnauthorizedError, InternalServerError, handleError }

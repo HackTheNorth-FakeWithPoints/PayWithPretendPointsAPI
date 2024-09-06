@@ -2,9 +2,10 @@ import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
-import { MEMBER_STATUS } from '@/constants/index.ts'
+import { MEMBER_STATUS, addressRegex, nameRegex, phoneRegex } from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
 import { Partner } from '@/db/models/index.ts'
+import { zodDateSchema, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 
@@ -72,7 +73,7 @@ Member.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s]+$/gi,
+        is: nameRegex,
         len: [2, 50]
       },
       field: 'name'
@@ -81,7 +82,7 @@ Member.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s.,-]+$/gi,
+        is: addressRegex,
         len: [2, 255]
       },
       field: 'address'
@@ -90,7 +91,7 @@ Member.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s.()-]+$/gi,
+        is: phoneRegex,
         len: [2, 25]
       },
       field: 'phone'
@@ -119,7 +120,7 @@ Member.init(
       defaultValue: MEMBER_STATUS.PENDING,
       values: Object.values(MEMBER_STATUS),
       validate: {
-        is: /^[\w\s]+$/gi
+        is: nameRegex
       },
       field: 'status'
     },
@@ -151,19 +152,19 @@ Member.init(
 )
 
 const MemberZod = z.object({
-  id: z.number().openapi({ example: 1 }),
-  partnerId: z.number().openapi({ example: 1 }),
-  name: z.string().openapi({ example: 'John Doe' }),
-  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
-  phone: z.string().openapi({ example: '4161234567' }),
+  id: zodIdSchema,
+  partnerId: zodIdSchema,
+  name: z.string().regex(nameRegex).openapi({ example: 'John Doe' }),
+  address: z.string().regex(addressRegex).openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().regex(phoneRegex).openapi({ example: '4161234567' }),
   email: z.string().email().openapi({ example: 'member@example.com' }),
-  balance: z.number().openapi({ example: 1000 }),
+  balance: z.number().int().openapi({ example: 1000 }),
   status: z
     .enum([MEMBER_STATUS.PENDING, ...Object.values(MEMBER_STATUS).slice(1)])
     .default(MEMBER_STATUS.PENDING)
     .openapi({ example: MEMBER_STATUS.PENDING }),
-  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
-  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
+  createdAt: zodDateSchema,
+  updatedAt: zodDateSchema
 })
 
-export { Member, MemberZod, type MemberCreationAttributes }
+export { Member, MemberZod, type MemberAttributes, type MemberCreationAttributes }

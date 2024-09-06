@@ -1,10 +1,9 @@
 import { RouteConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
 
-import { ROUTE_PREFIX } from '@/constants/routes.ts'
-import { PartnerZod } from '@/db/models/partner.ts'
-import { zodHTTPCodeResponses } from '@/utils/index.ts'
-import { zodDeletedCountResponse, zodIdSchema } from '@/utils/zod.ts'
+import { ROUTE_PREFIX } from '@/constants/index.ts'
+import { PartnerZod } from '@/db/models/index.ts'
+import { zodDeletedCountResponse, zodHTTPCodeResponses, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 

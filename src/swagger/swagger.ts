@@ -5,7 +5,7 @@ import * as yaml from 'yaml'
 import { z } from 'zod'
 
 import { MemberZod, PartnerZod, TransactionZod } from '@/db/models/index.ts'
-import { logger } from '@/logger/logger.ts'
+import { logger } from '@/logger/index.ts'
 import { postAdminAuthSwagger, postPartnerAuthSwagger } from '@/routes/auth/index.ts'
 import { getHealthSwagger } from '@/routes/health/index.ts'
 import {

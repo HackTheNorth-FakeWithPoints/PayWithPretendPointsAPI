@@ -1,33 +1,56 @@
-import { WhereOptions } from 'sequelize'
+import { Transaction as SequelizeTransaction, WhereOptions } from 'sequelize'
 
 import { Partner, PartnerCreationAttributes } from '@/db/models/index.ts'
 
-const findPartners = (where: WhereOptions<Partner>) => {
-  return Partner.findAll({ where, attributes: { exclude: ['password'] }, raw: true })
+const findPartners = (where: WhereOptions<Partner>, sequelizeTransaction?: SequelizeTransaction) => {
+  return Partner.findAll({ where, attributes: { exclude: ['password'] }, transaction: sequelizeTransaction, raw: true })
 }
 
-const findPartner = (where: WhereOptions<Partner>, excludePassword: boolean = true) => {
-  return Partner.findOne({ where, attributes: { exclude: excludePassword ? ['password'] : [] }, raw: true })
+const findPartner = (
+  where: WhereOptions<Partner>,
+  partnerId: number,
+  excludePassword: boolean,
+  sequelizeTransaction?: SequelizeTransaction
+) => {
+  return Partner.findOne({
+    where: { ...where, id: partnerId },
+    attributes: { exclude: excludePassword ? ['password'] : [] },
+    transaction: sequelizeTransaction,
+    raw: true
+  })
 }
 
-const findPartnerById = (id: number) => {
-  return Partner.findByPk(id, { attributes: { exclude: ['password'] }, raw: true })
+const findPartnerByEmail = (email: string, excludePassword: boolean, sequelizeTransaction?: SequelizeTransaction) => {
+  return Partner.findOne({
+    where: { email },
+    attributes: { exclude: excludePassword ? ['password'] : [] },
+    transaction: sequelizeTransaction,
+    raw: true
+  })
 }
 
-const addPartner = (partner: PartnerCreationAttributes) => {
-  return Partner.create(partner, { raw: true }).then((partner) => {
+const addPartner = (partnerPayload: PartnerCreationAttributes, sequelizeTransaction?: SequelizeTransaction) => {
+  return Partner.create(partnerPayload, { transaction: sequelizeTransaction, raw: true }).then((partner) => {
     return partner.get({ plain: true })
   })
 }
 
-const modifyPartner = (id: number, partner: Partial<Partner>) => {
-  return Partner.update(partner, { where: { id }, returning: true }).then(([, partners]) => {
+const modifyPartner = (
+  partnerId: number,
+  partnerPayload: Partial<PartnerCreationAttributes>,
+  sequelizeTransaction?: SequelizeTransaction
+) => {
+  return Partner.update(partnerPayload, {
+    where: { id: partnerId },
+    transaction: sequelizeTransaction,
+    returning: true
+  }).then(([, partners]) => {
     return partners?.[0]?.get({ plain: true })
   })
 }
 
-const removePartner = (id: number) => {
-  return Partner.destroy({ where: { id } })
+const removePartner = (partnerId: number, sequelizeTransaction?: SequelizeTransaction) => {
+  return Partner.destroy({ where: { id: partnerId }, transaction: sequelizeTransaction })
 }
 
-export { findPartners, findPartner, findPartnerById, addPartner, modifyPartner, removePartner }
+export { findPartners, findPartner, findPartnerByEmail, addPartner, modifyPartner, removePartner }

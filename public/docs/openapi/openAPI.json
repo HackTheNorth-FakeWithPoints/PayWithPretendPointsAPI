@@ -8,19 +8,19 @@
       "Partner": {
         "type": "object",
         "properties": {
-          "id": { "type": "number", "example": 1 },
+          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+          "description": { "type": "string", "pattern": "^[\\w\\s.,!?'\"()-]+$", "example": "Partner Description" },
+          "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+          "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+          "email": { "type": "string", "format": "email", "example": "example@email.com" },
+          "password": { "type": "string", "example": "*********" },
           "status": {
             "type": "string",
             "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
             "default": "ACTIVE",
             "example": "ACTIVE"
           },
-          "name": { "type": "string", "example": "Partner Name" },
-          "description": { "type": "string", "example": "Partner Description" },
-          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-          "phone": { "type": "string", "example": "4161234567" },
-          "email": { "type": "string", "format": "email", "example": "example@email.com" },
-          "password": { "type": "string", "example": "*********" },
           "permission": {
             "type": "string",
             "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
@@ -35,13 +35,13 @@
       "Member": {
         "type": "object",
         "properties": {
-          "id": { "type": "number", "example": 1 },
-          "partnerId": { "type": "number", "example": 1 },
-          "name": { "type": "string", "example": "John Doe" },
-          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-          "phone": { "type": "string", "example": "4161234567" },
+          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+          "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+          "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
           "email": { "type": "string", "format": "email", "example": "member@example.com" },
-          "balance": { "type": "number", "example": 1000 },
+          "balance": { "type": "integer", "example": 1000 },
           "status": {
             "type": "string",
             "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
@@ -56,11 +56,17 @@
       "Transaction": {
         "type": "object",
         "properties": {
-          "id": { "type": "number", "example": 1 },
+          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+          "partnerRefId": { "type": "string", "pattern": "^[\\w\\s.,!?'\"()-]+$", "example": "INV-20234" },
           "reference": { "type": "string", "format": "uuid", "example": "123e4567-e89b-12d3-a456-426614174001" },
-          "partnerId": { "type": "number", "example": 1 },
-          "memberId": { "type": "number", "example": 1 },
-          "partnerRefId": { "type": "string", "example": "INV-20234" },
+          "amount": { "type": "integer", "example": 100 },
+          "note": {
+            "type": "string",
+            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+            "example": "This is a note about the transaction."
+          },
           "status": {
             "type": "string",
             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -73,13 +79,11 @@
             "default": "PAYMENT",
             "example": "PAYMENT"
           },
-          "amount": { "type": "number", "example": 100 },
-          "note": { "type": "string", "example": "This is a note about the transaction." },
           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
         },
-        "required": ["id", "reference", "partnerId", "memberId", "amount", "transactedAt", "createdAt", "updatedAt"]
+        "required": ["id", "partnerId", "memberId", "reference", "amount", "transactedAt", "createdAt", "updatedAt"]
       }
     },
     "parameters": {}
@@ -102,6 +106,7 @@
                     "error": {
                       "anyOf": [
                         { "nullable": true },
+                        { "type": "boolean" },
                         { "type": "object", "properties": {} },
                         { "type": "string" },
                         { "nullable": true }
@@ -274,15 +279,25 @@
                     "transaction": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerRefId": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "INV-20234"
+                        },
                         "reference": {
                           "type": "string",
                           "format": "uuid",
                           "example": "123e4567-e89b-12d3-a456-426614174001"
                         },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "memberId": { "type": "number", "example": 1 },
-                        "partnerRefId": { "type": "string", "example": "INV-20234" },
+                        "amount": { "type": "integer", "example": 100 },
+                        "note": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "This is a note about the transaction."
+                        },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -295,17 +310,15 @@
                           "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
-                        "amount": { "type": "number", "example": 100 },
-                        "note": { "type": "string", "example": "This is a note about the transaction." },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "reference",
                         "partnerId",
                         "memberId",
+                        "reference",
                         "amount",
                         "transactedAt",
                         "createdAt",
@@ -354,15 +367,25 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "number", "example": 1 },
+                          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "partnerRefId": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                            "example": "INV-20234"
+                          },
                           "reference": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-426614174001"
                           },
-                          "partnerId": { "type": "number", "example": 1 },
-                          "memberId": { "type": "number", "example": 1 },
-                          "partnerRefId": { "type": "string", "example": "INV-20234" },
+                          "amount": { "type": "integer", "example": 100 },
+                          "note": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                            "example": "This is a note about the transaction."
+                          },
                           "status": {
                             "type": "string",
                             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -375,17 +398,15 @@
                             "default": "PAYMENT",
                             "example": "PAYMENT"
                           },
-                          "amount": { "type": "number", "example": 100 },
-                          "note": { "type": "string", "example": "This is a note about the transaction." },
                           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
                         "required": [
                           "id",
-                          "reference",
                           "partnerId",
                           "memberId",
+                          "reference",
                           "amount",
                           "transactedAt",
                           "createdAt",
@@ -439,15 +460,25 @@
                     "transaction": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerRefId": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "INV-20234"
+                        },
                         "reference": {
                           "type": "string",
                           "format": "uuid",
                           "example": "123e4567-e89b-12d3-a456-426614174001"
                         },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "memberId": { "type": "number", "example": 1 },
-                        "partnerRefId": { "type": "string", "example": "INV-20234" },
+                        "amount": { "type": "integer", "example": 100 },
+                        "note": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "This is a note about the transaction."
+                        },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -460,17 +491,15 @@
                           "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
-                        "amount": { "type": "number", "example": 100 },
-                        "note": { "type": "string", "example": "This is a note about the transaction." },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "reference",
                         "partnerId",
                         "memberId",
+                        "reference",
                         "amount",
                         "transactedAt",
                         "createdAt",
@@ -516,15 +545,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "partnerRefId": { "type": "string", "example": "INV-20234" },
+                  "partnerRefId": { "type": "string", "pattern": "^[\\w\\s.,!?'\"()-]+$", "example": "INV-20234" },
+                  "amount": { "type": "integer", "example": 100 },
+                  "note": {
+                    "type": "string",
+                    "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                    "example": "This is a note about the transaction."
+                  },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
                     "default": "PAYMENT",
                     "example": "PAYMENT"
-                  },
-                  "amount": { "type": "number", "example": 100 },
-                  "note": { "type": "string", "example": "This is a note about the transaction." }
+                  }
                 }
               }
             }
@@ -541,15 +574,25 @@
                     "transaction": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerRefId": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "INV-20234"
+                        },
                         "reference": {
                           "type": "string",
                           "format": "uuid",
                           "example": "123e4567-e89b-12d3-a456-426614174001"
                         },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "memberId": { "type": "number", "example": 1 },
-                        "partnerRefId": { "type": "string", "example": "INV-20234" },
+                        "amount": { "type": "integer", "example": 100 },
+                        "note": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "This is a note about the transaction."
+                        },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -562,17 +605,15 @@
                           "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
-                        "amount": { "type": "number", "example": 100 },
-                        "note": { "type": "string", "example": "This is a note about the transaction." },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "reference",
                         "partnerId",
                         "memberId",
+                        "reference",
                         "amount",
                         "transactedAt",
                         "createdAt",
@@ -661,15 +702,25 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "number", "example": 1 },
+                          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "partnerRefId": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                            "example": "INV-20234"
+                          },
                           "reference": {
                             "type": "string",
                             "format": "uuid",
                             "example": "123e4567-e89b-12d3-a456-426614174001"
                           },
-                          "partnerId": { "type": "number", "example": 1 },
-                          "memberId": { "type": "number", "example": 1 },
-                          "partnerRefId": { "type": "string", "example": "INV-20234" },
+                          "amount": { "type": "integer", "example": 100 },
+                          "note": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                            "example": "This is a note about the transaction."
+                          },
                           "status": {
                             "type": "string",
                             "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -682,17 +733,15 @@
                             "default": "PAYMENT",
                             "example": "PAYMENT"
                           },
-                          "amount": { "type": "number", "example": 100 },
-                          "note": { "type": "string", "example": "This is a note about the transaction." },
                           "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                           "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                         },
                         "required": [
                           "id",
-                          "reference",
                           "partnerId",
                           "memberId",
+                          "reference",
                           "amount",
                           "transactedAt",
                           "createdAt",
@@ -733,15 +782,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "partnerRefId": { "type": "string", "example": "INV-20234" },
+                  "partnerRefId": { "type": "string", "pattern": "^[\\w\\s.,!?'\"()-]+$", "example": "INV-20234" },
+                  "amount": { "type": "integer", "example": 100 },
+                  "note": {
+                    "type": "string",
+                    "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                    "example": "This is a note about the transaction."
+                  },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
                     "default": "PAYMENT",
                     "example": "PAYMENT"
-                  },
-                  "amount": { "type": "number", "example": 100 },
-                  "note": { "type": "string", "example": "This is a note about the transaction." }
+                  }
                 },
                 "required": ["amount"]
               }
@@ -759,15 +812,25 @@
                     "transaction": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "memberId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerRefId": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "INV-20234"
+                        },
                         "reference": {
                           "type": "string",
                           "format": "uuid",
                           "example": "123e4567-e89b-12d3-a456-426614174001"
                         },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "memberId": { "type": "number", "example": 1 },
-                        "partnerRefId": { "type": "string", "example": "INV-20234" },
+                        "amount": { "type": "integer", "example": 100 },
+                        "note": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "This is a note about the transaction."
+                        },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "COMPLETED", "VOIDED"],
@@ -780,17 +843,15 @@
                           "default": "PAYMENT",
                           "example": "PAYMENT"
                         },
-                        "amount": { "type": "number", "example": 100 },
-                        "note": { "type": "string", "example": "This is a note about the transaction." },
                         "transactedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "createdAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" },
                         "updatedAt": { "type": "string", "example": "2024-09-01T01:03:43.004Z" }
                       },
                       "required": [
                         "id",
-                        "reference",
                         "partnerId",
                         "memberId",
+                        "reference",
                         "amount",
                         "transactedAt",
                         "createdAt",
@@ -837,13 +898,17 @@
                     "member": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
+                        "balance": { "type": "integer", "example": 1000 },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
@@ -898,11 +963,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string", "example": "John Doe" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
+                  "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                  "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "number", "example": 1000 }
+                  "balance": { "type": "integer", "example": 1000 }
                 }
               }
             }
@@ -919,13 +984,17 @@
                     "member": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
+                        "balance": { "type": "integer", "example": 1000 },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
@@ -1023,13 +1092,17 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "number", "example": 1 },
-                          "partnerId": { "type": "number", "example": 1 },
-                          "name": { "type": "string", "example": "John Doe" },
-                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                          "phone": { "type": "string", "example": "4161234567" },
+                          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                          "address": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,-]+$",
+                            "example": "123 Main St, Toronto, ON"
+                          },
+                          "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                           "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                          "balance": { "type": "number", "example": 1000 },
+                          "balance": { "type": "integer", "example": 1000 },
                           "status": {
                             "type": "string",
                             "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
@@ -1077,11 +1150,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string", "example": "John Doe" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
+                  "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                  "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "number", "example": 1000 }
+                  "balance": { "type": "integer", "example": 1000 }
                 },
                 "required": ["name", "address", "phone", "email", "balance"]
               }
@@ -1099,13 +1172,17 @@
                     "member": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
-                        "partnerId": { "type": "number", "example": 1 },
-                        "name": { "type": "string", "example": "John Doe" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "partnerId": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                         "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                        "balance": { "type": "number", "example": 1000 },
+                        "balance": { "type": "integer", "example": 1000 },
                         "status": {
                           "type": "string",
                           "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
@@ -1167,19 +1244,27 @@
                     "partner": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                        "description": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "Partner Description"
+                        },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
                         "status": {
                           "type": "string",
                           "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
                           "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                        "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
                           "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
@@ -1234,10 +1319,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string", "example": "Partner Name" },
-                  "description": { "type": "string", "example": "Partner Description" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
+                  "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                  "description": {
+                    "type": "string",
+                    "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                    "example": "Partner Description"
+                  },
+                  "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
                   "password": { "type": "string", "example": "*********" }
                 }
@@ -1256,19 +1345,27 @@
                     "partner": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                        "description": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "Partner Description"
+                        },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
                         "status": {
                           "type": "string",
                           "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
                           "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                        "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
                           "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
@@ -1366,19 +1463,27 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "number", "example": 1 },
+                          "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                          "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                          "description": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                            "example": "Partner Description"
+                          },
+                          "address": {
+                            "type": "string",
+                            "pattern": "^[\\w\\s.,-]+$",
+                            "example": "123 Main St, Toronto, ON"
+                          },
+                          "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+                          "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                          "password": { "type": "string", "example": "*********" },
                           "status": {
                             "type": "string",
                             "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
                             "default": "ACTIVE",
                             "example": "ACTIVE"
                           },
-                          "name": { "type": "string", "example": "Partner Name" },
-                          "description": { "type": "string", "example": "Partner Description" },
-                          "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                          "phone": { "type": "string", "example": "4161234567" },
-                          "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                          "password": { "type": "string", "example": "*********" },
                           "permission": {
                             "type": "string",
                             "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
@@ -1426,10 +1531,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string", "example": "Partner Name" },
-                  "description": { "type": "string", "example": "Partner Description" },
-                  "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                  "phone": { "type": "string", "example": "4161234567" },
+                  "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                  "description": {
+                    "type": "string",
+                    "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                    "example": "Partner Description"
+                  },
+                  "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
+                  "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
                   "password": { "type": "string", "example": "*********" }
                 },
@@ -1449,19 +1558,27 @@
                     "partner": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "number", "example": 1 },
+                        "id": { "type": "integer", "minimum": 0, "exclusiveMinimum": true, "example": 1 },
+                        "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "Partner Name" },
+                        "description": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,!?'\"()-]+$",
+                          "example": "Partner Description"
+                        },
+                        "address": {
+                          "type": "string",
+                          "pattern": "^[\\w\\s.,-]+$",
+                          "example": "123 Main St, Toronto, ON"
+                        },
+                        "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
+                        "password": { "type": "string", "example": "*********" },
                         "status": {
                           "type": "string",
                           "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
                           "default": "ACTIVE",
                           "example": "ACTIVE"
                         },
-                        "name": { "type": "string", "example": "Partner Name" },
-                        "description": { "type": "string", "example": "Partner Description" },
-                        "address": { "type": "string", "example": "123 Main St, Toronto, ON" },
-                        "phone": { "type": "string", "example": "4161234567" },
-                        "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                        "password": { "type": "string", "example": "*********" },
                         "permission": {
                           "type": "string",
                           "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],

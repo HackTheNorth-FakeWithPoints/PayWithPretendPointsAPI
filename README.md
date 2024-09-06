@@ -6,7 +6,7 @@ Manage and earn points in a loyalty and rewards system.
 
 ## Requirements 🖥️
 
-- **You will need [`Node.JS`](https://nodejs.org/en/download/package-manager/current) version `22.7.0` installed if you're not running via Docker, this will also install the required [`npm`](https://www.npmjs.com/) version `10.8.2`:**
+- **You will need [`Node.JS`](https://nodejs.org/en/download/package-manager/current) `22.7.0` and [`npm`](https://www.npmjs.com/) `10.8.2` installed if you're not using Docker:**
 
   ```json
   "engines": {
@@ -15,7 +15,9 @@ Manage and earn points in a loyalty and rewards system.
   },
   ```
 
-- **Otherwise you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a container.**
+- **Otherwise, you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a containerized environment.**
+
+- **For an optimal developer experience we recommend the plugins in [`extensions.json`](./.vscode/extensions.json).**
 
 ## Getting Started 🚀
 
@@ -105,6 +107,36 @@ module.exports = {
 }
 ```
 
+### **Standards**
+
+**For developers, follow the structure below when adding to or refactoring the codebase:**
+
+[**`constants`**](./src/constants) - **for reusuable values that don't change**
+
+[**`controllers`**](./src/controllers) - **for implementing business logic**
+
+[**`db/config`**](./src/db/config) - **for database configuration, such as connection setup**
+
+[**`db/migrations`**](./src/db/migrations) - **for modifying the database schema**
+
+[**`db/models`**](./src/db/models) - **for defining database schema structures**
+
+[**`db/providers`**](./src/db/providers) - **to get data and modify the database**
+
+[**`logger`**](./src/logger) - **terminal logging configuration**
+
+[**`middleware`**](./src/middleware) - **for request intercepting functions**
+
+[**`routes`**](./src/routes) - **for defining callable api endpoints**
+
+[**`server`**](./src/server) - **for configuring and starting the Express instance**
+
+[**`swagger`**](./src/swagger) - **for auto-generating the OpenAPI specification**
+
+[**`types`**](./src/types) - **for reusuable user-defined TypeScript types**
+
+[**`utils`**](./src/utils) - **for reusuable helper functions used in different places**
+
 ## Commands 🤖
 
 ### **Custom Commands**
@@ -184,9 +216,13 @@ docker volume prune --filter all=1
 
 ### **System Diagram**
 
+Can be ran in either bare metal, Docker or cloud native configurations.
+
 ![System Diagram](./docs/system/system.png)
 
 ### **Database Schema**
+
+`Partners` has many `Members` which has many `Transactions`, `Partners` also have many `Transactions`.
 
 ![Database Schema](./docs/database/database.png)
 
@@ -194,11 +230,11 @@ docker volume prune --filter all=1
 
 **Big thanks to the team for making this possible!**
 
-| Name                  | GitHub Handle                                      | Role                         |
-| --------------------- | -------------------------------------------------- | ---------------------------- |
-| **Geoffrey Peart**    | [@GeoffreyPeart](https://github.com/GeoffreyPeart) | Lead Organizer and Developer |
-| **Tony Liu**          | [@szboynono](https://github.com/szboynono)         | Lead Organizer and Developer |
-| **Bryan Peart**       | [@BryanPeart](https://github.com/BryanPeart)       | Developer                    |
-| **Sachin Chandwani**  | [@Sachin-c](https://github.com/Sachin-c)           | Developer                    |
-| **Tapiwa Kundishora** | [@tapiwakundi](https://github.com/tapiwakundi)     | Developer                    |
-| **Jacky Tea**         | [@jackytea](https://github.com/jackytea)           | Developer                    |
+| Name                  | GitHub Handle                                      | Role                         | Organization                                                                   |
+| --------------------- | -------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| **Geoffrey Peart**    | [@GeoffreyPeart](https://github.com/GeoffreyPeart) | Lead Organizer and Developer | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |
+| **Tony Liu**          | [@szboynono](https://github.com/szboynono)         | Lead Organizer and Developer | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |
+| **Bryan Peart**       | [@BryanPeart](https://github.com/BryanPeart)       | Developer                    | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |
+| **Sachin Chandwani**  | [@Sachin-c](https://github.com/Sachin-c)           | Developer                    | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |
+| **Tapiwa Kundishora** | [@tapiwakundi](https://github.com/tapiwakundi)     | Developer                    | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |
+| **Jacky Tea**         | [@jackytea](https://github.com/jackytea)           | Developer                    | [@HackTheNorth-FakeWithPoints](https://github.com/HackTheNorth-FakeWithPoints) |

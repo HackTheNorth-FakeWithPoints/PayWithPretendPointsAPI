@@ -1,7 +1,7 @@
 export {
   findPartners,
   findPartner,
-  findPartnerById,
+  findPartnerByEmail,
   addPartner,
   modifyPartner,
   removePartner
@@ -11,6 +11,7 @@ export {
   countTransactions,
   findTransactions,
   findTransaction,
+  findTransactionsByPartner,
   addTransaction,
   modifyTransaction,
   removeTransaction

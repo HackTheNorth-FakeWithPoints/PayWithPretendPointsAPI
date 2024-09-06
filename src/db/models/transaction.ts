@@ -2,9 +2,10 @@ import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
-import { TRANSACTION_STATUS, TRANSACTION_TYPE } from '@/constants/index.ts'
+import { TRANSACTION_STATUS, TRANSACTION_TYPE, nameRegex, textRegex } from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
 import { Member, Partner } from '@/db/models/index.ts'
+import { zodDateSchema, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 
@@ -114,7 +115,7 @@ Transaction.init(
     partnerRefId: {
       type: DataTypes.TEXT,
       validate: {
-        is: /^[\w\s.,!?'"()-]+$/gi,
+        is: textRegex,
         len: [2, 500]
       },
       field: 'partner_ref_id'
@@ -125,7 +126,7 @@ Transaction.init(
       defaultValue: TRANSACTION_STATUS.PENDING,
       values: Object.values(TRANSACTION_STATUS),
       validate: {
-        is: /^[\w\s]+$/gi
+        is: nameRegex
       },
       field: 'status'
     },
@@ -135,7 +136,7 @@ Transaction.init(
       defaultValue: TRANSACTION_TYPE.PAYMENT,
       values: Object.values(TRANSACTION_TYPE),
       validate: {
-        is: /^[\w\s]+$/gi
+        is: nameRegex
       },
       field: 'type'
     },
@@ -150,7 +151,7 @@ Transaction.init(
     note: {
       type: DataTypes.TEXT,
       validate: {
-        is: /^[\w\s.,!?'"()-]+$/gi,
+        is: textRegex,
         len: [2, 500]
       },
       field: 'note'
@@ -183,11 +184,13 @@ Transaction.init(
 )
 
 const TransactionZod = z.object({
-  id: z.number().openapi({ example: 1 }),
+  id: zodIdSchema,
+  partnerId: zodIdSchema,
+  memberId: zodIdSchema,
+  partnerRefId: z.string().regex(textRegex).optional().openapi({ example: 'INV-20234' }),
   reference: z.string().uuid().openapi({ example: '123e4567-e89b-12d3-a456-426614174001' }),
-  partnerId: z.number().openapi({ example: 1 }),
-  memberId: z.number().openapi({ example: 1 }),
-  partnerRefId: z.string().optional().openapi({ example: 'INV-20234' }),
+  amount: z.number().int().openapi({ example: 100 }),
+  note: z.string().regex(textRegex).optional().openapi({ example: 'This is a note about the transaction.' }),
   status: z
     .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS).slice(1)])
     .default(TRANSACTION_STATUS.PENDING)
@@ -196,11 +199,9 @@ const TransactionZod = z.object({
     .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE).slice(1)])
     .default(TRANSACTION_TYPE.PAYMENT)
     .openapi({ example: TRANSACTION_TYPE.PAYMENT }),
-  amount: z.number().openapi({ example: 100 }),
-  note: z.string().optional().openapi({ example: 'This is a note about the transaction.' }),
-  transactedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
-  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
-  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
+  transactedAt: zodDateSchema,
+  createdAt: zodDateSchema,
+  updatedAt: zodDateSchema
 })
 
-export { Transaction, TransactionZod, type TransactionCreationAttributes }
+export { Transaction, TransactionZod, type TransactionAttributes, type TransactionCreationAttributes }

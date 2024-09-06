@@ -2,8 +2,16 @@ import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DataTypes, Model, Optional } from 'sequelize'
 import { z } from 'zod'
 
-import { PARTNER_PERMISSIONS, PARTNER_STATUS } from '@/constants/partners.ts'
+import {
+  PARTNER_PERMISSIONS,
+  PARTNER_STATUS,
+  addressRegex,
+  nameRegex,
+  phoneRegex,
+  textRegex
+} from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
+import { zodDateSchema, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 
@@ -55,7 +63,7 @@ Partner.init(
       defaultValue: PARTNER_STATUS.ACTIVE,
       values: Object.values(PARTNER_STATUS),
       validate: {
-        is: /^[\w\s]+$/gi
+        is: nameRegex
       },
       field: 'status'
     },
@@ -63,7 +71,7 @@ Partner.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s]+$/gi,
+        is: nameRegex,
         len: [2, 50]
       },
       field: 'name'
@@ -72,7 +80,7 @@ Partner.init(
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        is: /^[\w\s.,!?'"()-]+$/gi,
+        is: textRegex,
         len: [2, 500]
       },
       field: 'description'
@@ -81,7 +89,7 @@ Partner.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s.,-]+$/gi,
+        is: addressRegex,
         len: [2, 255]
       },
       field: 'address'
@@ -90,7 +98,7 @@ Partner.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[\w\s.()-]+$/gi,
+        is: phoneRegex,
         len: [2, 25]
       },
       field: 'phone'
@@ -110,7 +118,7 @@ Partner.init(
       defaultValue: PARTNER_PERMISSIONS.WRITE,
       values: Object.values(PARTNER_PERMISSIONS),
       validate: {
-        is: /^[\w\s]+$/gi
+        is: nameRegex
       },
       field: 'permission'
     },
@@ -150,23 +158,23 @@ Partner.init(
 )
 
 const PartnerZod = z.object({
-  id: z.number().openapi({ example: 1 }),
+  id: zodIdSchema,
+  name: z.string().regex(nameRegex).openapi({ example: 'Partner Name' }),
+  description: z.string().regex(textRegex).openapi({ example: 'Partner Description' }),
+  address: z.string().regex(addressRegex).openapi({ example: '123 Main St, Toronto, ON' }),
+  phone: z.string().regex(phoneRegex).openapi({ example: '4161234567' }),
+  email: z.string().email().openapi({ example: 'example@email.com' }),
+  password: z.string().openapi({ example: '*********' }),
   status: z
     .enum([PARTNER_STATUS.ACTIVE, ...Object.values(PARTNER_STATUS).slice(1)])
     .default(PARTNER_STATUS.ACTIVE)
     .openapi({ example: PARTNER_STATUS.ACTIVE }),
-  name: z.string().openapi({ example: 'Partner Name' }),
-  description: z.string().openapi({ example: 'Partner Description' }),
-  address: z.string().openapi({ example: '123 Main St, Toronto, ON' }),
-  phone: z.string().openapi({ example: '4161234567' }),
-  email: z.string().email().openapi({ example: 'example@email.com' }),
-  password: z.string().openapi({ example: '*********' }),
   permission: z
     .enum([PARTNER_PERMISSIONS.WRITE, ...Object.values(PARTNER_PERMISSIONS).slice(1)])
     .default(PARTNER_PERMISSIONS.WRITE)
     .openapi({ example: PARTNER_PERMISSIONS.WRITE }),
-  createdAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' }),
-  updatedAt: z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
+  createdAt: zodDateSchema,
+  updatedAt: zodDateSchema
 })
 
-export { Partner, PartnerZod, type PartnerCreationAttributes }
+export { Partner, PartnerZod, type PartnerAttributes, type PartnerCreationAttributes }

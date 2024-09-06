@@ -1,15 +1,15 @@
 import express, { type Request, type Response } from 'express'
 
-import { sequelize } from '@/db/index.ts'
-import { handleError } from '@/utils/errors.ts'
+import { healthController } from '@/controllers/health/index.ts'
+import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()
 
 router.get('/health', async (_: Request, res: Response) => {
   try {
-    await sequelize.authenticate()
+    const isHealthy = await healthController()
 
-    return res.status(200).json({ status: 'SUCCESS', message: 'Database Healthy', error: null })
+    return res.status(200).json({ status: 'SUCCESS', message: 'Database Healthy', error: isHealthy })
   } catch (error) {
     handleError(error as Error, res)
   }

@@ -1,7 +1,11 @@
-import { ResponseConfig } from '@asteasolutions/zod-to-openapi'
+import { ResponseConfig, extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { ZodType, ZodTypeDef, z } from 'zod'
 
+extendZodWithOpenApi(z)
+
 const zodIdSchema = z.number({ coerce: true }).int().positive().openapi({ example: 1 })
+
+const zodDateSchema = z.date().openapi({ example: '2024-09-01T01:03:43.004Z' })
 
 const zodDeletedCountResponse = z.object({ count: z.number().int().openapi({ example: 1 }) })
 
@@ -27,4 +31,4 @@ const zodHTTPCodeResponses = (schema: ZodType<unknown, ZodTypeDef, unknown>) => 
   } satisfies { [statusCode: string]: ResponseConfig }
 }
 
-export { zodIdSchema, zodCredentials, zodAccessToken, zodDeletedCountResponse, zodHTTPCodeResponses }
+export { zodIdSchema, zodDateSchema, zodCredentials, zodAccessToken, zodDeletedCountResponse, zodHTTPCodeResponses }

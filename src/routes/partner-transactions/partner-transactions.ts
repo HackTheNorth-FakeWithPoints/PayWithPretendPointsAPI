@@ -1,21 +1,20 @@
 import express, { type Request, type Response } from 'express'
 
-import { findTransaction, findTransactions } from '@/db/providers/transaction.ts'
-import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
+import {
+  getPartnerTransactionController,
+  getPartnerTransactionsController
+} from '@/controllers/partner-transactions/index.ts'
+import { partnerAuthMiddleware } from '@/middleware/index.ts'
 import { partnerIdSchema, partnerIdTransactionIdSchema } from '@/routes/partner-transactions/index.ts'
-import { NotFoundError, UnauthorizedError, handleError } from '@/utils/errors.ts'
+import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()
 
 router.get('/loyalty/partners/:partnerId/transactions', partnerAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    if (req.partnerId?.toString() !== req.params.partnerId) {
-      throw new UnauthorizedError('Unauthorized')
-    }
-
     const { partnerId } = partnerIdSchema.parse(req.params)
 
-    const transactions = await findTransactions({ partnerId })
+    const transactions = await getPartnerTransactionsController(req.partnerId as number, partnerId)
 
     return res.status(200).json({ transactions })
   } catch (error) {
@@ -28,20 +27,9 @@ router.get(
   partnerAuthMiddleware,
   async (req: Request, res: Response) => {
     try {
-      if (req.partnerId?.toString() !== req.params.partnerId) {
-        throw new UnauthorizedError('Unauthorized')
-      }
-
       const { partnerId, transactionId } = partnerIdTransactionIdSchema.parse(req.params)
 
-      const transaction = await findTransaction({
-        partnerId,
-        id: transactionId
-      })
-
-      if (!transaction) {
-        throw new NotFoundError(`Transaction with id of ${transactionId} was not found!`)
-      }
+      const transaction = await getPartnerTransactionController(req.partnerId as number, partnerId, transactionId)
 
       return res.status(200).json({ transaction })
     } catch (error) {

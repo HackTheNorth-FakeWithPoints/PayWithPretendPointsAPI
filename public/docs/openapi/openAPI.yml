@@ -15,27 +15,25 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
           example: 1
-        status:
-          type: string
-          enum: &a4
-            - ACTIVE
-            - TERMINATED
-            - UNAVAILABLE
-          default: ACTIVE
-          example: ACTIVE
         name:
           type: string
+          pattern: ^[\w\s]+$
           example: Partner Name
         description:
           type: string
+          pattern: ^[\w\s.,!?'"()-]+$
           example: Partner Description
         address:
           type: string
+          pattern: ^[\w\s.,-]+$
           example: 123 Main St, Toronto, ON
         phone:
           type: string
+          pattern: ^[\w\s.()-]+$
           example: '4161234567'
         email:
           type: string
@@ -44,6 +42,14 @@ components:
         password:
           type: string
           example: '*********'
+        status:
+          type: string
+          enum: &a4
+            - ACTIVE
+            - TERMINATED
+            - UNAVAILABLE
+          default: ACTIVE
+          example: ACTIVE
         permission:
           type: string
           enum: &a5
@@ -72,26 +78,33 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
           example: 1
         partnerId:
-          type: number
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
           example: 1
         name:
           type: string
+          pattern: ^[\w\s]+$
           example: John Doe
         address:
           type: string
+          pattern: ^[\w\s.,-]+$
           example: 123 Main St, Toronto, ON
         phone:
           type: string
+          pattern: ^[\w\s.()-]+$
           example: '4161234567'
         email:
           type: string
           format: email
           example: member@example.com
         balance:
-          type: number
+          type: integer
           example: 1000
         status:
           type: string
@@ -121,21 +134,35 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
           example: 1
+        partnerId:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 1
+        memberId:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 1
+        partnerRefId:
+          type: string
+          pattern: ^[\w\s.,!?'"()-]+$
+          example: INV-20234
         reference:
           type: string
           format: uuid
           example: 123e4567-e89b-12d3-a456-426614174001
-        partnerId:
-          type: number
-          example: 1
-        memberId:
-          type: number
-          example: 1
-        partnerRefId:
+        amount:
+          type: integer
+          example: 100
+        note:
           type: string
-          example: INV-20234
+          pattern: ^[\w\s.,!?'"()-]+$
+          example: This is a note about the transaction.
         status:
           type: string
           enum: &a1
@@ -152,12 +179,6 @@ components:
             - INTERNAL
           default: PAYMENT
           example: PAYMENT
-        amount:
-          type: number
-          example: 100
-        note:
-          type: string
-          example: This is a note about the transaction.
         transactedAt:
           type: string
           example: 2024-09-01T01:03:43.004Z
@@ -169,9 +190,9 @@ components:
           example: 2024-09-01T01:03:43.004Z
       required:
         - id
-        - reference
         - partnerId
         - memberId
+        - reference
         - amount
         - transactedAt
         - createdAt
@@ -200,6 +221,7 @@ paths:
                   error:
                     anyOf:
                       - nullable: true
+                      - type: boolean
                       - type: object
                         properties: {}
                       - type: string
@@ -402,21 +424,35 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
+                      partnerId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      memberId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      partnerRefId:
+                        type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: INV-20234
                       reference:
                         type: string
                         format: uuid
                         example: 123e4567-e89b-12d3-a456-426614174001
-                      partnerId:
-                        type: number
-                        example: 1
-                      memberId:
-                        type: number
-                        example: 1
-                      partnerRefId:
+                      amount:
+                        type: integer
+                        example: 100
+                      note:
                         type: string
-                        example: INV-20234
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: This is a note about the transaction.
                       status:
                         type: string
                         enum: *a1
@@ -427,12 +463,6 @@ paths:
                         enum: *a2
                         default: PAYMENT
                         example: PAYMENT
-                      amount:
-                        type: number
-                        example: 100
-                      note:
-                        type: string
-                        example: This is a note about the transaction.
                       transactedAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -444,9 +474,9 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - reference
                       - partnerId
                       - memberId
+                      - reference
                       - amount
                       - transactedAt
                       - createdAt
@@ -497,21 +527,35 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: number
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
                           example: 1
+                        partnerId:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          example: 1
+                        memberId:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          example: 1
+                        partnerRefId:
+                          type: string
+                          pattern: ^[\w\s.,!?'"()-]+$
+                          example: INV-20234
                         reference:
                           type: string
                           format: uuid
                           example: 123e4567-e89b-12d3-a456-426614174001
-                        partnerId:
-                          type: number
-                          example: 1
-                        memberId:
-                          type: number
-                          example: 1
-                        partnerRefId:
+                        amount:
+                          type: integer
+                          example: 100
+                        note:
                           type: string
-                          example: INV-20234
+                          pattern: ^[\w\s.,!?'"()-]+$
+                          example: This is a note about the transaction.
                         status:
                           type: string
                           enum: *a1
@@ -522,12 +566,6 @@ paths:
                           enum: *a2
                           default: PAYMENT
                           example: PAYMENT
-                        amount:
-                          type: number
-                          example: 100
-                        note:
-                          type: string
-                          example: This is a note about the transaction.
                         transactedAt:
                           type: string
                           example: 2024-09-01T01:03:43.004Z
@@ -539,9 +577,9 @@ paths:
                           example: 2024-09-01T01:03:43.004Z
                       required:
                         - id
-                        - reference
                         - partnerId
                         - memberId
+                        - reference
                         - amount
                         - transactedAt
                         - createdAt
@@ -598,21 +636,35 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
+                      partnerId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      memberId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      partnerRefId:
+                        type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: INV-20234
                       reference:
                         type: string
                         format: uuid
                         example: 123e4567-e89b-12d3-a456-426614174001
-                      partnerId:
-                        type: number
-                        example: 1
-                      memberId:
-                        type: number
-                        example: 1
-                      partnerRefId:
+                      amount:
+                        type: integer
+                        example: 100
+                      note:
                         type: string
-                        example: INV-20234
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: This is a note about the transaction.
                       status:
                         type: string
                         enum: *a1
@@ -623,12 +675,6 @@ paths:
                         enum: *a2
                         default: PAYMENT
                         example: PAYMENT
-                      amount:
-                        type: number
-                        example: 100
-                      note:
-                        type: string
-                        example: This is a note about the transaction.
                       transactedAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -640,9 +686,9 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - reference
                       - partnerId
                       - memberId
+                      - reference
                       - amount
                       - transactedAt
                       - createdAt
@@ -694,18 +740,20 @@ paths:
               properties:
                 partnerRefId:
                   type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
                   example: INV-20234
+                amount:
+                  type: integer
+                  example: 100
+                note:
+                  type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
+                  example: This is a note about the transaction.
                 type:
                   type: string
                   enum: *a2
                   default: PAYMENT
                   example: PAYMENT
-                amount:
-                  type: number
-                  example: 100
-                note:
-                  type: string
-                  example: This is a note about the transaction.
       responses:
         '200':
           description: OK
@@ -718,21 +766,35 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
+                      partnerId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      memberId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      partnerRefId:
+                        type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: INV-20234
                       reference:
                         type: string
                         format: uuid
                         example: 123e4567-e89b-12d3-a456-426614174001
-                      partnerId:
-                        type: number
-                        example: 1
-                      memberId:
-                        type: number
-                        example: 1
-                      partnerRefId:
+                      amount:
+                        type: integer
+                        example: 100
+                      note:
                         type: string
-                        example: INV-20234
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: This is a note about the transaction.
                       status:
                         type: string
                         enum: *a1
@@ -743,12 +805,6 @@ paths:
                         enum: *a2
                         default: PAYMENT
                         example: PAYMENT
-                      amount:
-                        type: number
-                        example: 100
-                      note:
-                        type: string
-                        example: This is a note about the transaction.
                       transactedAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -760,9 +816,9 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - reference
                       - partnerId
                       - memberId
+                      - reference
                       - amount
                       - transactedAt
                       - createdAt
@@ -863,21 +919,35 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: number
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
                           example: 1
+                        partnerId:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          example: 1
+                        memberId:
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
+                          example: 1
+                        partnerRefId:
+                          type: string
+                          pattern: ^[\w\s.,!?'"()-]+$
+                          example: INV-20234
                         reference:
                           type: string
                           format: uuid
                           example: 123e4567-e89b-12d3-a456-426614174001
-                        partnerId:
-                          type: number
-                          example: 1
-                        memberId:
-                          type: number
-                          example: 1
-                        partnerRefId:
+                        amount:
+                          type: integer
+                          example: 100
+                        note:
                           type: string
-                          example: INV-20234
+                          pattern: ^[\w\s.,!?'"()-]+$
+                          example: This is a note about the transaction.
                         status:
                           type: string
                           enum: *a1
@@ -888,12 +958,6 @@ paths:
                           enum: *a2
                           default: PAYMENT
                           example: PAYMENT
-                        amount:
-                          type: number
-                          example: 100
-                        note:
-                          type: string
-                          example: This is a note about the transaction.
                         transactedAt:
                           type: string
                           example: 2024-09-01T01:03:43.004Z
@@ -905,9 +969,9 @@ paths:
                           example: 2024-09-01T01:03:43.004Z
                       required:
                         - id
-                        - reference
                         - partnerId
                         - memberId
+                        - reference
                         - amount
                         - transactedAt
                         - createdAt
@@ -951,18 +1015,20 @@ paths:
               properties:
                 partnerRefId:
                   type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
                   example: INV-20234
+                amount:
+                  type: integer
+                  example: 100
+                note:
+                  type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
+                  example: This is a note about the transaction.
                 type:
                   type: string
                   enum: *a2
                   default: PAYMENT
                   example: PAYMENT
-                amount:
-                  type: number
-                  example: 100
-                note:
-                  type: string
-                  example: This is a note about the transaction.
               required:
                 - amount
       responses:
@@ -977,21 +1043,35 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
+                      partnerId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      memberId:
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
+                        example: 1
+                      partnerRefId:
+                        type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: INV-20234
                       reference:
                         type: string
                         format: uuid
                         example: 123e4567-e89b-12d3-a456-426614174001
-                      partnerId:
-                        type: number
-                        example: 1
-                      memberId:
-                        type: number
-                        example: 1
-                      partnerRefId:
+                      amount:
+                        type: integer
+                        example: 100
+                      note:
                         type: string
-                        example: INV-20234
+                        pattern: ^[\w\s.,!?'"()-]+$
+                        example: This is a note about the transaction.
                       status:
                         type: string
                         enum: *a1
@@ -1002,12 +1082,6 @@ paths:
                         enum: *a2
                         default: PAYMENT
                         example: PAYMENT
-                      amount:
-                        type: number
-                        example: 100
-                      note:
-                        type: string
-                        example: This is a note about the transaction.
                       transactedAt:
                         type: string
                         example: 2024-09-01T01:03:43.004Z
@@ -1019,9 +1093,9 @@ paths:
                         example: 2024-09-01T01:03:43.004Z
                     required:
                       - id
-                      - reference
                       - partnerId
                       - memberId
+                      - reference
                       - amount
                       - transactedAt
                       - createdAt
@@ -1070,26 +1144,33 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       partnerId:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: John Doe
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
                         format: email
                         example: member@example.com
                       balance:
-                        type: number
+                        type: integer
                         example: 1000
                       status:
                         type: string
@@ -1151,19 +1232,22 @@ paths:
               properties:
                 name:
                   type: string
+                  pattern: ^[\w\s]+$
                   example: John Doe
                 address:
                   type: string
+                  pattern: ^[\w\s.,-]+$
                   example: 123 Main St, Toronto, ON
                 phone:
                   type: string
+                  pattern: ^[\w\s.()-]+$
                   example: '4161234567'
                 email:
                   type: string
                   format: email
                   example: member@example.com
                 balance:
-                  type: number
+                  type: integer
                   example: 1000
       responses:
         '200':
@@ -1177,26 +1261,33 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       partnerId:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: John Doe
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
                         format: email
                         example: member@example.com
                       balance:
-                        type: number
+                        type: integer
                         example: 1000
                       status:
                         type: string
@@ -1307,26 +1398,33 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: number
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
                           example: 1
                         partnerId:
-                          type: number
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
                           example: 1
                         name:
                           type: string
+                          pattern: ^[\w\s]+$
                           example: John Doe
                         address:
                           type: string
+                          pattern: ^[\w\s.,-]+$
                           example: 123 Main St, Toronto, ON
                         phone:
                           type: string
+                          pattern: ^[\w\s.()-]+$
                           example: '4161234567'
                         email:
                           type: string
                           format: email
                           example: member@example.com
                         balance:
-                          type: number
+                          type: integer
                           example: 1000
                         status:
                           type: string
@@ -1379,19 +1477,22 @@ paths:
               properties:
                 name:
                   type: string
+                  pattern: ^[\w\s]+$
                   example: John Doe
                 address:
                   type: string
+                  pattern: ^[\w\s.,-]+$
                   example: 123 Main St, Toronto, ON
                 phone:
                   type: string
+                  pattern: ^[\w\s.()-]+$
                   example: '4161234567'
                 email:
                   type: string
                   format: email
                   example: member@example.com
                 balance:
-                  type: number
+                  type: integer
                   example: 1000
               required:
                 - name
@@ -1411,26 +1512,33 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       partnerId:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: John Doe
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
                         format: email
                         example: member@example.com
                       balance:
-                        type: number
+                        type: integer
                         example: 1000
                       status:
                         type: string
@@ -1497,24 +1605,25 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
-                      status:
-                        type: string
-                        enum: *a4
-                        default: ACTIVE
-                        example: ACTIVE
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: Partner Name
                       description:
                         type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
                         example: Partner Description
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
@@ -1523,6 +1632,11 @@ paths:
                       password:
                         type: string
                         example: '*********'
+                      status:
+                        type: string
+                        enum: *a4
+                        default: ACTIVE
+                        example: ACTIVE
                       permission:
                         type: string
                         enum: *a5
@@ -1583,15 +1697,19 @@ paths:
               properties:
                 name:
                   type: string
+                  pattern: ^[\w\s]+$
                   example: Partner Name
                 description:
                   type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
                   example: Partner Description
                 address:
                   type: string
+                  pattern: ^[\w\s.,-]+$
                   example: 123 Main St, Toronto, ON
                 phone:
                   type: string
+                  pattern: ^[\w\s.()-]+$
                   example: '4161234567'
                 email:
                   type: string
@@ -1612,24 +1730,25 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
-                      status:
-                        type: string
-                        enum: *a4
-                        default: ACTIVE
-                        example: ACTIVE
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: Partner Name
                       description:
                         type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
                         example: Partner Description
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
@@ -1638,6 +1757,11 @@ paths:
                       password:
                         type: string
                         example: '*********'
+                      status:
+                        type: string
+                        enum: *a4
+                        default: ACTIVE
+                        example: ACTIVE
                       permission:
                         type: string
                         enum: *a5
@@ -1747,24 +1871,25 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: number
+                          type: integer
+                          minimum: 0
+                          exclusiveMinimum: true
                           example: 1
-                        status:
-                          type: string
-                          enum: *a4
-                          default: ACTIVE
-                          example: ACTIVE
                         name:
                           type: string
+                          pattern: ^[\w\s]+$
                           example: Partner Name
                         description:
                           type: string
+                          pattern: ^[\w\s.,!?'"()-]+$
                           example: Partner Description
                         address:
                           type: string
+                          pattern: ^[\w\s.,-]+$
                           example: 123 Main St, Toronto, ON
                         phone:
                           type: string
+                          pattern: ^[\w\s.()-]+$
                           example: '4161234567'
                         email:
                           type: string
@@ -1773,6 +1898,11 @@ paths:
                         password:
                           type: string
                           example: '*********'
+                        status:
+                          type: string
+                          enum: *a4
+                          default: ACTIVE
+                          example: ACTIVE
                         permission:
                           type: string
                           enum: *a5
@@ -1824,15 +1954,19 @@ paths:
               properties:
                 name:
                   type: string
+                  pattern: ^[\w\s]+$
                   example: Partner Name
                 description:
                   type: string
+                  pattern: ^[\w\s.,!?'"()-]+$
                   example: Partner Description
                 address:
                   type: string
+                  pattern: ^[\w\s.,-]+$
                   example: 123 Main St, Toronto, ON
                 phone:
                   type: string
+                  pattern: ^[\w\s.()-]+$
                   example: '4161234567'
                 email:
                   type: string
@@ -1860,24 +1994,25 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
+                        minimum: 0
+                        exclusiveMinimum: true
                         example: 1
-                      status:
-                        type: string
-                        enum: *a4
-                        default: ACTIVE
-                        example: ACTIVE
                       name:
                         type: string
+                        pattern: ^[\w\s]+$
                         example: Partner Name
                       description:
                         type: string
+                        pattern: ^[\w\s.,!?'"()-]+$
                         example: Partner Description
                       address:
                         type: string
+                        pattern: ^[\w\s.,-]+$
                         example: 123 Main St, Toronto, ON
                       phone:
                         type: string
+                        pattern: ^[\w\s.()-]+$
                         example: '4161234567'
                       email:
                         type: string
@@ -1886,6 +2021,11 @@ paths:
                       password:
                         type: string
                         example: '*********'
+                      status:
+                        type: string
+                        enum: *a4
+                        default: ACTIVE
+                        example: ACTIVE
                       permission:
                         type: string
                         enum: *a5

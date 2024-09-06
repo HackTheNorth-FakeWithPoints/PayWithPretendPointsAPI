@@ -2,5 +2,5 @@
   "version": "1",
   "name": "Pay With Pretend Points API",
   "type": "collection",
-  "ignore": ["node_modules", ".git", ".github", ".husky"]
+  "ignore": ["node_modules", "public", "docs", "dist", "bruno", ".git", ".github", ".husky", ".vscode"]
 }

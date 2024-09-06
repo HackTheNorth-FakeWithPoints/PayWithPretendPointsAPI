@@ -1,27 +1,12 @@
 import type { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import { ForbiddenError, handleError } from '@/utils/errors.ts'
+import { authHandler } from '@/middleware/index.ts'
+import { handleError } from '@/utils/index.ts'
 
 const partnerAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]
-
-    if (!token) {
-      throw new ForbiddenError('Bearer token not found!')
-    }
-
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as jwt.JwtPayload
-
-    if (!decodedToken?.id) {
-      throw new ForbiddenError('Invalid token!')
-    }
-
-    req.partnerId = decodedToken.id as number
-
-    if (!req.partnerId) {
-      throw new ForbiddenError('Invalid partner!')
-    }
+    authHandler(req, process.env.JWT_SECRET as jwt.Secret, false)
 
     next()
   } catch (error) {

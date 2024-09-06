@@ -1,9 +1,9 @@
 import express, { type Request, type Response } from 'express'
 
-import { findMember } from '@/db/providers/index.ts'
-import { partnerAuthMiddleware } from '@/middleware/partner-auth.ts'
+import { getPointsController } from '@/controllers/points/index.ts'
+import { partnerAuthMiddleware } from '@/middleware/index.ts'
 import { memberIdSchema } from '@/routes/points/index.ts'
-import { NotFoundError, handleError } from '@/utils/errors.ts'
+import { handleError } from '@/utils/index.ts'
 
 const router = express.Router()
 
@@ -11,18 +11,9 @@ router.get('/loyalty/:memberId/points', partnerAuthMiddleware, async (req: Reque
   try {
     const { memberId } = memberIdSchema.parse(req.params)
 
-    const member = await findMember(
-      {
-        id: memberId
-      },
-      req.partnerId as number
-    )
+    const balance = await getPointsController(req.partnerId as number, memberId)
 
-    if (!member) {
-      throw new NotFoundError(`Member with id of ${memberId} was not found!`)
-    }
-
-    return res.status(200).json({ balance: member.balance })
+    return res.status(200).json({ balance })
   } catch (error) {
     handleError(error as Error, res)
   }
