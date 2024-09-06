@@ -6,7 +6,7 @@ import { handleError } from '@/utils/index.ts'
 
 const adminAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    authHandler(req, process.env.JWT_SECRET_ADMIN as jwt.Secret, true)
+    authHandler(req, process.env.JWT_ADMIN_SECRET as jwt.Secret, true)
 
     next()
   } catch (error) {

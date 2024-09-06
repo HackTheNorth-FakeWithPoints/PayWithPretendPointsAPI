@@ -11,7 +11,7 @@ const memberIdSchema = z.object({
   memberId: zodIdSchema
 })
 
-const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true, status: true, partnerId: true })
+const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true, partnerId: true })
 
 const patchMember = postMember.partial()
 

@@ -23,7 +23,6 @@ const postTransaction = TransactionZod.omit({
   createdAt: true,
   updatedAt: true,
   transactedAt: true,
-  status: true,
   reference: true
 })
 

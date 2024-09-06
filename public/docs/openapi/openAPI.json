@@ -552,6 +552,12 @@
                     "pattern": "^[\\w\\s.,!?'\"()-]+$",
                     "example": "This is a note about the transaction."
                   },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                    "default": "PENDING",
+                    "example": "PENDING"
+                  },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
@@ -789,6 +795,12 @@
                     "pattern": "^[\\w\\s.,!?'\"()-]+$",
                     "example": "This is a note about the transaction."
                   },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "COMPLETED", "VOIDED"],
+                    "default": "PENDING",
+                    "example": "PENDING"
+                  },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
@@ -967,7 +979,13 @@
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "integer", "example": 1000 }
+                  "balance": { "type": "integer", "example": 1000 },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                    "default": "PENDING",
+                    "example": "PENDING"
+                  }
                 }
               }
             }
@@ -1154,7 +1172,13 @@
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "integer", "example": 1000 }
+                  "balance": { "type": "integer", "example": 1000 },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
+                    "default": "PENDING",
+                    "example": "PENDING"
+                  }
                 },
                 "required": ["name", "address", "phone", "email", "balance"]
               }
@@ -1328,7 +1352,13 @@
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                  "password": { "type": "string", "example": "*********" }
+                  "password": { "type": "string", "example": "*********" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                    "default": "ACTIVE",
+                    "example": "ACTIVE"
+                  }
                 }
               }
             }
@@ -1540,7 +1570,13 @@
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "example@email.com" },
-                  "password": { "type": "string", "example": "*********" }
+                  "password": { "type": "string", "example": "*********" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
+                    "default": "ACTIVE",
+                    "example": "ACTIVE"
+                  }
                 },
                 "required": ["name", "description", "address", "phone", "email", "password"]
               }

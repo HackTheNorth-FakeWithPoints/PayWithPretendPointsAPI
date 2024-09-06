@@ -80,7 +80,7 @@ git commit -m "feat: initial commit"
 `Note: this is only if you want a standalone database and you're running the API without docker.`
 
 ```bash
-docker compose -f docker-compose.local.db.yml up --build
+docker compose -f docker-compose.db.local.yml up --build
 ```
 
 **Sequelize migration template:**
@@ -111,31 +111,21 @@ module.exports = {
 
 **For developers, follow the structure below when adding to or refactoring the codebase:**
 
-[**`constants`**](./src/constants) - **for reusuable values that don't change**
-
-[**`controllers`**](./src/controllers) - **for implementing business logic**
-
-[**`db/config`**](./src/db/config) - **for database configuration, such as connection setup**
-
-[**`db/migrations`**](./src/db/migrations) - **for modifying the database schema**
-
-[**`db/models`**](./src/db/models) - **for defining database schema structures**
-
-[**`db/providers`**](./src/db/providers) - **to get data and modify the database**
-
-[**`logger`**](./src/logger) - **terminal logging configuration**
-
-[**`middleware`**](./src/middleware) - **for request intercepting functions**
-
-[**`routes`**](./src/routes) - **for defining callable api endpoints**
-
-[**`server`**](./src/server) - **for configuring and starting the Express instance**
-
-[**`swagger`**](./src/swagger) - **for auto-generating the OpenAPI specification**
-
-[**`types`**](./src/types) - **for reusuable user-defined TypeScript types**
-
-[**`utils`**](./src/utils) - **for reusuable helper functions used in different places**
+| Directory                                  | Description                                                 | Repository                                                                                            | Notes |
+| ------------------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----- |
+| [**`constants`**](./src/constants)         | **for reusuable values that don't change**                  | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`controllers`**](./src/controllers)     | **for implementing business logic**                         | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`db/config`**](./src/db/config)         | **for database configuration, such as connection setup**    | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`db/migrations`**](./src/db/migrations) | **for modifying the database schema**                       | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`db/models`**](./src/db/models)         | **for defining database schema structures**                 | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`db/providers`**](./src/db/providers)   | **to get data and modify the database**                     | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`logger`**](./src/logger)               | **terminal logging configuration**                          | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`middleware`**](./src/middleware)       | **for request intercepting functions**                      | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`routes`**](./src/routes)               | **for defining callable api endpoints**                     | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`server`**](./src/server)               | **for configuring and starting the Express instance**       | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`swagger`**](./src/swagger)             | **for auto-generating the OpenAPI specification**           | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`types`**](./src/types)                 | **for reusuable user-defined TypeScript types**             | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
+| [**`utils`**](./src/utils)                 | **for reusuable helper functions used in different places** | [Pay With Pretend Points API](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) |       |
 
 ## Commands 🤖
 

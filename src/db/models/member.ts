@@ -162,6 +162,7 @@ const MemberZod = z.object({
   status: z
     .enum([MEMBER_STATUS.PENDING, ...Object.values(MEMBER_STATUS).slice(1)])
     .default(MEMBER_STATUS.PENDING)
+    .optional()
     .openapi({ example: MEMBER_STATUS.PENDING }),
   createdAt: zodDateSchema,
   updatedAt: zodDateSchema

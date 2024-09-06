@@ -168,10 +168,12 @@ const PartnerZod = z.object({
   status: z
     .enum([PARTNER_STATUS.ACTIVE, ...Object.values(PARTNER_STATUS).slice(1)])
     .default(PARTNER_STATUS.ACTIVE)
+    .optional()
     .openapi({ example: PARTNER_STATUS.ACTIVE }),
   permission: z
     .enum([PARTNER_PERMISSIONS.WRITE, ...Object.values(PARTNER_PERMISSIONS).slice(1)])
     .default(PARTNER_PERMISSIONS.WRITE)
+    .optional()
     .openapi({ example: PARTNER_PERMISSIONS.WRITE }),
   createdAt: zodDateSchema,
   updatedAt: zodDateSchema

@@ -749,6 +749,11 @@ paths:
                   type: string
                   pattern: ^[\w\s.,!?'"()-]+$
                   example: This is a note about the transaction.
+                status:
+                  type: string
+                  enum: *a1
+                  default: PENDING
+                  example: PENDING
                 type:
                   type: string
                   enum: *a2
@@ -1024,6 +1029,11 @@ paths:
                   type: string
                   pattern: ^[\w\s.,!?'"()-]+$
                   example: This is a note about the transaction.
+                status:
+                  type: string
+                  enum: *a1
+                  default: PENDING
+                  example: PENDING
                 type:
                   type: string
                   enum: *a2
@@ -1249,6 +1259,11 @@ paths:
                 balance:
                   type: integer
                   example: 1000
+                status:
+                  type: string
+                  enum: *a3
+                  default: PENDING
+                  example: PENDING
       responses:
         '200':
           description: OK
@@ -1494,6 +1509,11 @@ paths:
                 balance:
                   type: integer
                   example: 1000
+                status:
+                  type: string
+                  enum: *a3
+                  default: PENDING
+                  example: PENDING
               required:
                 - name
                 - address
@@ -1718,6 +1738,11 @@ paths:
                 password:
                   type: string
                   example: '*********'
+                status:
+                  type: string
+                  enum: *a4
+                  default: ACTIVE
+                  example: ACTIVE
       responses:
         '200':
           description: OK
@@ -1975,6 +2000,11 @@ paths:
                 password:
                   type: string
                   example: '*********'
+                status:
+                  type: string
+                  enum: *a4
+                  default: ACTIVE
+                  example: ACTIVE
               required:
                 - name
                 - description

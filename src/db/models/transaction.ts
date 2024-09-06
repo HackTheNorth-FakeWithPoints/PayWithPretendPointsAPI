@@ -194,10 +194,12 @@ const TransactionZod = z.object({
   status: z
     .enum([TRANSACTION_STATUS.PENDING, ...Object.values(TRANSACTION_STATUS).slice(1)])
     .default(TRANSACTION_STATUS.PENDING)
+    .optional()
     .openapi({ example: TRANSACTION_STATUS.PENDING }),
   type: z
     .enum([TRANSACTION_TYPE.PAYMENT, ...Object.values(TRANSACTION_TYPE).slice(1)])
     .default(TRANSACTION_TYPE.PAYMENT)
+    .optional()
     .openapi({ example: TRANSACTION_TYPE.PAYMENT }),
   transactedAt: zodDateSchema,
   createdAt: zodDateSchema,
