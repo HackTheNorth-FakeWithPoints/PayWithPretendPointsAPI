@@ -17,7 +17,7 @@ Manage and earn points in a loyalty and rewards system.
 
 - **Otherwise, you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a containerized environment.**
 
-- **For an optimal developer experience we recommend the plugins in [`extensions.json`](./.vscode/extensions.json).**
+- **For an optimal developer experience, we recommend using the plugins in [`extensions.json`](./.vscode/extensions.json).**
 
 ## Getting Started 🚀
 
