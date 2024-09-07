@@ -84,11 +84,11 @@ router.patch('/admin/members/batch/:memberIds', adminAuthMiddleware, async (req:
       where: { id: { [Op.in]: JSON.parse(req.params.memberIds) as number[] } }
     })
 
-    logger.info(`[/admin/members/${req.params.memberIds}]: successfully updated members`)
+    logger.info(`[/admin/members/batch/${req.params.memberIds}]: successfully updated members`)
 
     return res.status(200).json({ members })
   } catch (error) {
-    logger.error(`[/admin/members/${req.params.memberIds}]: error occurred ${error}`)
+    logger.error(`[/admin/members/batch/${req.params.memberIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }
@@ -114,11 +114,11 @@ router.delete('/admin/members/batch/:memberIds', adminAuthMiddleware, async (req
       where: { id: { [Op.in]: JSON.parse(req.params.memberIds) as number[] } }
     })
 
-    logger.info(`[/admin/members/${req.params.memberIds}]: successfully deleted members`)
+    logger.info(`[/admin/members/batch/${req.params.memberIds}]: successfully deleted members`)
 
     return res.status(200).json({ members })
   } catch (error) {
-    logger.error(`[/admin/members/${req.params.memberIds}]: error occurred ${error}`)
+    logger.error(`[/admin/members/batch/${req.params.memberIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }

@@ -84,11 +84,11 @@ router.patch('/admin/transactions/batch/:transactionIds', adminAuthMiddleware, a
       where: { id: { [Op.in]: JSON.parse(req.params.transactionIds) as number[] } }
     })
 
-    logger.info(`[/admin/transactions/${req.params.transactionIds}]: successfully updated transactions`)
+    logger.info(`[/admin/transactions/batch/${req.params.transactionIds}]: successfully updated transactions`)
 
     return res.status(200).json({ transactions })
   } catch (error) {
-    logger.error(`[/admin/transactions/${req.params.transactionIds}]: error occurred ${error}`)
+    logger.error(`[/admin/transactions/batch/${req.params.transactionIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }
@@ -114,11 +114,11 @@ router.delete('/admin/transactions/batch/:transactionIds', adminAuthMiddleware, 
       where: { id: { [Op.in]: JSON.parse(req.params.transactionIds) as number[] } }
     })
 
-    logger.info(`[/admin/transactions/${req.params.transactionIds}]: successfully deleted transactions`)
+    logger.info(`[/admin/transactions/batch/${req.params.transactionIds}]: successfully deleted transactions`)
 
     return res.status(200).json({ transactions })
   } catch (error) {
-    logger.error(`[/admin/transactions/${req.params.transactionIds}]: error occurred ${error}`)
+    logger.error(`[/admin/transactions/batch/${req.params.transactionIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }

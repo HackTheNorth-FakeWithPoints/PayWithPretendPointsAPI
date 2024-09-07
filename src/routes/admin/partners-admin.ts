@@ -84,11 +84,11 @@ router.patch('/admin/partners/batch/:partnerIds', adminAuthMiddleware, async (re
       where: { id: { [Op.in]: JSON.parse(req.params.partnerIds) as number[] } }
     })
 
-    logger.info(`[/admin/partners/${req.params.partnerIds}]: successfully updated partners`)
+    logger.info(`[/admin/partners/batch/${req.params.partnerIds}]: successfully updated partners`)
 
     return res.status(200).json({ partners })
   } catch (error) {
-    logger.error(`[/admin/partners/${req.params.partnerIds}]: error occurred ${error}`)
+    logger.error(`[/admin/partners/batch/${req.params.partnerIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }
@@ -114,11 +114,11 @@ router.delete('/admin/partners/batch/:partnerIds', adminAuthMiddleware, async (r
       where: { id: { [Op.in]: JSON.parse(req.params.partnerIds) as number[] } }
     })
 
-    logger.info(`[/admin/partners/${req.params.partnerIds}]: successfully deleted partners`)
+    logger.info(`[/admin/partners/batch/${req.params.partnerIds}]: successfully deleted partners`)
 
     return res.status(200).json({ partners })
   } catch (error) {
-    logger.error(`[/admin/partners/${req.params.partnerIds}]: error occurred ${error}`)
+    logger.error(`[/admin/partners/batch/${req.params.partnerIds}]: error occurred ${error}`)
 
     handleError(error as Error, res)
   }
