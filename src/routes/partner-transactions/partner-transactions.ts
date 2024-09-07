@@ -4,6 +4,7 @@ import {
   getPartnerTransactionController,
   getPartnerTransactionsController
 } from '@/controllers/partner-transactions/index.ts'
+import { logger } from '@/logger/index.ts'
 import { partnerAuthMiddleware } from '@/middleware/index.ts'
 import { partnerIdSchema, partnerIdTransactionIdSchema } from '@/routes/utils/index.ts'
 import { handleError } from '@/utils/index.ts'
@@ -16,8 +17,12 @@ router.get('/loyalty/partners/:partnerId/transactions', partnerAuthMiddleware, a
 
     const transactions = await getPartnerTransactionsController(req.partnerId as number, partnerId)
 
+    logger.info(`[/loyalty/partners/${partnerId}/transactions]: successfully retrieved transactions`)
+
     return res.status(200).json({ transactions })
   } catch (error) {
+    logger.error(`[/loyalty/partners/${req.params.partnerId}/transactions]: ${error}`)
+
     handleError(error as Error, res)
   }
 })
@@ -31,8 +36,12 @@ router.get(
 
       const transaction = await getPartnerTransactionController(req.partnerId as number, partnerId, transactionId)
 
+      logger.info(`[/loyalty/partners/${partnerId}/transactions/${transactionId}]: successfully retrieved transaction`)
+
       return res.status(200).json({ transaction })
     } catch (error) {
+      logger.error(`[/loyalty/partners/${req.params.partnerId}/transactions/${req.params.transactionId}]: ${error}`)
+
       handleError(error as Error, res)
     }
   }
