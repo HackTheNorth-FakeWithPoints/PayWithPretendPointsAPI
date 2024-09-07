@@ -5,6 +5,7 @@ import morgan from 'morgan'
 
 import { ROUTE_PREFIX } from '@/constants/index.ts'
 import { rateLimiter } from '@/middleware/index.ts'
+import { membersAdminRouter, partnersAdminRouter, transactionsAdminRouter } from '@/routes/admin/index.ts'
 import { adminAuthRouter, partnerAuthRouter } from '@/routes/auth/index.ts'
 import { healthRouter } from '@/routes/health/index.ts'
 import { memberTransactionRouter } from '@/routes/member-transactions/index.ts'
@@ -36,5 +37,8 @@ app.use(`${ROUTE_PREFIX}`, memberRouter)
 app.use(`${ROUTE_PREFIX}`, pointsRouter)
 app.use(`${ROUTE_PREFIX}`, memberTransactionRouter)
 app.use(`${ROUTE_PREFIX}`, partnerTransactionsRouter)
+app.use(`${ROUTE_PREFIX}`, partnersAdminRouter)
+app.use(`${ROUTE_PREFIX}`, membersAdminRouter)
+app.use(`${ROUTE_PREFIX}`, transactionsAdminRouter)
 
 export { app }
