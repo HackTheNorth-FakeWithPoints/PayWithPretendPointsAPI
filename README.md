@@ -15,6 +15,8 @@ Manage and earn points in a loyalty and rewards system.
   },
   ```
 
+- **Alternatively, you can also run this using [`Bun`](https://bun.sh/) `latest` while using the same setup.**
+
 - **Otherwise, you will need [`Docker`](https://www.docker.com/products/docker-desktop/) installed to run this in a containerized environment.**
 
 - **For an optimal developer experience, we recommend using the plugins in [`extensions.json`](./.vscode/extensions.json).**
