@@ -978,7 +978,6 @@
                   "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
-                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "integer", "example": 1000 },
                   "status": {
                     "type": "string",
@@ -1172,13 +1171,7 @@
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
                   "email": { "type": "string", "format": "email", "example": "member@example.com" },
-                  "balance": { "type": "integer", "example": 1000 },
-                  "status": {
-                    "type": "string",
-                    "enum": ["PENDING", "ACTIVE", "DEACTIVATED"],
-                    "default": "PENDING",
-                    "example": "PENDING"
-                  }
+                  "balance": { "type": "integer", "example": 1000 }
                 },
                 "required": ["name", "address", "phone", "email", "balance"]
               }
@@ -1358,6 +1351,12 @@
                     "enum": ["ACTIVE", "TERMINATED", "UNAVAILABLE"],
                     "default": "ACTIVE",
                     "example": "ACTIVE"
+                  },
+                  "permission": {
+                    "type": "string",
+                    "enum": ["WRITE", "READ", "BALANCE_INQUIRY"],
+                    "default": "WRITE",
+                    "example": "WRITE"
                   }
                 }
               }

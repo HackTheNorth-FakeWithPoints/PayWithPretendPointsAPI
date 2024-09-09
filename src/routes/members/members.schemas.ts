@@ -8,9 +8,15 @@ import { zodDeletedCountResponse, zodHTTPCodeResponses } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 
-const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true, partnerId: true })
+const postMember = MemberZod.omit({ id: true, createdAt: true, updatedAt: true, status: true, partnerId: true })
 
-const patchMember = postMember.partial()
+const patchMember = MemberZod.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  email: true,
+  partnerId: true
+}).partial()
 
 const getMembersSwagger: RouteConfig = {
   method: 'get',
@@ -69,12 +75,12 @@ const deleteMemberSwagger: RouteConfig = {
 }
 
 export {
-  memberIdSchema,
-  postMember,
-  patchMember,
-  postMemberSwagger,
+  deleteMemberSwagger,
   getMemberSwagger,
   getMembersSwagger,
+  memberIdSchema,
+  patchMember,
   patchMemberSwagger,
-  deleteMemberSwagger
+  postMember,
+  postMemberSwagger
 }

@@ -113,7 +113,7 @@ const patchMemberTransactionController = async (
 
     const updatedTransaction = await modifyTransaction(partnerId, memberId, transactionId, transactionPayload)
 
-    if (updatedTransaction) {
+    if (!updatedTransaction) {
       throw new InternalServerError(`Transaction with id of ${transactionId} could not be updated!`)
     }
 
@@ -150,9 +150,9 @@ const deleteMemberTransactionController = async (partnerId: number, memberId: nu
 }
 
 export {
-  getMemberTransactionsController,
+  deleteMemberTransactionController,
   getMemberTransactionController,
-  postMemberTransactionController,
+  getMemberTransactionsController,
   patchMemberTransactionController,
-  deleteMemberTransactionController
+  postMemberTransactionController
 }

@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { MEMBER_STATUS, addressRegex, nameRegex, phoneRegex } from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
-import { Partner } from '@/db/models/index.ts'
+import { Partner, Transaction } from '@/db/models/index.ts'
 import { zodDateSchema, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
@@ -17,7 +17,7 @@ interface MemberAttributes {
   phone: string
   email: string
   balance: number
-  status: string
+  status: keyof typeof MEMBER_STATUS
   createdAt: Date
   updatedAt: Date
 }
@@ -36,8 +36,12 @@ class Member extends Model<MemberAttributes, MemberCreationAttributes> {
   declare createdAt: Date
   declare updatedAt: Date
 
-  static associate(models: { Partner: typeof Partner }) {
+  static associate(models: { Partner: typeof Partner; Transaction: typeof Transaction }) {
     Member.belongsTo(models.Partner, {
+      foreignKey: 'partnerId',
+      onDelete: 'CASCADE'
+    })
+    Member.hasMany(models.Transaction, {
       foreignKey: 'partnerId',
       onDelete: 'CASCADE'
     })

@@ -10,7 +10,7 @@ extendZodWithOpenApi(z)
 
 const postPartner = PartnerZod.omit({ id: true, createdAt: true, updatedAt: true, permission: true })
 
-const patchPartner = postPartner.partial()
+const patchPartner = PartnerZod.omit({ id: true, createdAt: true, updatedAt: true }).partial()
 
 const getPartnersSwagger: RouteConfig = {
   method: 'get',
@@ -69,12 +69,12 @@ const deletePartnerSwagger: RouteConfig = {
 }
 
 export {
-  partnerIdSchema,
-  postPartner,
-  patchPartner,
-  postPartnerSwagger,
+  deletePartnerSwagger,
   getPartnerSwagger,
   getPartnersSwagger,
+  partnerIdSchema,
+  patchPartner,
   patchPartnerSwagger,
-  deletePartnerSwagger
+  postPartner,
+  postPartnerSwagger
 }
