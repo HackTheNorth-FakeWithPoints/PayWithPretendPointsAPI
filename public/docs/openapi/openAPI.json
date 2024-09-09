@@ -978,6 +978,7 @@
                   "name": { "type": "string", "pattern": "^[\\w\\s]+$", "example": "John Doe" },
                   "address": { "type": "string", "pattern": "^[\\w\\s.,-]+$", "example": "123 Main St, Toronto, ON" },
                   "phone": { "type": "string", "pattern": "^[\\w\\s.()-]+$", "example": "4161234567" },
+                  "email": { "type": "string", "format": "email", "example": "member@example.com" },
                   "balance": { "type": "integer", "example": 1000 },
                   "status": {
                     "type": "string",

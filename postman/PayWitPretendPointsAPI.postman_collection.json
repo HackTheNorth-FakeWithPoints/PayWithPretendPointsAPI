@@ -364,7 +364,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"balance\": 1000,\r\n    \"status\": \"ACTIVE\"\r\n}",
+              "raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"balance\": 1000,\r\n    \"email\": \"example-new@example.com\",\r\n    \"status\": \"ACTIVE\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
