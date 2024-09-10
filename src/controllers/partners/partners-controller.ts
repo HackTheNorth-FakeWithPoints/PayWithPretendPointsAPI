@@ -34,7 +34,7 @@ const patchPartnerController = async (partnerId: number, partnerPayload: Partner
   const partner = await modifyPartner(partnerId, partnerPayload)
 
   if (!partner) {
-    throw new NotFoundError(`Partner with id of ${partnerId} could not be created!`)
+    throw new NotFoundError(`Partner with id of ${partnerId} could not be updated!`)
   }
 
   const sanitizedPartner = partner as Partial<Partner>
@@ -55,9 +55,9 @@ const deletePartnerController = async (partnerId: number) => {
 }
 
 export {
-  getPartnersController,
+  deletePartnerController,
   getPartnerController,
-  postPartnerController,
+  getPartnersController,
   patchPartnerController,
-  deletePartnerController
+  postPartnerController
 }
