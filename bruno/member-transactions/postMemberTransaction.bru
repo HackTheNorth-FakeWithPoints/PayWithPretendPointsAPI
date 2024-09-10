@@ -4,10 +4,10 @@ meta {
   seq: 3
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+post {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/transactions
+  body: json
+  auth: bearer
 }
 
 params:path {
@@ -15,8 +15,10 @@ params:path {
   transactionId: 1
 }
 
-post {
-  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/transactions
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
 
 body:json {

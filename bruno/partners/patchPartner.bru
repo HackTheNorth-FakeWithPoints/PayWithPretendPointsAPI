@@ -4,18 +4,20 @@ meta {
   seq: 4
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+patch {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/partners/:partnerId
+  body: json
+  auth: bearer
 }
 
 params:path {
   partnerId: 1
 }
 
-patch {
-  url: {{baseUrl}}/{{routePrefix}}/loyalty/partners/:partnerId
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
 
 body:json {

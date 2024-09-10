@@ -4,14 +4,16 @@ meta {
   seq: 3
 }
 
+post {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/members
+  body: json
+  auth: bearer
+}
+
 headers {
   accept: application/json
   Content-Type: application/json
   Authorization: Bearer
-}
-
-post {
-  url: {{baseUrl}}/{{routePrefix}}/loyalty/members
 }
 
 body:json {

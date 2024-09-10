@@ -4,14 +4,15 @@ meta {
   seq: 2
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-}
-
 post {
   url: {{baseUrl}}/{{routePrefix}}/auth
   body: json
+  auth: none
+}
+
+headers {
+  accept: application/json
+  Content-Type: application/json
 }
 
 body:json {

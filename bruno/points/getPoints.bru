@@ -4,16 +4,18 @@ meta {
   seq: 1
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+get {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/points
+  body: none
+  auth: bearer
 }
 
 params:path {
   memberId: 1
 }
 
-get {
-  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/points
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
