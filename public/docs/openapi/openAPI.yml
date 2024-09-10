@@ -1029,11 +1029,6 @@ paths:
                   type: string
                   pattern: ^[\w\s.,!?'"()-]+$
                   example: This is a note about the transaction.
-                status:
-                  type: string
-                  enum: *a1
-                  default: PENDING
-                  example: PENDING
                 type:
                   type: string
                   enum: *a2

@@ -10,13 +10,13 @@ headers {
 }
 
 post {
-  url: {{baseUrl}}/api/v1/admin-auth
+  url: {{baseUrl}}/{{routePrefix}}/admin-auth
   body: json
 }
 
 body:json {
   {
-    "email": "example@email.com",
-    "password": "password"
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
   }
 }

@@ -16,12 +16,14 @@ params:path {
 }
 
 patch {
-  url: {{baseUrl}}/api/v1/loyalty/:memberId/transactions/:transactionId
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/transactions/:transactionId
 }
 
 body:json {
   {
-    "type": "PAYMENT",
+    "partnerRefId": "INV-20234",
     "amount": 100,
+    "note": "This is a note about the transaction.",
+    "type": "PAYMENT"
   }
 }

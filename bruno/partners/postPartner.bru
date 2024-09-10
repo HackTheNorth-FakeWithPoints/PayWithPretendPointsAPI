@@ -11,7 +11,7 @@ headers {
 }
 
 post {
-  url: {{baseUrl}}/api/v1/loyalty/partners
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/partners
 }
 
 body:json {
@@ -21,6 +21,7 @@ body:json {
     "address": "123 Main St, Toronto, ON",
     "phone": "4161234567",
     "email": "example@email.com",
-    "password": "*********"
+    "password": "*********",
+    "status": "ACTIVE"
   }
 }

@@ -795,12 +795,6 @@
                     "pattern": "^[\\w\\s.,!?'\"()-]+$",
                     "example": "This is a note about the transaction."
                   },
-                  "status": {
-                    "type": "string",
-                    "enum": ["PENDING", "COMPLETED", "VOIDED"],
-                    "default": "PENDING",
-                    "example": "PENDING"
-                  },
                   "type": {
                     "type": "string",
                     "enum": ["PAYMENT", "REFUND", "INTERNAL"],
