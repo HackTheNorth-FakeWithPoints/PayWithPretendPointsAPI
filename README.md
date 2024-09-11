@@ -109,6 +109,12 @@ module.exports = {
 }
 ```
 
+### **Testing**
+
+For testing out api calls you can use our [`Postman collection here`](./postman/PayWitPretendPointsAPI.postman_collection.json) or our [`Bruno collection here`](./bruno).
+
+Read more about [`Postman`](https://www.postman.com/) or [`Bruno`](https://www.usebruno.com/) here.
+
 ### **Standards**
 
 **For developers, follow the structure below when adding to or refactoring the codebase:**

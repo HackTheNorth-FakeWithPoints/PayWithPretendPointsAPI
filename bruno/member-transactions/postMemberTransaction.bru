@@ -4,10 +4,10 @@ meta {
   seq: 3
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+post {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/:memberId/transactions
+  body: json
+  auth: bearer
 }
 
 params:path {
@@ -15,13 +15,17 @@ params:path {
   transactionId: 1
 }
 
-post {
-  url: {{baseUrl}}/api/v1/loyalty/:memberId/transactions
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
 
 body:json {
   {
-    "type": "PAYMENT",
+    "partnerRefId": "INV-20234",
     "amount": 100,
+    "note": "This is a note about the member transaction.",
+    "type": "PAYMENT"
   }
 }
