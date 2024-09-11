@@ -4,11 +4,13 @@ meta {
   seq: 1
 }
 
+get {
+  url: {{baseUrl}}/{{routePrefix}}/health
+  body: none
+  auth: none
+}
+
 headers {
   accept: application/json
   Content-Type: application/json
-}
-
-get {
-  url: {{baseUrl}}/api/v1/health
 }

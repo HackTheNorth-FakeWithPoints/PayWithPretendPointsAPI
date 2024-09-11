@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express'
 import { Op } from 'sequelize'
 
-import { Transaction } from '@/db/models/index.ts'
+import { Member, Partner, Transaction } from '@/db/models/index.ts'
 import { logger } from '@/logger/index.ts'
 import { adminAuthMiddleware } from '@/middleware/index.ts'
 import { handleError } from '@/utils/index.ts'
@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.get('/admin/transactions', adminAuthMiddleware, async (_: Request, res: Response) => {
   try {
-    const transactions = await Transaction.findAll()
+    const transactions = await Transaction.findAll({ include: [{ model: Partner }, { model: Member }] })
 
     logger.info(`[/admin/transactions]: successfully retrieved transactions`)
 
@@ -24,7 +24,9 @@ router.get('/admin/transactions', adminAuthMiddleware, async (_: Request, res: R
 
 router.get('/admin/transactions/:transactionId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const transactions = await Transaction.findByPk(parseInt(req.params.transactionId))
+    const transactions = await Transaction.findByPk(parseInt(req.params.transactionId), {
+      include: [{ model: Partner }, { model: Member }]
+    })
 
     logger.info(`[/admin/transactions/${req.params.transactionId}]: successfully retrieved transactions`)
 
@@ -38,7 +40,7 @@ router.get('/admin/transactions/:transactionId', adminAuthMiddleware, async (req
 
 router.post('/admin/transactions', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const transaction = await Transaction.create(req.body)
+    const transaction = await Transaction.create(req.body, { include: [{ model: Partner }, { model: Member }] })
 
     logger.info(`[/admin/transactions]: successfully created transaction`)
 
@@ -52,7 +54,7 @@ router.post('/admin/transactions', adminAuthMiddleware, async (req: Request, res
 
 router.post('/admin/transactions/batch', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const transactions = await Transaction.bulkCreate(req.body)
+    const transactions = await Transaction.bulkCreate(req.body, { include: [{ model: Partner }, { model: Member }] })
 
     logger.info(`[/admin/transactions/batch]: successfully created transactions`)
 

@@ -16,7 +16,7 @@ interface TransactionAttributes {
   memberId: number
   partnerRefId?: string
   status: keyof typeof TRANSACTION_STATUS
-  type: string
+  type: keyof typeof TRANSACTION_TYPE
   amount: number
   note?: string
   transactedAt: Date
@@ -36,7 +36,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
   declare memberId: number
   declare partnerRefId?: string
   declare status: keyof typeof TRANSACTION_STATUS
-  declare type: string
+  declare type: keyof typeof TRANSACTION_TYPE
   declare amount: number
   declare note?: string
   declare transactedAt: Date
@@ -48,7 +48,6 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
       foreignKey: 'partnerId',
       onDelete: 'CASCADE'
     })
-
     Transaction.belongsTo(models.Member, {
       foreignKey: 'memberId',
       onDelete: 'CASCADE'
@@ -182,6 +181,10 @@ Transaction.init(
     sequelize
   }
 )
+
+Partner.associate({ Member, Transaction })
+Member.associate({ Partner, Transaction })
+Transaction.associate({ Partner, Member })
 
 const TransactionZod = z.object({
   id: zodIdSchema,

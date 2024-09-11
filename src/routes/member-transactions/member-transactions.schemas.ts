@@ -15,10 +15,19 @@ const postTransaction = TransactionZod.omit({
   createdAt: true,
   updatedAt: true,
   transactedAt: true,
+  status: true,
   reference: true
 })
 
-const patchTransaction = postTransaction.partial()
+const patchTransaction = TransactionZod.omit({
+  id: true,
+  memberId: true,
+  partnerId: true,
+  createdAt: true,
+  updatedAt: true,
+  transactedAt: true,
+  reference: true
+}).partial()
 
 const getMemberTransactionsSwagger: RouteConfig = {
   method: 'get',
@@ -78,11 +87,11 @@ const deleteMemberTransactionSwagger: RouteConfig = {
 }
 
 export {
-  postTransaction,
-  patchTransaction,
-  getMemberTransactionsSwagger,
+  deleteMemberTransactionSwagger,
   getMemberTransactionSwagger,
-  postMemberTransactionSwagger,
+  getMemberTransactionsSwagger,
   patchMemberTransactionSwagger,
-  deleteMemberTransactionSwagger
+  patchTransaction,
+  postMemberTransactionSwagger,
+  postTransaction
 }

@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express'
 import { Op } from 'sequelize'
 
-import { Partner } from '@/db/models/index.ts'
+import { Member, Partner, Transaction } from '@/db/models/index.ts'
 import { logger } from '@/logger/index.ts'
 import { adminAuthMiddleware } from '@/middleware/index.ts'
 import { handleError } from '@/utils/index.ts'
@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.get('/admin/partners', adminAuthMiddleware, async (_: Request, res: Response) => {
   try {
-    const partners = await Partner.findAll()
+    const partners = await Partner.findAll({ include: [{ model: Member }, { model: Transaction }] })
 
     logger.info(`[/admin/partners]: successfully retrieved partners`)
 
@@ -24,7 +24,9 @@ router.get('/admin/partners', adminAuthMiddleware, async (_: Request, res: Respo
 
 router.get('/admin/partners/:partnerId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const partners = await Partner.findByPk(parseInt(req.params.partnerId))
+    const partners = await Partner.findByPk(parseInt(req.params.partnerId), {
+      include: [{ model: Member }, { model: Transaction }]
+    })
 
     logger.info(`[/admin/partners/${req.params.partnerId}]: successfully retrieved partners`)
 
@@ -38,7 +40,7 @@ router.get('/admin/partners/:partnerId', adminAuthMiddleware, async (req: Reques
 
 router.post('/admin/partners', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const partner = await Partner.create(req.body)
+    const partner = await Partner.create(req.body, { include: [{ model: Member }, { model: Transaction }] })
 
     logger.info(`[/admin/partners]: successfully created partner`)
 
@@ -52,7 +54,7 @@ router.post('/admin/partners', adminAuthMiddleware, async (req: Request, res: Re
 
 router.post('/admin/partners/batch', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const partners = await Partner.bulkCreate(req.body)
+    const partners = await Partner.bulkCreate(req.body, { include: [{ model: Member }, { model: Transaction }] })
 
     logger.info(`[/admin/partners/batch]: successfully created partners`)
 
