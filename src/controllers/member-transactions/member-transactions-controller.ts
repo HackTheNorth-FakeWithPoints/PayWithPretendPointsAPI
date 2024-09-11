@@ -117,12 +117,17 @@ const patchMemberTransactionController = async (
       throw new InternalServerError(`Transaction with id of ${transactionId} could not be updated!`)
     }
 
+    const isVoided = updatedTransaction.status === TRANSACTION_STATUS.VOIDED
+    const isNegativeBalance = -Math.abs(updatedTransaction.amount) + member.balance < 0
+    const isVoidedAndNegativeBalance = isVoided && isNegativeBalance
+    const deductOrZeroBalance = isVoidedAndNegativeBalance ? 0 : -Math.abs(updatedTransaction.amount)
+
     const updatedMember = await modifyMember(
       partnerId,
       memberId,
       {
         ...member,
-        balance: member.balance + transactionPayload.amount
+        balance: member.balance + (isVoided ? deductOrZeroBalance : updatedTransaction.amount)
       },
       sequelizeTransaction
     )
