@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "7bc8950c-333d-4eb9-b656-1dea19c1895e",
-    "name": "PayWitPretendPointsAPI",
+    "_postman_id": "311a5611-f114-4713-9770-6944da2bb4d3",
+    "name": "PayWithPretendPointsAPI",
     "description": "See [https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI](https://github.com/HackTheNorth-FakeWithPoints/PayWithPretendPointsAPI) for details.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "31702119"
@@ -176,7 +176,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Partner Name\",\r\n    \"description\": \"Partner Description\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"email\": \"{{PARTNER_EMAIL}}\",\r\n    \"password\": \"{{PARTNER_PASSWORD}}\",\r\n    \"status\": \"ACTIVE\"\r\n}",
+              "raw": "{\r\n    \"name\": \"Partner Name\",\r\n    \"description\": \"Partner Description\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"email\": \"{{PARTNER_EMAIL}}\",\r\n    \"password\": \"{{PARTNER_PASSWORD_HASHED}}\",\r\n    \"status\": \"ACTIVE\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -364,7 +364,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"balance\": 1000,\r\n    \"email\": \"example-new@example.com\",\r\n    \"status\": \"ACTIVE\"\r\n}",
+              "raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"address\": \"123 Main St, City Town\",\r\n    \"phone\": \"(000)-000-0000\",\r\n    \"balance\": 1000,\r\n    \"email\": \"example@example.com\",\r\n    \"status\": \"ACTIVE\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -378,7 +378,7 @@
               "variable": [
                 {
                   "key": "memberId",
-                  "value": "8"
+                  "value": ""
                 }
               ]
             }
@@ -498,7 +498,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"partnerRefId\": \"INV-20234\",\r\n    \"amount\": 100,\r\n    \"note\": \"This is a note about the member transaction.\",\r\n    \"status\": \"PENDING\",\r\n    \"type\": \"PAYMENT\"\r\n}\r\n",
+              "raw": "{\r\n    \"partnerRefId\": \"INV-20234\",\r\n    \"amount\": 100,\r\n    \"note\": \"This is a note about the member transaction.\",\r\n    \"type\": \"PAYMENT\"\r\n}\r\n",
               "options": {
                 "raw": {
                   "language": "json"
