@@ -54,7 +54,7 @@ const patchMemberController = (partnerId: number, memberId: number, memberPayloa
     const member = await modifyMember(partnerId, memberId, memberPayload, sequelizeTransaction)
 
     if (!member) {
-      throw new NotFoundError(`Member could for partner id not be created!`)
+      throw new NotFoundError(`Member with id of ${memberId} could not be updated!`)
     }
 
     return member
@@ -76,9 +76,9 @@ const deleteMemberController = (partnerId: number, memberId: number) => {
 }
 
 export {
-  getMembersController,
+  deleteMemberController,
   getMemberController,
-  postMemberController,
+  getMembersController,
   patchMemberController,
-  deleteMemberController
+  postMemberController
 }

@@ -4,18 +4,20 @@ meta {
   seq: 4
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+patch {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/partners/:partnerId
+  body: json
+  auth: bearer
 }
 
 params:path {
   partnerId: 1
 }
 
-patch {
-  url: {{baseUrl}}/api/v1/loyalty/partners/:partnerId
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
 
 body:json {
@@ -25,6 +27,8 @@ body:json {
     "address": "123 Main St, Toronto, ON",
     "phone": "4161234567",
     "email": "example@email.com",
-    "password": "*********"
+    "password": "*********",
+    "status": "ACTIVE",
+    "permission": "WRITE"
   }
 }

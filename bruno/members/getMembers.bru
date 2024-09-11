@@ -4,12 +4,14 @@ meta {
   seq: 1
 }
 
+get {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/members
+  body: none
+  auth: bearer
+}
+
 headers {
   accept: application/json
   Content-Type: application/json
   Authorization: Bearer
-}
-
-get {
-  url: {{baseUrl}}/api/v1/loyalty/members
 }

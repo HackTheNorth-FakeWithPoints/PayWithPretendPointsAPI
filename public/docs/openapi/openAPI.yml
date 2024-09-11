@@ -1029,11 +1029,6 @@ paths:
                   type: string
                   pattern: ^[\w\s.,!?'"()-]+$
                   example: This is a note about the transaction.
-                status:
-                  type: string
-                  enum: *a1
-                  default: PENDING
-                  example: PENDING
                 type:
                   type: string
                   enum: *a2
@@ -1509,11 +1504,6 @@ paths:
                 balance:
                   type: integer
                   example: 1000
-                status:
-                  type: string
-                  enum: *a3
-                  default: PENDING
-                  example: PENDING
               required:
                 - name
                 - address
@@ -1743,6 +1733,11 @@ paths:
                   enum: *a4
                   default: ACTIVE
                   example: ACTIVE
+                permission:
+                  type: string
+                  enum: *a5
+                  default: WRITE
+                  example: WRITE
       responses:
         '200':
           description: OK

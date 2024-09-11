@@ -4,16 +4,18 @@ meta {
   seq: 5
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+delete {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/members/:memberId
+  body: none
+  auth: bearer
 }
 
 params:path {
   memberId: 1
 }
 
-delete {
-  url: {{baseUrl}}/api/v1/loyalty/members/:memberId
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }

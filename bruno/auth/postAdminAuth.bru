@@ -4,19 +4,20 @@ meta {
   seq: 1
 }
 
+post {
+  url: {{baseUrl}}/{{routePrefix}}/admin-auth
+  body: json
+  auth: none
+}
+
 headers {
   accept: application/json
   Content-Type: application/json
 }
 
-post {
-  url: {{baseUrl}}/api/v1/admin-auth
-  body: json
-}
-
 body:json {
   {
-    "email": "example@email.com",
-    "password": "password"
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
   }
 }
