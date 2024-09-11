@@ -4,16 +4,18 @@ meta {
   seq: 2
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+get {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/partners/:partnerId
+  body: none
+  auth: bearer
 }
 
 params:path {
   partnerId: 1
 }
 
-get {
-  url: {{baseUrl}}/api/v1/loyalty/partners/:partnerId
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }

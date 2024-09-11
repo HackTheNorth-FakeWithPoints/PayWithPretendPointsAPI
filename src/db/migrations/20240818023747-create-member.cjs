@@ -61,7 +61,6 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
         validate: {
           isEmail: true
         },
@@ -105,12 +104,19 @@ module.exports = {
         field: 'updated_at'
       }
     })
+
+    await queryInterface.addConstraint('members', {
+      fields: ['partner_id', 'email'],
+      type: 'unique',
+      name: 'members_partner_id_email_unique'
+    })
   },
   /**
    * @param {import('sequelize').QueryInterface} queryInterface
    * @returns {Promise<void>}
    */
   down: async (queryInterface) => {
+    await queryInterface.removeConstraint('members', 'members_partner_id_email_unique')
     await queryInterface.dropTable('members')
   }
 }

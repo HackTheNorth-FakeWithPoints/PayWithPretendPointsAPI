@@ -4,18 +4,20 @@ meta {
   seq: 4
 }
 
-headers {
-  accept: application/json
-  Content-Type: application/json
-  Authorization: Bearer
+patch {
+  url: {{baseUrl}}/{{routePrefix}}/loyalty/members/:memberId
+  body: none
+  auth: bearer
 }
 
 params:path {
   memberId: 1
 }
 
-patch {
-  url: {{baseUrl}}/api/v1/loyalty/members/:memberId
+headers {
+  accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer
 }
 
 body:json {
@@ -24,6 +26,7 @@ body:json {
     "address": "123 Main St, Toronto, ON",
     "phone": "4161234567",
     "email": "member@example.com",
-    "balance": 1000
+    "balance": 1000,
+    "status": "PENDING"
   }
 }

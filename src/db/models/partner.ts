@@ -11,19 +11,20 @@ import {
   textRegex
 } from '@/constants/index.ts'
 import { sequelize } from '@/db/index.ts'
+import { Member, Transaction } from '@/db/models/index.ts'
 import { zodDateSchema, zodIdSchema } from '@/utils/index.ts'
 
 extendZodWithOpenApi(z)
 
 interface PartnerAttributes {
   id: number
-  status: string
+  status: keyof typeof PARTNER_STATUS
   name: string
   description: string
   address: string
   phone: string
   email: string
-  permission: string
+  permission: keyof typeof PARTNER_PERMISSIONS
   password: string
   createdAt: Date
   updatedAt: Date
@@ -43,6 +44,17 @@ class Partner extends Model<PartnerAttributes, PartnerCreationAttributes> {
   declare password: string
   declare createdAt: Date
   declare updatedAt: Date
+
+  static associate(models: { Member: typeof Member; Transaction: typeof Transaction }) {
+    Partner.hasMany(models.Member, {
+      foreignKey: 'partnerId',
+      onDelete: 'CASCADE'
+    })
+    Partner.hasMany(models.Transaction, {
+      foreignKey: 'partnerId',
+      onDelete: 'CASCADE'
+    })
+  }
 }
 
 Partner.init(

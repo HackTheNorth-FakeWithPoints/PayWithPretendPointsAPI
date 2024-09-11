@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express'
 import { Op } from 'sequelize'
 
-import { Member } from '@/db/models/index.ts'
+import { Member, Partner, Transaction } from '@/db/models/index.ts'
 import { logger } from '@/logger/index.ts'
 import { adminAuthMiddleware } from '@/middleware/index.ts'
 import { handleError } from '@/utils/index.ts'
@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.get('/admin/members', adminAuthMiddleware, async (_: Request, res: Response) => {
   try {
-    const members = await Member.findAll()
+    const members = await Member.findAll({ include: [{ model: Partner }, { model: Transaction }] })
 
     logger.info(`[/admin/members]: successfully retrieved members`)
 
@@ -24,7 +24,9 @@ router.get('/admin/members', adminAuthMiddleware, async (_: Request, res: Respon
 
 router.get('/admin/members/:memberId', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const members = await Member.findByPk(parseInt(req.params.memberId))
+    const members = await Member.findByPk(parseInt(req.params.memberId), {
+      include: [{ model: Partner }, { model: Transaction }]
+    })
 
     logger.info(`[/admin/members/${req.params.memberId}]: successfully retrieved members`)
 
@@ -38,7 +40,7 @@ router.get('/admin/members/:memberId', adminAuthMiddleware, async (req: Request,
 
 router.post('/admin/members', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const member = await Member.create(req.body)
+    const member = await Member.create(req.body, { include: [{ model: Partner }, { model: Transaction }] })
 
     logger.info(`[/admin/members]: successfully created member`)
 
@@ -52,7 +54,7 @@ router.post('/admin/members', adminAuthMiddleware, async (req: Request, res: Res
 
 router.post('/admin/members/batch', adminAuthMiddleware, async (req: Request, res: Response) => {
   try {
-    const members = await Member.bulkCreate(req.body)
+    const members = await Member.bulkCreate(req.body, { include: [{ model: Partner }, { model: Transaction }] })
 
     logger.info(`[/admin/members/batch]: successfully created members`)
 
