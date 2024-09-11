@@ -111,9 +111,17 @@ module.exports = {
 
 ### **Testing**
 
-For testing out api calls you can use our [`Postman collection here`](./postman/PayWitPretendPointsAPI.postman_collection.json) or our [`Bruno collection here`](./bruno).
+**For testing out api calls you can use our [`Postman collection here`](./postman/PayWitPretendPointsAPI.postman_collection.json) or our [`Bruno collection here`](./bruno).**
 
-Read more about [`Postman`](https://www.postman.com/) or [`Bruno`](https://www.usebruno.com/) here.
+**Read more about [`Postman`](https://www.postman.com/) or [`Bruno`](https://www.usebruno.com/) here.**
+
+### **Business Logic**
+
+- **Transactions can only created if a Partner's _status_ is `ACTIVE` and its _permission_ is `WRITE` or `BALANCE_INQUIRY`**
+
+- **Transactions can only created if a Members's _status_ is `ACTIVE`**
+
+- **Transactions can no longer be updated if its _status_ is no longer `PENDING`**
 
 ### **Standards**
 
