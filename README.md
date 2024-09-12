@@ -123,6 +123,8 @@ module.exports = {
 
 - **Transactions can no longer be updated if its _status_ is no longer `PENDING`**
 
+- **Transactions will deduct from a Member's _balance_ if its _status_ is updated to `VOIDED`**
+
 ### **Standards**
 
 **For developers, follow the structure below when adding to or refactoring the codebase:**
