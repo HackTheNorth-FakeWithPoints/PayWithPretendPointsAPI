@@ -33,7 +33,7 @@ const partnerAuthController = async (email: string, password: string) => {
   const isPasswordCorrect = await bcrypt.compare(password, partner.password)
 
   if (!isPasswordCorrect) {
-    throw new ForbiddenError(`Incorrect credentials!`)
+    throw new ForbiddenError(`Incorrect credentials, please contact #2024-rbc slack channel for your credentials!`)
   }
 
   const sanitizedPartner = partner as Partial<Partner>
