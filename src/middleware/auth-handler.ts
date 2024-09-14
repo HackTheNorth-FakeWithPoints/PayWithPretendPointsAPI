@@ -23,7 +23,9 @@ const partnerAuthHandler = (req: Request, jwtSecret: jwt.Secret) => {
   req.partnerId = baseAuthHandler(req, jwtSecret) as number
 
   if (!req.partnerId) {
-    throw new ForbiddenError('Invalid partner id provided in the payload, please contact #2024-rbc slack for your partner credentials!')
+    throw new ForbiddenError(
+      'Invalid partner id provided in the payload, please contact #2024-rbc slack for your partner credentials!'
+    )
   }
 
   return req
